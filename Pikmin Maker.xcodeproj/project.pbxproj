@@ -1,0 +1,286 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7D488C401CC67EAF00A412D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */; };
+		7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C411CC67EAF00A412D9 /* GameScene.swift */; };
+		7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C431CC67EAF00A412D9 /* GameScene.sks */; };
+		7D488C461CC67EAF00A412D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C451CC67EAF00A412D9 /* Assets.xcassets */; };
+		7D488C491CC67EAF00A412D9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C471CC67EAF00A412D9 /* MainMenu.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pikmin Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7D488C411CC67EAF00A412D9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		7D488C431CC67EAF00A412D9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		7D488C451CC67EAF00A412D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7D488C481CC67EAF00A412D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		7D488C4A1CC67EAF00A412D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7D488C391CC67EAF00A412D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7D488C331CC67EAF00A412D9 = {
+			isa = PBXGroup;
+			children = (
+				7D488C3E1CC67EAF00A412D9 /* Pikmin Maker */,
+				7D488C3D1CC67EAF00A412D9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7D488C3D1CC67EAF00A412D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7D488C3E1CC67EAF00A412D9 /* Pikmin Maker */ = {
+			isa = PBXGroup;
+			children = (
+				7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */,
+				7D488C411CC67EAF00A412D9 /* GameScene.swift */,
+				7D488C431CC67EAF00A412D9 /* GameScene.sks */,
+				7D488C451CC67EAF00A412D9 /* Assets.xcassets */,
+				7D488C471CC67EAF00A412D9 /* MainMenu.xib */,
+				7D488C4A1CC67EAF00A412D9 /* Info.plist */,
+			);
+			path = "Pikmin Maker";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7D488C3B1CC67EAF00A412D9 /* Pikmin Maker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D488C4D1CC67EAF00A412D9 /* Build configuration list for PBXNativeTarget "Pikmin Maker" */;
+			buildPhases = (
+				7D488C381CC67EAF00A412D9 /* Sources */,
+				7D488C391CC67EAF00A412D9 /* Frameworks */,
+				7D488C3A1CC67EAF00A412D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pikmin Maker";
+			productName = "Pikmin Maker";
+			productReference = 7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7D488C341CC67EAF00A412D9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Bryan Mazariegos";
+				TargetAttributes = {
+					7D488C3B1CC67EAF00A412D9 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 7D488C371CC67EAF00A412D9 /* Build configuration list for PBXProject "Pikmin Maker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7D488C331CC67EAF00A412D9;
+			productRefGroup = 7D488C3D1CC67EAF00A412D9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7D488C3B1CC67EAF00A412D9 /* Pikmin Maker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7D488C3A1CC67EAF00A412D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D488C461CC67EAF00A412D9 /* Assets.xcassets in Resources */,
+				7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */,
+				7D488C491CC67EAF00A412D9 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7D488C381CC67EAF00A412D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */,
+				7D488C401CC67EAF00A412D9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7D488C471CC67EAF00A412D9 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D488C481CC67EAF00A412D9 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7D488C4B1CC67EAF00A412D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7D488C4C1CC67EAF00A412D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7D488C4E1CC67EAF00A412D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Pikmin Maker/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7D488C4F1CC67EAF00A412D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Pikmin Maker/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7D488C371CC67EAF00A412D9 /* Build configuration list for PBXProject "Pikmin Maker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D488C4B1CC67EAF00A412D9 /* Debug */,
+				7D488C4C1CC67EAF00A412D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7D488C4D1CC67EAF00A412D9 /* Build configuration list for PBXNativeTarget "Pikmin Maker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D488C4E1CC67EAF00A412D9 /* Debug */,
+				7D488C4F1CC67EAF00A412D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7D488C341CC67EAF00A412D9 /* Project object */;
+}
