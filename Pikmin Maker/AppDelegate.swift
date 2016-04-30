@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  Pikmin Maker
+//  Haunter
 //
-//  Created by Bryan Mazariegos on 4/19/16.
+//  Created by Bryan Mazariegos on 4/28/16.
 //  Copyright (c) 2016 Bryan Mazariegos. All rights reserved.
 //
 
