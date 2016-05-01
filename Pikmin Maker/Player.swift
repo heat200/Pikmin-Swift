@@ -16,6 +16,7 @@ class Player:SKSpriteNode {
     var callingPikmin = false
     var playerLastDirection = ""
     var playerDirection = "Down"
+    var moveTo = ""
     var cursorCircle = SKShapeNode(circleOfRadius: 10)
     let recallCircle = SKShapeNode(circleOfRadius: 5)
     let callSound = SKAudioNode(fileNamed: "call")
@@ -57,39 +58,39 @@ class Player:SKSpriteNode {
         }
     }
     
-    func move(direction:String) {
-        if direction != "" {
+    func move() {
+        if moveTo != "" {
             playerDirection = direction
         }
         let graphic = character + "_" + playerDirection + "_"
         
-        if direction != "" && playerLastDirection != playerDirection {
+        if moveTo != "" && playerLastDirection != playerDirection {
             playerLastDirection = playerDirection
             self.removeAllActions()
             self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:graphic + "Run1"),SKTexture(imageNamed:graphic + "Run2"),SKTexture(imageNamed:graphic + "Run3"),SKTexture(imageNamed:graphic + "Run4")], timePerFrame: 0.12)))
-        } else if direction == "" {
+        } else if moveTo == "" {
             playerLastDirection = ""
             self.removeAllActions()
             self.runAction(SKAction.setTexture(SKTexture(imageNamed:graphic + "Stand")))
         }
         
-        if direction == "Down" {
-            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -10), duration: 0.25))
+        if moveTo == "Down" {
+            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -2.5), duration: 0.25))
             antenna.position = CGPoint(x: 0, y: 20)
             antenna.zPosition = -1
             cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: -100), duration: 0.5))
-        } else if direction == "Up" {
-            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: 10), duration: 0.25))
+        } else if moveTo == "Up" {
+            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: 2.5), duration: 0.25))
             antenna.position = CGPoint(x: 0, y: 20)
             antenna.zPosition = 1
             cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: 100), duration: 0.5))
-        } else if direction == "Left" {
-            self.runAction(SKAction.moveBy(CGVector(dx: -10, dy: 0), duration: 0.25))
+        } else if moveTo == "Left" {
+            self.runAction(SKAction.moveBy(CGVector(dx: -2.5, dy: 0), duration: 0.25))
             antenna.position = CGPoint(x: 9, y: 15)
             antenna.zPosition = 1
             cursorCircle.runAction(SKAction.moveTo(CGPoint(x: -100, y: -20), duration: 0.5))
-        } else if direction == "Right" {
-            self.runAction(SKAction.moveBy(CGVector(dx: 10, dy: 0), duration: 0.25))
+        } else if moveTo == "Right" {
+            self.runAction(SKAction.moveBy(CGVector(dx: 2.5, dy: 0), duration: 0.25))
             antenna.position = CGPoint(x: -9, y: 15)
             antenna.zPosition = 1
             cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 100, y: -20), duration: 0.5))

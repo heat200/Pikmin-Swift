@@ -93,13 +93,13 @@ class GameScene:SKScene {
         let objectTouched = self.nodeAtPoint(ThePlayer.position)
         let chars = theEvent.characters!
         if chars.containsString("w") {
-            ThePlayer.move("Up")
+            ThePlayer.moveTo = "Up"
         } else if chars.containsString("d") {
-            ThePlayer.move("Right")
+            ThePlayer.moveTo = "Right"
         } else if chars.containsString("a") {
-            ThePlayer.move("Left")
+            ThePlayer.moveTo = "Left"
         } else if chars.containsString("s") {
-            ThePlayer.move("Down")
+            ThePlayer.moveTo = "Down"
         } else if chars.containsString(" ") {
             if objectTouched is Onion {
                 let onion = objectTouched as! Onion
@@ -123,7 +123,7 @@ class GameScene:SKScene {
     override func keyUp(theEvent: NSEvent) {
         let chars = theEvent.characters!
         if chars.containsString("w") || chars.containsString("a") || chars.containsString("s") || chars.containsString("d") {
-            ThePlayer.move("")
+            ThePlayer.moveTo = ""
         } else if chars.containsString(" ") {
             if ThePlayer.pikminToThrow != nil {
                 ThePlayer.throwPikmin()
@@ -133,5 +133,6 @@ class GameScene:SKScene {
     
     override func update(currentTime: NSTimeInterval) {
         self.camera!.position = ThePlayer.position
+        ThePlayer.move()
     }
 }

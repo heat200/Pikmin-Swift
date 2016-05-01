@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D063FDB1CD5AE510063539B /* pikminLand.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D063FD91CD5AE2B0063539B /* pikminLand.wav */; };
+		7D063FDD1CD5B49F0063539B /* pikminLand.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D063FDC1CD5B49F0063539B /* pikminLand.wav */; };
 		7D488C401CC67EAF00A412D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */; };
 		7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C411CC67EAF00A412D9 /* GameScene.swift */; };
 		7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C431CC67EAF00A412D9 /* GameScene.sks */; };
@@ -15,6 +17,28 @@
 		7D488C571CC6E33900A412D9 /* map1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C561CC6E33900A412D9 /* map1.png */; };
 		7D488C591CC6E6DF00A412D9 /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C581CC6E6DF00A412D9 /* Seed.swift */; };
 		7D488C5B1CC6ED0400A412D9 /* Pikmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C5A1CC6ED0400A412D9 /* Pikmin.swift */; };
+		7D51C6911CD568D6002FB2F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */; };
+		7D51C6931CD568D6002FB2F8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6921CD568D6002FB2F8 /* GameScene.sks */; };
+		7D51C6951CD568D6002FB2F8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6941CD568D6002FB2F8 /* GameScene.swift */; };
+		7D51C6971CD568D6002FB2F8 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6961CD568D6002FB2F8 /* GameViewController.swift */; };
+		7D51C69A1CD568D6002FB2F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6981CD568D6002FB2F8 /* Main.storyboard */; };
+		7D51C69F1CD568D6002FB2F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C69D1CD568D6002FB2F8 /* LaunchScreen.storyboard */; };
+		7D51C6BB1CD56995002FB2F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6A51CD56995002FB2F8 /* Assets.xcassets */; };
+		7D51C6BD1CD56995002FB2F8 /* call.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6A71CD56995002FB2F8 /* call.wav */; };
+		7D51C6BE1CD56995002FB2F8 /* Flower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6A81CD56995002FB2F8 /* Flower.swift */; };
+		7D51C6BF1CD56995002FB2F8 /* forestOfHope.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6A91CD56995002FB2F8 /* forestOfHope.mp3 */; };
+		7D51C6C31CD56995002FB2F8 /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6AD1CD56995002FB2F8 /* Ghost.swift */; };
+		7D51C6C51CD56995002FB2F8 /* map1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6AF1CD56995002FB2F8 /* map1.png */; };
+		7D51C6C61CD56995002FB2F8 /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B01CD56995002FB2F8 /* Monster.swift */; };
+		7D51C6C71CD56995002FB2F8 /* Nutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B11CD56995002FB2F8 /* Nutrient.swift */; };
+		7D51C6C81CD56995002FB2F8 /* Onion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B21CD56995002FB2F8 /* Onion.swift */; };
+		7D51C6C91CD56995002FB2F8 /* Pikmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B31CD56995002FB2F8 /* Pikmin.swift */; };
+		7D51C6CA1CD56995002FB2F8 /* pikminGhost.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B41CD56995002FB2F8 /* pikminGhost.wav */; };
+		7D51C6CB1CD56995002FB2F8 /* pikminPluck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B51CD56995002FB2F8 /* pikminPluck.wav */; };
+		7D51C6CC1CD56995002FB2F8 /* pikminSquel.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B61CD56995002FB2F8 /* pikminSquel.wav */; };
+		7D51C6CD1CD56995002FB2F8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B71CD56995002FB2F8 /* Player.swift */; };
+		7D51C6CE1CD56995002FB2F8 /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B81CD56995002FB2F8 /* Seed.swift */; };
+		7D51C6CF1CD56995002FB2F8 /* throw.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B91CD56995002FB2F8 /* throw.wav */; };
 		7DA7353F1CD11C7000B5CE3F /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA7353E1CD11C7000B5CE3F /* Monster.swift */; };
 		7DAF450F1CD35F1900178852 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DAF450C1CD35E3A00178852 /* MainMenu.xib */; };
 		7DAF45151CD46EA100178852 /* forestOfHope.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DAF45141CD46EA100178852 /* forestOfHope.mp3 */; };
@@ -30,6 +54,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D063FD91CD5AE2B0063539B /* pikminLand.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminLand.wav; sourceTree = "<group>"; };
+		7D063FDC1CD5B49F0063539B /* pikminLand.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminLand.wav; sourceTree = "<group>"; };
 		7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pikmin Maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D488C411CC67EAF00A412D9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -40,6 +66,30 @@
 		7D488C561CC6E33900A412D9 /* map1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map1.png; path = ../map1.png; sourceTree = "<group>"; };
 		7D488C581CC6E6DF00A412D9 /* Seed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
 		7D488C5A1CC6ED0400A412D9 /* Pikmin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pikmin.swift; sourceTree = "<group>"; };
+		7D51C68E1CD568D6002FB2F8 /* Pikmin Maker iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pikmin Maker iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7D51C6921CD568D6002FB2F8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		7D51C6941CD568D6002FB2F8 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		7D51C6961CD568D6002FB2F8 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		7D51C6991CD568D6002FB2F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7D51C69E1CD568D6002FB2F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7D51C6A01CD568D6002FB2F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7D51C6A51CD56995002FB2F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7D51C6A71CD56995002FB2F8 /* call.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = call.wav; sourceTree = "<group>"; };
+		7D51C6A81CD56995002FB2F8 /* Flower.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flower.swift; sourceTree = "<group>"; };
+		7D51C6A91CD56995002FB2F8 /* forestOfHope.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = forestOfHope.mp3; sourceTree = "<group>"; };
+		7D51C6AD1CD56995002FB2F8 /* Ghost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ghost.swift; sourceTree = "<group>"; };
+		7D51C6AF1CD56995002FB2F8 /* map1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map1.png; sourceTree = "<group>"; };
+		7D51C6B01CD56995002FB2F8 /* Monster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
+		7D51C6B11CD56995002FB2F8 /* Nutrient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrient.swift; sourceTree = "<group>"; };
+		7D51C6B21CD56995002FB2F8 /* Onion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Onion.swift; sourceTree = "<group>"; };
+		7D51C6B31CD56995002FB2F8 /* Pikmin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pikmin.swift; sourceTree = "<group>"; };
+		7D51C6B41CD56995002FB2F8 /* pikminGhost.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminGhost.wav; sourceTree = "<group>"; };
+		7D51C6B51CD56995002FB2F8 /* pikminPluck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminPluck.wav; sourceTree = "<group>"; };
+		7D51C6B61CD56995002FB2F8 /* pikminSquel.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminSquel.wav; sourceTree = "<group>"; };
+		7D51C6B71CD56995002FB2F8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		7D51C6B81CD56995002FB2F8 /* Seed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
+		7D51C6B91CD56995002FB2F8 /* throw.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = throw.wav; sourceTree = "<group>"; };
 		7DA7353E1CD11C7000B5CE3F /* Monster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 		7DAF450D1CD35E3A00178852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
 		7DAF45141CD46EA100178852 /* forestOfHope.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = forestOfHope.mp3; sourceTree = "<group>"; };
@@ -62,6 +112,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7D51C68B1CD568D6002FB2F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -69,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				7D488C3E1CC67EAF00A412D9 /* Pikmin Maker */,
+				7D51C68F1CD568D6002FB2F8 /* Pikmin Maker iOS */,
 				7D488C3D1CC67EAF00A412D9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */,
+				7D51C68E1CD568D6002FB2F8 /* Pikmin Maker iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,16 +156,64 @@
 				7D488C431CC67EAF00A412D9 /* GameScene.sks */,
 				7DC869FF1CD143970086E146 /* Assets.xcassets */,
 				7D488C561CC6E33900A412D9 /* map1.png */,
+				7D51C6D01CD569E3002FB2F8 /* Sounds */,
+				7DAF450C1CD35E3A00178852 /* MainMenu.xib */,
+				7D488C4A1CC67EAF00A412D9 /* Info.plist */,
+			);
+			path = "Pikmin Maker";
+			sourceTree = "<group>";
+		};
+		7D51C68F1CD568D6002FB2F8 /* Pikmin Maker iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */,
+				7D51C6921CD568D6002FB2F8 /* GameScene.sks */,
+				7D51C6941CD568D6002FB2F8 /* GameScene.swift */,
+				7D51C6961CD568D6002FB2F8 /* GameViewController.swift */,
+				7D51C6981CD568D6002FB2F8 /* Main.storyboard */,
+				7D51C6A51CD56995002FB2F8 /* Assets.xcassets */,
+				7D51C6AF1CD56995002FB2F8 /* map1.png */,
+				7D51C6D11CD569EF002FB2F8 /* Sounds */,
+				7D51C6A81CD56995002FB2F8 /* Flower.swift */,
+				7D51C6AD1CD56995002FB2F8 /* Ghost.swift */,
+				7D51C6B01CD56995002FB2F8 /* Monster.swift */,
+				7D51C6B11CD56995002FB2F8 /* Nutrient.swift */,
+				7D51C6B21CD56995002FB2F8 /* Onion.swift */,
+				7D51C6B31CD56995002FB2F8 /* Pikmin.swift */,
+				7D51C6B71CD56995002FB2F8 /* Player.swift */,
+				7D51C6B81CD56995002FB2F8 /* Seed.swift */,
+				7D51C69D1CD568D6002FB2F8 /* LaunchScreen.storyboard */,
+				7D51C6A01CD568D6002FB2F8 /* Info.plist */,
+			);
+			path = "Pikmin Maker iOS";
+			sourceTree = "<group>";
+		};
+		7D51C6D01CD569E3002FB2F8 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
 				7DAF45141CD46EA100178852 /* forestOfHope.mp3 */,
 				7DBFEF641CD47F8C00841727 /* pikminPluck.wav */,
 				7DBFEF661CD47F9C00841727 /* pikminSquel.wav */,
 				7DBFEF621CD47F7600841727 /* pikminGhost.wav */,
 				7DBFEF5E1CD47CFE00841727 /* call.wav */,
 				7DBFEF5F1CD47CFE00841727 /* throw.wav */,
-				7DAF450C1CD35E3A00178852 /* MainMenu.xib */,
-				7D488C4A1CC67EAF00A412D9 /* Info.plist */,
+				7D063FD91CD5AE2B0063539B /* pikminLand.wav */,
 			);
-			path = "Pikmin Maker";
+			name = Sounds;
+			sourceTree = "<group>";
+		};
+		7D51C6D11CD569EF002FB2F8 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				7D063FDC1CD5B49F0063539B /* pikminLand.wav */,
+				7D51C6A71CD56995002FB2F8 /* call.wav */,
+				7D51C6A91CD56995002FB2F8 /* forestOfHope.mp3 */,
+				7D51C6B41CD56995002FB2F8 /* pikminGhost.wav */,
+				7D51C6B51CD56995002FB2F8 /* pikminPluck.wav */,
+				7D51C6B61CD56995002FB2F8 /* pikminSquel.wav */,
+				7D51C6B91CD56995002FB2F8 /* throw.wav */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,6 +236,23 @@
 			productReference = 7D488C3C1CC67EAF00A412D9 /* Pikmin Maker.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7D51C68D1CD568D6002FB2F8 /* Pikmin Maker iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D51C6A31CD568D6002FB2F8 /* Build configuration list for PBXNativeTarget "Pikmin Maker iOS" */;
+			buildPhases = (
+				7D51C68A1CD568D6002FB2F8 /* Sources */,
+				7D51C68B1CD568D6002FB2F8 /* Frameworks */,
+				7D51C68C1CD568D6002FB2F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pikmin Maker iOS";
+			productName = "Pikmin Maker iOS";
+			productReference = 7D51C68E1CD568D6002FB2F8 /* Pikmin Maker iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -142,6 +266,9 @@
 					7D488C3B1CC67EAF00A412D9 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = N4MWNVQDSJ;
+					};
+					7D51C68D1CD568D6002FB2F8 = {
+						CreatedOnToolsVersion = 7.3;
 					};
 				};
 			};
@@ -159,6 +286,7 @@
 			projectRoot = "";
 			targets = (
 				7D488C3B1CC67EAF00A412D9 /* Pikmin Maker */,
+				7D51C68D1CD568D6002FB2F8 /* Pikmin Maker iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -173,11 +301,31 @@
 				7DBFEF601CD47CFE00841727 /* call.wav in Resources */,
 				7DAF450F1CD35F1900178852 /* MainMenu.xib in Resources */,
 				7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */,
+				7D063FDB1CD5AE510063539B /* pikminLand.wav in Resources */,
 				7DAF45151CD46EA100178852 /* forestOfHope.mp3 in Resources */,
 				7D488C571CC6E33900A412D9 /* map1.png in Resources */,
 				7DBFEF611CD47CFE00841727 /* throw.wav in Resources */,
 				7DBFEF651CD47F8C00841727 /* pikminPluck.wav in Resources */,
 				7DC86A001CD143970086E146 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D51C68C1CD568D6002FB2F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D51C6CB1CD56995002FB2F8 /* pikminPluck.wav in Resources */,
+				7D51C6931CD568D6002FB2F8 /* GameScene.sks in Resources */,
+				7D51C69F1CD568D6002FB2F8 /* LaunchScreen.storyboard in Resources */,
+				7D51C6BF1CD56995002FB2F8 /* forestOfHope.mp3 in Resources */,
+				7D51C69A1CD568D6002FB2F8 /* Main.storyboard in Resources */,
+				7D063FDD1CD5B49F0063539B /* pikminLand.wav in Resources */,
+				7D51C6BD1CD56995002FB2F8 /* call.wav in Resources */,
+				7D51C6CA1CD56995002FB2F8 /* pikminGhost.wav in Resources */,
+				7D51C6CC1CD56995002FB2F8 /* pikminSquel.wav in Resources */,
+				7D51C6C51CD56995002FB2F8 /* map1.png in Resources */,
+				7D51C6BB1CD56995002FB2F8 /* Assets.xcassets in Resources */,
+				7D51C6CF1CD56995002FB2F8 /* throw.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,9 +349,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7D51C68A1CD568D6002FB2F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D51C6C81CD56995002FB2F8 /* Onion.swift in Sources */,
+				7D51C6C61CD56995002FB2F8 /* Monster.swift in Sources */,
+				7D51C6CE1CD56995002FB2F8 /* Seed.swift in Sources */,
+				7D51C6CD1CD56995002FB2F8 /* Player.swift in Sources */,
+				7D51C6C31CD56995002FB2F8 /* Ghost.swift in Sources */,
+				7D51C6951CD568D6002FB2F8 /* GameScene.swift in Sources */,
+				7D51C6C71CD56995002FB2F8 /* Nutrient.swift in Sources */,
+				7D51C6BE1CD56995002FB2F8 /* Flower.swift in Sources */,
+				7D51C6971CD568D6002FB2F8 /* GameViewController.swift in Sources */,
+				7D51C6911CD568D6002FB2F8 /* AppDelegate.swift in Sources */,
+				7D51C6C91CD56995002FB2F8 /* Pikmin.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		7D51C6981CD568D6002FB2F8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D51C6991CD568D6002FB2F8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		7D51C69D1CD568D6002FB2F8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D51C69E1CD568D6002FB2F8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		7DAF450C1CD35E3A00178852 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -323,6 +505,37 @@
 			};
 			name = Release;
 		};
+		7D51C6A11CD568D6002FB2F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "Pikmin Maker iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7D51C6A21CD568D6002FB2F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "Pikmin Maker iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +553,15 @@
 			buildConfigurations = (
 				7D488C4E1CC67EAF00A412D9 /* Debug */,
 				7D488C4F1CC67EAF00A412D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7D51C6A31CD568D6002FB2F8 /* Build configuration list for PBXNativeTarget "Pikmin Maker iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D51C6A11CD568D6002FB2F8 /* Debug */,
+				7D51C6A21CD568D6002FB2F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
