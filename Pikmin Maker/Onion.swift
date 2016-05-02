@@ -13,6 +13,9 @@ class Onion:SKSpriteNode {
     var awake = false
     var awakened = false
     
+    var randXMultiplayer:CGFloat = 0
+    var receivedMsg = false
+    
     func randomizePosition() {
         let randX:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
         let randY:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
@@ -36,43 +39,59 @@ class Onion:SKSpriteNode {
     
     func dispelSeed() {
         if awakened {
-            let randX:CGFloat = CGFloat(Int(arc4random_uniform(180)) - 90)
+            var allowed = true
+            var randX:CGFloat = CGFloat(Int(arc4random_uniform(180)) - 90)
             
-            let seed = Seed(imageNamed:"Seed_" + onionColor + "_Falling2")
-            seed.zPosition = FrontLayer
-            seed.seedColor = onionColor
-            let original = CGFloat(seed.zRotation)
-            seed.zRotation = CGFloat(M_PI * 3)
-            seed.position.x = self.position.x
-            seed.position.y = self.position.y + 50
-            seed.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Seed_" + onionColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
-            
-            if randX > 0 {
-                seed.runAction(SKAction.rotateToAngle(original, duration: 0.8,shortestUnitArc:true))
-            } else {
-                seed.runAction((SKAction.rotateByAngle(CGFloat(M_PI), duration: 0.8)))
+            if self.parent is MultiGameScene {
+                let parent = self.parent as! MultiGameScene
+                if parent.currentPlayer == "2" {
+                    randX = randXMultiplayer
+                    if !receivedMsg {
+                        allowed = false
+                    }
+                } else {
+                    parent.sendOnionNum(self, randX: randX)
+                }
             }
             
-            seed.pikminIdleLook.runAction(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
-            seed.pikminIdleLook.setScale(1)
-            seed.pikminIdleLook.zPosition = -1
-            seed.pikminIdleLook.hidden = true
-            let group = SKAction.sequence([SKAction.scaleTo(1.9, duration: 0.75),SKAction.scaleTo(2.4, duration: 0.75)])
-            seed.pikminIdleLook.runAction(SKAction.repeatActionForever(group))
-            seed.addChild(seed.pikminIdleLook)
-            seed.addChild(seed.pikminPluck)
-            seed.pikminPluck.positional = true
-            seed.pikminPluck.autoplayLooped = false
-            seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.4, dy: 30), duration: 0.8),completion:{
-                seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.6, dy: -140 + (abs(randX) * 0.5)), duration: 1.7), completion:{
-                    seed.removeAllActions()
-                    seed.rooted = true
-                    seed.pikminIdleLook.hidden = false
-                    seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
-                    seed.runAction(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.onionColor + "_Falling2"), resize: true))
+            if allowed {
+                receivedMsg = false
+                let seed = Seed(imageNamed:"Seed_" + onionColor + "_Falling2")
+                seed.zPosition = FrontLayer
+                seed.seedColor = onionColor
+                let original = CGFloat(seed.zRotation)
+                seed.zRotation = CGFloat(M_PI * 3)
+                seed.position.x = self.position.x
+                seed.position.y = self.position.y + 50
+                seed.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Seed_" + onionColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
+                
+                if randX > 0 {
+                    seed.runAction(SKAction.rotateToAngle(original, duration: 0.8,shortestUnitArc:true))
+                } else {
+                    seed.runAction((SKAction.rotateByAngle(CGFloat(M_PI), duration: 0.8)))
+                }
+                
+                seed.pikminIdleLook.runAction(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
+                seed.pikminIdleLook.setScale(1)
+                seed.pikminIdleLook.zPosition = -1
+                seed.pikminIdleLook.hidden = true
+                let group = SKAction.sequence([SKAction.scaleTo(1.9, duration: 0.75),SKAction.scaleTo(2.4, duration: 0.75)])
+                seed.pikminIdleLook.runAction(SKAction.repeatActionForever(group))
+                seed.pikminPluck.positional = true
+                seed.pikminPluck.autoplayLooped = false
+                seed.addChild(seed.pikminIdleLook)
+                seed.addChild(seed.pikminPluck)
+                seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.4, dy: 30), duration: 0.8),completion:{
+                    seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.6, dy: -140 + (abs(randX) * 0.5)), duration: 1.7), completion:{
+                        seed.removeAllActions()
+                        seed.rooted = true
+                        seed.pikminIdleLook.hidden = false
+                        seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
+                        seed.runAction(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.onionColor + "_Falling2"), resize: true))
+                    })
                 })
-            })
-            self.parent!.addChild(seed)
+                self.parent!.addChild(seed)
+            }
         }
     }
     

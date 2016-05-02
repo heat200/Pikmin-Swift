@@ -20,9 +20,20 @@ class GameScene:SKScene {
     let BlueOnion = Onion(imageNamed:"Onion_Inactive")
     let YellowOnion = Onion(imageNamed:"Onion_Inactive")
     
+    let TheShip = Ship(imageNamed:"Ship_Empty")
+    
+    let Space = SKSpriteNode(imageNamed:"space")
+    
     let backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
     
     let MAP = SKSpriteNode(imageNamed:"map1")
+    
+    var nightOverlay = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 10, height: 10)))
+    
+    var movingSpace = false
+    
+    var lastTime:Double = 0
+    var day = true
     
     override func didMoveToView(view: SKView) {
         MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
@@ -49,6 +60,21 @@ class GameScene:SKScene {
         
         let WhiteFlower = Flower(imageNamed:"Flower_White_Open")
         WhiteFlower.zPosition = MidLayer
+        
+        TheShip.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 300)
+        TheShip.zPosition = FrontLayer
+        
+        Space.zPosition = BackmostLayer - 1
+        Space.position = CGPoint(x: self.frame.midX, y: self.frame.midY + self.size.height/2)
+        Space.setScale(4)
+        
+        nightOverlay = SKShapeNode(rect: self.frame)
+        nightOverlay.zPosition = -1
+        nightOverlay.position = CGPoint(x: -self.frame.width/2, y: -self.frame.height/2)
+        nightOverlay.fillColor = SKColor.blackColor()
+        nightOverlay.alpha = 0.0
+        nightOverlay.strokeColor = SKColor.clearColor()
+        self.camera!.addChild(nightOverlay)
         
         var nutrientsAdded = 0
         while nutrientsAdded < 75 {
@@ -80,6 +106,8 @@ class GameScene:SKScene {
         self.addChild(YellowOnion)
         self.addChild(PurpleFlower)
         self.addChild(WhiteFlower)
+        self.addChild(TheShip)
+        self.addChild(Space)
         self.addChild(backgroundMusic)
         
         RedOnion.randomizePosition()
@@ -90,26 +118,56 @@ class GameScene:SKScene {
     }
     
     override func keyDown(theEvent: NSEvent) {
-        let objectTouched = self.nodeAtPoint(ThePlayer.position)
+        let location = theEvent.locationInNode(self)
+        let objectTouched = self.nodeAtPoint(location)
+        let objectPlayerOn = self.nodeAtPoint(ThePlayer.position)
         let chars = theEvent.characters!
         if chars.containsString("w") {
-            ThePlayer.moveTo = "Up"
+            if TheShip.followShip {
+                TheShip.toMultiplayer()
+            } else {
+                ThePlayer.moveTo = "Up"
+            }
         } else if chars.containsString("d") {
-            ThePlayer.moveTo = "Right"
+            if TheShip.followShip {
+                if TheShip.player == "1" {
+                    TheShip.player = "2"
+                } else {
+                    TheShip.player = "1"
+                }
+                print(TheShip.player)
+            } else {
+                ThePlayer.moveTo = "Right"
+            }
         } else if chars.containsString("a") {
-            ThePlayer.moveTo = "Left"
+            if TheShip.followShip {
+                if TheShip.player == "1" {
+                    TheShip.player = "2"
+                } else {
+                    TheShip.player = "1"
+                }
+                print(TheShip.player)
+            } else {
+                ThePlayer.moveTo = "Left"
+            }
         } else if chars.containsString("s") {
-            ThePlayer.moveTo = "Down"
-        } else if chars.containsString(" ") {
-            if objectTouched is Onion {
-                let onion = objectTouched as! Onion
+            if TheShip.followShip {
+                TheShip.backToEarth()
+            } else {
+                ThePlayer.moveTo = "Down"
+            }
+        }
+        
+        if chars.containsString(" ") {
+            if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
+                let onion = objectPlayerOn as! Onion
                 onion.wake()
-            } else if objectTouched is Seed {
-                let seed = objectTouched as! Seed
+            } else if objectPlayerOn is Seed {
+                let seed = objectPlayerOn as! Seed
                 seed.unrootPikmin(ThePlayer)
-            } else if objectTouched is Flower {
-                let flower = objectTouched as! Flower
-                flower.toggleOpen()
+            } else if objectPlayerOn is Ship {
+                let ship = objectPlayerOn as! Ship
+                ship.getIn(ThePlayer)
             } else {
                 ThePlayer.grabPikmin()
             }
@@ -124,7 +182,9 @@ class GameScene:SKScene {
         let chars = theEvent.characters!
         if chars.containsString("w") || chars.containsString("a") || chars.containsString("s") || chars.containsString("d") {
             ThePlayer.moveTo = ""
-        } else if chars.containsString(" ") {
+        }
+        
+        if chars.containsString(" ") {
             if ThePlayer.pikminToThrow != nil {
                 ThePlayer.throwPikmin()
             }
@@ -132,7 +192,49 @@ class GameScene:SKScene {
     }
     
     override func update(currentTime: NSTimeInterval) {
-        self.camera!.position = ThePlayer.position
-        ThePlayer.move()
+        let timeFrame:Double = 2
+        if currentTime - lastTime >= timeFrame {
+            lastTime = currentTime
+            if day {
+                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
+                if nightOverlay.alpha >= 0.7 {
+                    nightOverlay.alpha = 0.7
+                    day = false
+                }
+            } else {
+                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
+                if nightOverlay.alpha <= 0.0 {
+                    nightOverlay.alpha = 0.0
+                    day = true
+                }
+            }
+        }
+        
+        if !TheShip.followShip {
+            self.camera!.position = ThePlayer.position
+            ThePlayer.move()
+        } else {
+            self.camera!.position = TheShip.position
+            if !movingSpace {
+                movingSpace = true
+                if !TheShip.returning {
+                    Space.removeAllActions()
+                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: -750), duration: 9),SKAction.runBlock({
+                        self.Space.position.x = self.TheShip.position.x
+                        self.Space.position.y = self.TheShip.position.y + 1100
+                    })])
+                    Space.position.y = TheShip.position.y + 1550
+                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                } else {
+                    Space.removeAllActions()
+                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: 500), duration: 6),SKAction.runBlock({
+                        self.Space.position.x = self.TheShip.position.x
+                        self.Space.position.y = self.TheShip.position.y - 900
+                    })])
+                    Space.position.y = TheShip.position.y - 1550
+                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                }
+            }
+        }
     }
 }

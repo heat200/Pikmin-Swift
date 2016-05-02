@@ -73,28 +73,7 @@ class Pikmin:SKSpriteNode {
     }
     
     func setUp() {
-        let randReverb = Float(arc4random_uniform(1))
-        let randReverb2 = Float(arc4random_uniform(1))
-        pikminThrow.autoplayLooped = false
-        pikminThrow.positional = false
-        pikminSquel.autoplayLooped = false
-        pikminSquel.positional = false
-        pikminLand.autoplayLooped = false
-        pikminLand.positional = false
-        pikminLeft.autoplayLooped = false
-        pikminLeft.positional = false
-        pikminBumped.autoplayLooped = false
-        pikminBumped.positional = false
-        pikminLand.runAction(SKAction.changeReverbTo(1, duration: 0.05))
-        pikminLand.runAction(SKAction.changePlaybackRateTo(1.15, duration: 0.05))
-        pikminLeft.runAction(SKAction.changeReverbTo(randReverb2, duration: 0.05))
-        pikminLeft.runAction(SKAction.changePlaybackRateTo(0.4, duration: 0.05))
-        pikminBumped.runAction(SKAction.changeReverbTo(randReverb, duration: 0.05))
-        addChild(pikminThrow)
-        addChild(pikminLand)
-        addChild(pikminBumped)
-        addChild(pikminSquel)
-        addChild(pikminLeft)
+        fixAudio()
         setTier()
         let randX = CGFloat(arc4random_uniform(40)) + 10
         let randY = CGFloat(arc4random_uniform(40)) + 10
@@ -131,7 +110,9 @@ class Pikmin:SKSpriteNode {
             zPosition = BackLayer + 1
         } else if leader.playerDirection == "Down" {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y + dispY)
-            zPosition = BackLayer - 1
+            if !busy {
+                zPosition = BackLayer - 1
+            }
         }
         pikminIdleLook.position = pikminTierLook.position
         move()
@@ -157,6 +138,24 @@ class Pikmin:SKSpriteNode {
     
     func updateLooks() {
         if !busy {
+            if self.checkIfTooFar() {
+                if !idle {
+                    self.busy = false
+                    self.returning = false
+                    self.idle = true
+                    self.pikminLeft.runAction(SKAction.sequence([SKAction.waitForDuration(0.025),SKAction.play()]))
+                    var index = -1
+                    var found = false
+                    while index < self.leader.pikminFollowing.count - 1 && !found {
+                        index += 1
+                        if self == self.leader.pikminFollowing[index] {
+                            found = true
+                            self.leader.pikminFollowing.removeAtIndex(index)
+                        }
+                    }
+                }
+            }
+            
             if direction == "Down" && (direction != oldDirection || !moving) && !busy {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 6, y: 20)
@@ -189,50 +188,162 @@ class Pikmin:SKSpriteNode {
     
     func carryNutrient(nutrient:Nutrient) {
         busy = true
-        let parent = (self.parent as! GameScene)
-        var onionToTakeTo = parent.RedOnion
-        if pikminColor == "Red" {
-           onionToTakeTo = parent.RedOnion
-        } else if pikminColor == "Blue" {
-            onionToTakeTo = parent.BlueOnion
-        } else if pikminColor == "Yellow" {
-            onionToTakeTo = parent.YellowOnion
-        } else {
-            if nutrient.nutrientColor == "Red" {
+        if parent is GameScene {
+            let parent = (self.parent as! GameScene)
+            var onionToTakeTo = parent.RedOnion
+            if pikminColor == "Red" {
                 onionToTakeTo = parent.RedOnion
-            } else if nutrient.nutrientColor == "Blue" {
+            } else if pikminColor == "Blue" {
                 onionToTakeTo = parent.BlueOnion
-            } else if nutrient.nutrientColor == "Yellow" {
+            } else if pikminColor == "Yellow" {
                 onionToTakeTo = parent.YellowOnion
+            } else {
+                if nutrient.nutrientColor == "Red" {
+                    onionToTakeTo = parent.RedOnion
+                } else if nutrient.nutrientColor == "Blue" {
+                    onionToTakeTo = parent.BlueOnion
+                } else if nutrient.nutrientColor == "Yellow" {
+                    onionToTakeTo = parent.YellowOnion
+                } else {
+                    let randOnion = Int(arc4random_uniform(3) + 1)
+                    if randOnion == 1 {
+                        onionToTakeTo = parent.RedOnion
+                    } else if randOnion == 2 {
+                        onionToTakeTo = parent.BlueOnion
+                    } else {
+                        onionToTakeTo = parent.YellowOnion
+                    }
+                }
             }
+            let locationToTakeTo = CGPoint(x: onionToTakeTo.position.x, y: onionToTakeTo.position.y - 35)
+            var walkSpot1 = CGPoint(x: 0, y: 0)
+            var walkSpot2 = CGPoint(x: 0, y: 0)
+            if direction == "Right" {
+                walkSpot1 = CGPoint(x: nutrient.position.x - 17, y: nutrient.position.y + 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x - 17, y: locationToTakeTo.y + 5)
+            } else if direction == "Left" {
+                walkSpot1 = CGPoint(x: nutrient.position.x + 17, y: nutrient.position.y + 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x + 17, y: locationToTakeTo.y + 5)
+            } else if direction == "Up" {
+                walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y - 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y - 5)
+                nutrient.zPosition = self.zPosition - 2
+            } else if direction == "Down" {
+                walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
+            }
+            
+            self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+            self.runAction(SKAction.moveTo(walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
+                nutrient.runAction(SKAction.moveTo(locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
+                    self.busy = false
+                    self.returning = true
+                    onionToTakeTo.absorbNutrient(nutrient)
+                })
+                self.runAction(SKAction.moveTo(walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
+            })
+        } else if parent is MultiGameScene {
+            let parent = (self.parent as! MultiGameScene)
+            var onionToTakeTo = parent.RedOnion
+            if pikminColor == "Red" {
+                onionToTakeTo = parent.RedOnion
+            } else if pikminColor == "Blue" {
+                onionToTakeTo = parent.BlueOnion
+            } else if pikminColor == "Yellow" {
+                onionToTakeTo = parent.YellowOnion
+            } else {
+                if nutrient.nutrientColor == "Red" {
+                    onionToTakeTo = parent.RedOnion
+                } else if nutrient.nutrientColor == "Blue" {
+                    onionToTakeTo = parent.BlueOnion
+                } else if nutrient.nutrientColor == "Yellow" {
+                    onionToTakeTo = parent.YellowOnion
+                } else {
+                    let randOnion = Int(arc4random_uniform(3) + 1)
+                    if randOnion == 1 {
+                        onionToTakeTo = parent.RedOnion
+                    } else if randOnion == 2 {
+                        onionToTakeTo = parent.BlueOnion
+                    } else {
+                        onionToTakeTo = parent.YellowOnion
+                    }
+                }
+            }
+            let locationToTakeTo = CGPoint(x: onionToTakeTo.position.x, y: onionToTakeTo.position.y - 35)
+            var walkSpot1 = CGPoint(x: 0, y: 0)
+            var walkSpot2 = CGPoint(x: 0, y: 0)
+            if direction == "Right" {
+                walkSpot1 = CGPoint(x: nutrient.position.x - 17, y: nutrient.position.y + 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x - 17, y: locationToTakeTo.y + 5)
+            } else if direction == "Left" {
+                walkSpot1 = CGPoint(x: nutrient.position.x + 17, y: nutrient.position.y + 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x + 17, y: locationToTakeTo.y + 5)
+            } else if direction == "Up" {
+                walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y - 5)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y - 5)
+                nutrient.zPosition = self.zPosition - 2
+            } else if direction == "Down" {
+                walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
+                walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
+            }
+            
+            self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+            self.runAction(SKAction.moveTo(walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
+                nutrient.runAction(SKAction.moveTo(locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
+                    self.busy = false
+                    self.returning = true
+                    onionToTakeTo.absorbNutrient(nutrient)
+                })
+                self.runAction(SKAction.moveTo(walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
+            })
         }
-        let locationToTakeTo = CGPoint(x: onionToTakeTo.position.x, y: onionToTakeTo.position.y - 35)
-        var walkSpot1 = CGPoint(x: 0, y: 0)
-        var walkSpot2 = CGPoint(x: 0, y: 0)
-        if direction == "Right" {
-            walkSpot1 = CGPoint(x: nutrient.position.x - 17, y: nutrient.position.y + 5)
-            walkSpot2 = CGPoint(x: locationToTakeTo.x - 17, y: locationToTakeTo.y + 5)
-        } else if direction == "Left" {
-            walkSpot1 = CGPoint(x: nutrient.position.x + 17, y: nutrient.position.y + 5)
-            walkSpot2 = CGPoint(x: locationToTakeTo.x + 17, y: locationToTakeTo.y + 5)
-        } else if direction == "Up" {
-            walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y - 5)
-            walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y - 5)
-            nutrient.zPosition = self.zPosition - 2
-        } else if direction == "Down" {
-            walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
-            walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
+    }
+    
+    func checkIfTooFar() -> Bool {
+        var tooFar = false
+        let distance = sqrt(pow(Double(self.position.x - leader.position.x),2) + pow(Double(self.position.y - leader.position.y),2))
+        
+        if distance > 275 {
+            tooFar = true
         }
         
-        self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-        self.runAction(SKAction.moveTo(walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
-            nutrient.runAction(SKAction.moveTo(locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
-                self.busy = false
-                self.returning = true
-                onionToTakeTo.absorbNutrient(nutrient)
-            })
-            self.runAction(SKAction.moveTo(walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
-        })
+        return tooFar
+    }
+    
+    func fixAudio() {
+        pikminSquel.removeFromParent()
+        pikminLand.removeFromParent()
+        pikminBumped.removeFromParent()
+        pikminLeft.removeFromParent()
+        pikminThrow.removeFromParent()
+        
+        pikminSquel = SKAudioNode(fileNamed: "pikminSquel")
+        pikminLand = SKAudioNode(fileNamed: "pikminLand")
+        pikminBumped = SKAudioNode(fileNamed: "pikminLand")
+        pikminLeft = SKAudioNode(fileNamed: "pikminLand")
+        pikminThrow = SKAudioNode(fileNamed: "throw")
+        let randReverb = Float(arc4random_uniform(1))
+        let randReverb2 = Float(arc4random_uniform(1))
+        pikminThrow.autoplayLooped = false
+        pikminThrow.positional = false
+        pikminSquel.autoplayLooped = false
+        pikminSquel.positional = false
+        pikminLand.autoplayLooped = false
+        pikminLand.positional = false
+        pikminLeft.autoplayLooped = false
+        pikminLeft.positional = false
+        pikminBumped.autoplayLooped = false
+        pikminBumped.positional = false
+        pikminLand.runAction(SKAction.changeReverbTo(1, duration: 0.05))
+        pikminLand.runAction(SKAction.changePlaybackRateTo(1.15, duration: 0.05))
+        pikminLeft.runAction(SKAction.changeReverbTo(randReverb2, duration: 0.05))
+        pikminLeft.runAction(SKAction.changePlaybackRateTo(0.9, duration: 0.05))
+        pikminBumped.runAction(SKAction.changeReverbTo(randReverb, duration: 0.05))
+        addChild(pikminThrow)
+        addChild(pikminLand)
+        addChild(pikminBumped)
+        addChild(pikminSquel)
+        addChild(pikminLeft)
     }
     
     func kill() {

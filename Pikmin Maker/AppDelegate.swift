@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var skView: SKView!
+    var mpcHandler:MPCHandler = MPCHandler()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         /* Pick a size for the scene */
