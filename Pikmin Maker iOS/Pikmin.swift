@@ -20,6 +20,7 @@ class Pikmin:SKSpriteNode {
     var pikminIdleLook = SKSpriteNode(imageNamed:"RedGlow")
     var leader = Player()
     var followPoint = CGPoint()
+    var dead = false
     var idle = false
     var moving = false
     var busy = false
@@ -28,11 +29,14 @@ class Pikmin:SKSpriteNode {
     var throwHeight:CGFloat = 140
     var dispX:CGFloat = 0
     var dispY:CGFloat = 0
-    var pikminSquel = SKAudioNode(fileNamed: "pikminSquel")
-    var pikminLand = SKAudioNode(fileNamed: "pikminLand")
-    var pikminBumped = SKAudioNode(fileNamed: "pikminLand")
-    var pikminLeft = SKAudioNode(fileNamed: "pikminLand")
-    var pikminThrow = SKAudioNode(fileNamed: "throw")
+    var pikminSqueel = SKAction.playSoundFileNamed("pikminSqueel", waitForCompletion: false)
+    var pikminLand = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
+    var pikminBumped = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
+    var pikminLeft = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
+    var pikminThrow = SKAction.playSoundFileNamed("throw", waitForCompletion: false)
+    
+    var movingToHome = false
+    var inHome = false
     
     func setTier() {
         pikminIdleLook.runAction(SKAction.setTexture(SKTexture(imageNamed:pikminColor + "Glow"), resize: true))
@@ -73,7 +77,6 @@ class Pikmin:SKSpriteNode {
     }
     
     func setUp() {
-        fixAudio()
         setTier()
         let randX = CGFloat(arc4random_uniform(40)) + 10
         let randY = CGFloat(arc4random_uniform(40)) + 10
@@ -118,7 +121,7 @@ class Pikmin:SKSpriteNode {
         move()
         if position != followPoint && !idle && !busy {
             moving = true
-        } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy {
+        } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace {
             moving = false
             returning = false
             self.removeAllActions()
@@ -132,18 +135,120 @@ class Pikmin:SKSpriteNode {
             idle = false
             pikminIdleLook.hidden = true
             leader.pikminFollowing.append(self)
-            pikminBumped.runAction(SKAction.play())
+            runAction(pikminBumped)
+        }
+        
+        if leader.timeForSpace && !movingToHome && !inHome {
+            var onionPosition = CGPoint(x: 0, y: 0)
+            movingToHome = true
+            if pikminColor == "Red" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.RedOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.RedOnion.position
+                }
+            } else if pikminColor == "Blue" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.BlueOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.BlueOnion.position
+                }
+            } else if pikminColor == "Yellow" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.YellowOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.YellowOnion.position
+                }
+            } else if pikminColor == "White" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.TheShip.position
+                }
+            } else if pikminColor == "Purple" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.TheShip.position
+                }
+            }
+            
+            let pos1 = CGPoint(x: onionPosition.x, y: onionPosition.y - 50)
+            let pos2 = CGPoint(x: onionPosition.x, y: onionPosition.y + 25)
+            
+            runAction(SKAction.moveTo(pos1, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y - 40),2))/Double(self.movementSpeed)),completion:{
+                self.runAction(SKAction.moveTo(pos2, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y + 30),2))/Double(self.movementSpeed)),completion:{
+                    self.movingToHome = false
+                    self.inHome = true
+                    self.hidden = true
+                })
+            })
+        } else if leader.timeForSpace && inHome {
+            if pikminColor == "Red" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    self.position = parent.RedOnion.position
+                } else {
+                    let parent = (self.parent as! MultiGameScene)
+                    self.position = parent.RedOnion.position
+                }
+            } else if pikminColor == "Blue" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    self.position = parent.BlueOnion.position
+                } else {
+                    let parent = (self.parent as! MultiGameScene)
+                    self.position = parent.BlueOnion.position
+                }
+            } else if pikminColor == "Yellow" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    self.position = parent.YellowOnion.position
+                } else {
+                    let parent = (self.parent as! MultiGameScene)
+                    self.position = parent.YellowOnion.position
+                }
+            } else if pikminColor == "White" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    self.position = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //self.position = parent.TheShip.position
+                }
+            } else if pikminColor == "Purple" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    self.position = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //self.position = parent.TheShip.position
+                }
+            }
+        } else if !leader.timeForSpace {
+            inHome = false
+            hidden = false
         }
     }
     
     func updateLooks() {
-        if !busy {
+        if !busy && !leader.timeForSpace {
             if self.checkIfTooFar() {
                 if !idle {
                     self.busy = false
                     self.returning = false
                     self.idle = true
-                    self.pikminLeft.runAction(SKAction.sequence([SKAction.waitForDuration(0.025),SKAction.play()]))
+                    self.runAction(SKAction.sequence([SKAction.waitForDuration(0.025),pikminLeft]))
                     var index = -1
                     var found = false
                     while index < self.leader.pikminFollowing.count - 1 && !found {
@@ -156,25 +261,25 @@ class Pikmin:SKSpriteNode {
                 }
             }
             
-            if direction == "Down" && (direction != oldDirection || !moving) && !busy {
+            if direction == "Down" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 6, y: 20)
                 pikminTierLook.xScale = 1
                 self.removeAllActions()
                 self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-            } else if direction == "Up" && (direction != oldDirection || !moving) && !busy {
+            } else if direction == "Up" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 6, y: 20)
                 pikminTierLook.xScale = 1
                 self.removeAllActions()
                 self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-            } else if direction == "Right" && (direction != oldDirection || !moving) && !busy {
+            } else if direction == "Right" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: -7, y: 20)
                 pikminTierLook.xScale = -1
                 self.removeAllActions()
                 self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-            } else if direction == "Left" && (direction != oldDirection || !moving) && !busy {
+            } else if direction == "Left" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 7, y: 20)
                 pikminTierLook.xScale = 1
@@ -182,7 +287,12 @@ class Pikmin:SKSpriteNode {
                 self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             }
             
-            runAction(SKAction.moveTo(followPoint, duration: sqrt(pow(Double(self.position.x - followPoint.x),2) + pow(Double(self.position.y - followPoint.y),2))/Double(self.movementSpeed)))
+            var moveSpeedPatch = 1.00
+            if direction == "Up" || direction == "Down" {
+                moveSpeedPatch = 0.8
+            }
+            
+            runAction(SKAction.moveTo(followPoint, duration: sqrt(pow(Double(self.position.x - followPoint.x),2) + pow(Double(self.position.y - followPoint.y),2))/(Double(self.movementSpeed) * moveSpeedPatch)))
         }
     }
     
@@ -198,20 +308,28 @@ class Pikmin:SKSpriteNode {
             } else if pikminColor == "Yellow" {
                 onionToTakeTo = parent.YellowOnion
             } else {
-                if nutrient.nutrientColor == "Red" {
+                if nutrient.nutrientColor == "Red" && parent.RedOnion.awakened {
                     onionToTakeTo = parent.RedOnion
-                } else if nutrient.nutrientColor == "Blue" {
+                } else if nutrient.nutrientColor == "Blue" && parent.BlueOnion.awakened {
                     onionToTakeTo = parent.BlueOnion
-                } else if nutrient.nutrientColor == "Yellow" {
+                } else if nutrient.nutrientColor == "Yellow" && parent.YellowOnion.awakened {
                     onionToTakeTo = parent.YellowOnion
                 } else {
                     let randOnion = Int(arc4random_uniform(3) + 1)
-                    if randOnion == 1 {
+                    if randOnion == 1 && parent.RedOnion.awakened  {
                         onionToTakeTo = parent.RedOnion
-                    } else if randOnion == 2 {
+                    } else if randOnion == 2 && parent.BlueOnion.awakened {
                         onionToTakeTo = parent.BlueOnion
-                    } else {
+                    } else if randOnion == 3 && parent.YellowOnion.awakened {
                         onionToTakeTo = parent.YellowOnion
+                    } else {
+                        if parent.RedOnion.awakened {
+                            onionToTakeTo = parent.RedOnion
+                        } else if parent.BlueOnion.awakened {
+                            onionToTakeTo = parent.BlueOnion
+                        } else if parent.YellowOnion.awakened {
+                            onionToTakeTo = parent.YellowOnion
+                        }
                     }
                 }
             }
@@ -252,20 +370,28 @@ class Pikmin:SKSpriteNode {
             } else if pikminColor == "Yellow" {
                 onionToTakeTo = parent.YellowOnion
             } else {
-                if nutrient.nutrientColor == "Red" {
+                if nutrient.nutrientColor == "Red" && parent.RedOnion.awakened {
                     onionToTakeTo = parent.RedOnion
-                } else if nutrient.nutrientColor == "Blue" {
+                } else if nutrient.nutrientColor == "Blue" && parent.BlueOnion.awakened {
                     onionToTakeTo = parent.BlueOnion
-                } else if nutrient.nutrientColor == "Yellow" {
+                } else if nutrient.nutrientColor == "Yellow" && parent.YellowOnion.awakened {
                     onionToTakeTo = parent.YellowOnion
                 } else {
                     let randOnion = Int(arc4random_uniform(3) + 1)
-                    if randOnion == 1 {
+                    if randOnion == 1 && parent.RedOnion.awakened  {
                         onionToTakeTo = parent.RedOnion
-                    } else if randOnion == 2 {
+                    } else if randOnion == 2 && parent.BlueOnion.awakened {
                         onionToTakeTo = parent.BlueOnion
-                    } else {
+                    } else if randOnion == 3 && parent.YellowOnion.awakened {
                         onionToTakeTo = parent.YellowOnion
+                    } else {
+                        if parent.RedOnion.awakened {
+                            onionToTakeTo = parent.RedOnion
+                        } else if parent.BlueOnion.awakened {
+                            onionToTakeTo = parent.BlueOnion
+                        } else if parent.YellowOnion.awakened {
+                            onionToTakeTo = parent.YellowOnion
+                        }
                     }
                 }
             }
@@ -310,46 +436,26 @@ class Pikmin:SKSpriteNode {
         return tooFar
     }
     
-    func fixAudio() {
-        pikminSquel.removeFromParent()
-        pikminLand.removeFromParent()
-        pikminBumped.removeFromParent()
-        pikminLeft.removeFromParent()
-        pikminThrow.removeFromParent()
-        
-        pikminSquel = SKAudioNode(fileNamed: "pikminSquel")
-        pikminLand = SKAudioNode(fileNamed: "pikminLand")
-        pikminBumped = SKAudioNode(fileNamed: "pikminLand")
-        pikminLeft = SKAudioNode(fileNamed: "pikminLand")
-        pikminThrow = SKAudioNode(fileNamed: "throw")
-        let randReverb = Float(arc4random_uniform(1))
-        let randReverb2 = Float(arc4random_uniform(1))
-        pikminThrow.autoplayLooped = false
-        pikminThrow.positional = false
-        pikminSquel.autoplayLooped = false
-        pikminSquel.positional = false
-        pikminLand.autoplayLooped = false
-        pikminLand.positional = false
-        pikminLeft.autoplayLooped = false
-        pikminLeft.positional = false
-        pikminBumped.autoplayLooped = false
-        pikminBumped.positional = false
-        pikminLand.runAction(SKAction.changeReverbTo(1, duration: 0.05))
-        pikminLand.runAction(SKAction.changePlaybackRateTo(1.15, duration: 0.05))
-        pikminLeft.runAction(SKAction.changeReverbTo(randReverb2, duration: 0.05))
-        pikminLeft.runAction(SKAction.changePlaybackRateTo(0.9, duration: 0.05))
-        pikminBumped.runAction(SKAction.changeReverbTo(randReverb, duration: 0.05))
-        addChild(pikminThrow)
-        addChild(pikminLand)
-        addChild(pikminBumped)
-        addChild(pikminSquel)
-        addChild(pikminLeft)
-    }
-    
     func kill() {
-        brain.invalidate()
-        self.removeAllActions()
-        self.removeAllChildren()
-        self.removeFromParent()
+        if self.parent is GameScene {
+            let parent = self.parent as! GameScene
+            parent.population -= 1
+            print("New Population: " + String(parent.population))
+        }
+        
+        let NewGhost = Ghost(imageNamed: "Ghost_" + self.pikminColor + "1")
+        NewGhost.position = self.position
+        NewGhost.ghostColor = self.pikminColor
+        NewGhost.zPosition = FrontLayer
+        self.parent!.addChild(NewGhost)
+        NewGhost.setUp()
+        
+        runAction(pikminSqueel,completion: {
+            self.brain.invalidate()
+            self.removeAllActions()
+            self.removeAllChildren()
+            self.removeFromParent()
+        })
+        dead = true
     }
 }

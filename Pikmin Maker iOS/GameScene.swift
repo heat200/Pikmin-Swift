@@ -30,24 +30,28 @@ class GameScene:SKScene {
     
     let Space = SKSpriteNode(imageNamed:"space")
     
-    var UP_BTN = SKShapeNode(circleOfRadius: 30)
-    var DOWN_BTN = SKShapeNode(circleOfRadius: 30)
-    var LEFT_BTN = SKShapeNode(circleOfRadius: 30)
-    var RIGHT_BTN = SKShapeNode(circleOfRadius: 30)
-    var ACTION_BTN = SKShapeNode(circleOfRadius: 30)
-    var CALL_BTN = SKShapeNode(circleOfRadius: 30)
-    var IDLE_BTN = SKShapeNode(circleOfRadius: 30)
-    var ZOOM_BTN = SKShapeNode(circleOfRadius: 30)
+    var UP_BTN = SKShapeNode(circleOfRadius: 35)
+    var DOWN_BTN = SKShapeNode(circleOfRadius: 35)
+    var LEFT_BTN = SKShapeNode(circleOfRadius: 35)
+    var RIGHT_BTN = SKShapeNode(circleOfRadius: 35)
+    var ACTION_BTN = SKShapeNode(circleOfRadius: 35)
+    var CALL_BTN = SKShapeNode(circleOfRadius: 35)
+    var IDLE_BTN = SKShapeNode(circleOfRadius: 35)
+    var ZOOM_BTN = SKShapeNode(circleOfRadius: 35)
     
     let backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
     
     let MAP = SKSpriteNode(imageNamed:"map1")
     var nightOverlay = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 10, height: 10)))
     
+    var existingPikmin = [Pikmin]()
+    var population = 0
+    
     var movingSpace = false
     
     var lastTime = 0.0
     var day = true
+    var gameTime = 12
     
     override func didMoveToView(view: SKView) {
         MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
@@ -199,7 +203,7 @@ class GameScene:SKScene {
             let nutrient = Nutrient(imageNamed:"Nutrient_" + color)
             nutrient.nutrientColor = color
             nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
-            nutrient.zPosition = MidLayer - 1
+            nutrient.zPosition = MidLayer - 3
             self.addChild(nutrient)
         }
         
@@ -246,7 +250,6 @@ class GameScene:SKScene {
             }
             
             checkPlayerOn()
-            
             if objectTouched == UP_BTN {
                 if TheShip.followShip {
                     TheShip.toMultiplayer()
@@ -329,9 +332,24 @@ class GameScene:SKScene {
     }
     
     override func update(currentTime: NSTimeInterval) {
-        let timeFrame:Double = 2
+        let timeFrame:Double = 30
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
+            if gameTime == 23 {
+                gameTime = 0
+            } else {
+                gameTime += 1
+            }
+            
+            if gameTime > 20 || gameTime < 7 {
+                let aMonster = Monster(imageNamed:"Monster_Red_Bulborb_Down_Stand")
+                aMonster.zPosition = BackLayer
+                aMonster.monsterSpecies = "Red_Bulborb"
+                aMonster.setUp()
+                self.addChild(aMonster)
+                aMonster.randomizePosition()
+            }
+            
             if day {
                 nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
                 if nightOverlay.alpha >= 0.7 {
@@ -366,7 +384,7 @@ class GameScene:SKScene {
                     Space.removeAllActions()
                     let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: 500), duration: 6),SKAction.runBlock({
                         self.Space.position.x = self.TheShip.position.x
-                        self.Space.position.y = self.TheShip.position.y - 900
+                        self.Space.position.y = self.TheShip.position.y - 1200
                     })])
                     Space.position.y = TheShip.position.y - 1550
                     Space.runAction(SKAction.repeatActionForever(spaceZoom))

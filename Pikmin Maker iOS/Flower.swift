@@ -179,6 +179,7 @@ class Flower:SKSpriteNode {
     }
 
     func randomizePosition() {
+        zPosition = MidLayer - 1
         let randX:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
         let randY:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
         

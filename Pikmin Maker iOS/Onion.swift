@@ -55,6 +55,12 @@ class Onion:SKSpriteNode {
             }
             
             if allowed {
+                if self.parent is GameScene {
+                    let parent = self.parent as! GameScene
+                    parent.population += 1
+                }
+                
+                
                 receivedMsg = false
                 let seed = Seed(imageNamed:"Seed_" + onionColor + "_Falling2")
                 seed.zPosition = FrontLayer
@@ -82,7 +88,7 @@ class Onion:SKSpriteNode {
                 seed.addChild(seed.pikminIdleLook)
                 seed.addChild(seed.pikminPluck)
                 seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.4, dy: 30), duration: 0.8),completion:{
-                    seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.6, dy: -140 + (abs(randX) * 0.5)), duration: 1.7), completion:{
+                    seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.6, dy: -160 + (abs(randX) * 0.45)), duration: 1.7), completion:{
                         seed.removeAllActions()
                         seed.rooted = true
                         seed.pikminIdleLook.hidden = false

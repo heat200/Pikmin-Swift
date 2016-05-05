@@ -23,6 +23,8 @@ class Player:SKSpriteNode {
     let makeIdleSound = SKAudioNode(fileNamed: "call")
     var playerChars = ""
     
+    var timeForSpace = false
+    
     func setUp() {
         if character == "Olimar" {
             if character == "Olimar" {
@@ -84,15 +86,15 @@ class Player:SKSpriteNode {
         }
         
         if moveTo == "Down" {
-            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -2.5), duration: 0.25))
+            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -2), duration: 0.25))
             antenna.position = CGPoint(x: 0, y: 20)
             antenna.zPosition = -1
-            cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: -100), duration: 0.5))
+            cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: -80), duration: 0.5))
         } else if moveTo == "Up" {
-            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: 2.5), duration: 0.25))
+            self.runAction(SKAction.moveBy(CGVector(dx: 0, dy: 2), duration: 0.25))
             antenna.position = CGPoint(x: 0, y: 20)
             antenna.zPosition = 1
-            cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: 100), duration: 0.5))
+            cursorCircle.runAction(SKAction.moveTo(CGPoint(x: 0, y: 40), duration: 0.5))
         } else if moveTo == "Left" {
             self.runAction(SKAction.moveBy(CGVector(dx: -2.5, dy: 0), duration: 0.25))
             antenna.position = CGPoint(x: 9, y: 15)
@@ -119,7 +121,7 @@ class Player:SKSpriteNode {
                 index += 1
                 pikminFollowing[index].idle = true
                 pikminFollowing[index].returning = false
-                pikminFollowing[index].pikminLeft.runAction(SKAction.sequence([SKAction.waitForDuration(Double(index)/100),SKAction.play()]))
+                pikminFollowing[index].runAction(SKAction.sequence([SKAction.waitForDuration(Double(index)/100),pikminFollowing[index].pikminLeft]))
             }
             pikminFollowing.removeAll()
             pikminFollowing = [Pikmin]()
@@ -150,7 +152,7 @@ class Player:SKSpriteNode {
             let throwPosition = cursorCircle.position
             pikminChosen.busy = true
             pikminChosen.returning = true
-            pikminChosen.pikminThrow.runAction(SKAction.play())
+            pikminChosen.runAction(pikminChosen.pikminThrow)
             
             func checkIfPikminIsFine() {
                 let objectsPikminOn = self.parent!.nodesAtPoint(pikminChosen.position)
@@ -192,19 +194,11 @@ class Player:SKSpriteNode {
                     pikminChosen.removeAllActions()
                     pikminChosen.removeAllChildren()
                 } else if objectPikminOn is Nutrient {
-                    pikminChosen.pikminLand.runAction(SKAction.play(),completion:{
-                        self.parent!.runAction(SKAction.waitForDuration(0.15),completion:{
-                            pikminChosen.fixAudio()
-                        })
-                    })
+                    pikminChosen.runAction(pikminChosen.pikminLand)
                     let nutrient = objectPikminOn as! Nutrient
                     pikminChosen.carryNutrient(nutrient)
                 } else {
-                    pikminChosen.pikminLand.runAction(SKAction.play(),completion:{
-                        self.parent!.runAction(SKAction.waitForDuration(0.15),completion:{
-                            pikminChosen.fixAudio()
-                        })
-                    })
+                    pikminChosen.runAction(pikminChosen.pikminLand)
                     pikminChosen.busy = false
                 }
             }
@@ -257,7 +251,7 @@ class Player:SKSpriteNode {
         if !callingPikmin {
             callingPikmin = true
             callSound.runAction(SKAction.play())
-            recallCircle.runAction(SKAction.scaleXTo(15, y: 9, duration: 0.3),completion:{
+            recallCircle.runAction(SKAction.scaleXTo(25, y: 15, duration: 0.3),completion:{
                 self.recallCircle.runAction(SKAction.scaleTo(1, duration: 0.6),completion:{
                     self.callingPikmin = false
                 })

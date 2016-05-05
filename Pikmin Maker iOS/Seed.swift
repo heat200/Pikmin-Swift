@@ -29,6 +29,10 @@ class Seed:SKSpriteNode {
                 let rand = CGFloat(arc4random_uniform(2) + 1)
                 NewPikmin.zPosition = BackLayer + rand
                 player.pikminFollowing.append(NewPikmin)
+                if self.parent is GameScene {
+                    let parent = self.parent as! GameScene
+                    parent.existingPikmin.append(NewPikmin)
+                }
                 self.removeFromParent()
             })
         }

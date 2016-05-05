@@ -19,13 +19,28 @@ class Ship:SKSpriteNode {
             followShip = true
             allowedToLeave = false
             player.makePikminIdle()
-            (player.parent as! GameScene).camera?.runAction(SKAction.scaleTo(2, duration: 5))
-            player.runAction(SKAction.moveTo(self.position, duration: 1),completion:{
-                player.hidden = true
-                self.runAction(SKAction.setTexture(SKTexture(imageNamed: "Ship_" + player.character)),completion:{
-                    self.flyAwayWithOnions()
+            player.timeForSpace = true
+            var waitTime = 12.00
+            if self.parent is GameScene {
+                let parent = self.parent as! GameScene
+                if (!parent.RedOnion.awakened && !parent.RedOnion.awakened && !parent.RedOnion.awakened) && parent.population > 0 {
+                    waitTime = 3.00
+                } else if (parent.RedOnion.awakened || parent.RedOnion.awakened || parent.RedOnion.awakened) && parent.population > 0 {
+                    waitTime = 12.00
+                } else {
+                    waitTime = 0.00
+                }
+                
+                self.runAction(SKAction.waitForDuration(waitTime),completion:{
+                    parent.camera?.runAction(SKAction.scaleTo(2, duration: 5))
+                    player.runAction(SKAction.moveTo(self.position, duration: 1),completion:{
+                        player.hidden = true
+                        self.runAction(SKAction.setTexture(SKTexture(imageNamed: "Ship_" + player.character)),completion:{
+                            self.flyAwayWithOnions()
+                        })
+                    })
                 })
-            })
+            }
         }
     }
     
@@ -64,7 +79,7 @@ class Ship:SKSpriteNode {
             self.returning = true
             
             self.runAction(SKAction.rotateByAngle(CGFloat(M_PI), duration: 2),completion:{
-                self.runAction(SKAction.sequence([SKAction.waitForDuration(6.5),SKAction.rotateByAngle(CGFloat(-M_PI), duration: 3.5)]))
+                self.runAction(SKAction.sequence([SKAction.waitForDuration(6),SKAction.rotateByAngle(CGFloat(-M_PI), duration: 3)]))
                 self.runAction(SKAction.moveByX(0, y: -2800, duration: 10),completion:{
                     parent.ThePlayer.hidden = false
                     self.returning = false
@@ -74,22 +89,54 @@ class Ship:SKSpriteNode {
                     self.runAction(SKAction.setTexture(SKTexture(imageNamed: "Ship_Empty")))
                 })
                 
+                var allowRepopulation = false
+                if parent.population == 0 {
+                    allowRepopulation = true
+                }
+                
                 if parent.RedOnion.awakened {
                     parent.RedOnion.removeAllActions()
-                    parent.RedOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x - 200,y: self.position.y - 2700), duration: 15))
+                    
+                    parent.RedOnion.runAction(SKAction.rotateByAngle(CGFloat(M_PI), duration: 2),completion:{
+                        parent.RedOnion.runAction(SKAction.sequence([SKAction.waitForDuration(9),SKAction.rotateByAngle(CGFloat(-M_PI), duration: 3)]))
+                    })
+                    
+                    parent.RedOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x - 200,y: self.position.y - 2700), duration: 15),completion:{
+                        parent.ThePlayer.timeForSpace = false
+                        if allowRepopulation {
+                            parent.RedOnion.dispelSeed()
+                        }
+                    })
                     parent.RedOnion.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Onion_Red"),SKTexture(imageNamed:"Onion_Red2")], timePerFrame: 0.8, resize: true, restore: true)))
                 }
                 
                 if parent.BlueOnion.awakened {
                     parent.BlueOnion.removeAllActions()
                     parent.BlueOnion.zPosition = self.zPosition + 1
-                    parent.BlueOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x,y: self.position.y - 2625), duration: 15))
+                    
+                    parent.BlueOnion.runAction(SKAction.rotateByAngle(CGFloat(M_PI), duration: 2),completion:{
+                        parent.BlueOnion.runAction(SKAction.sequence([SKAction.waitForDuration(9),SKAction.rotateByAngle(CGFloat(-M_PI), duration: 3)]))
+                    })
+                    parent.BlueOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x,y: self.position.y - 2625), duration: 15),completion:{
+                        parent.ThePlayer.timeForSpace = false
+                        if allowRepopulation {
+                            parent.BlueOnion.dispelSeed()
+                        }
+                    })
                     parent.BlueOnion.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Onion_Blue"),SKTexture(imageNamed:"Onion_Blue2")], timePerFrame: 0.8, resize: true, restore: true)))
                 }
                 
                 if parent.YellowOnion.awakened {
                     parent.YellowOnion.removeAllActions()
-                    parent.YellowOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x + 200,y: self.position.y - 2700), duration: 15))
+                    parent.YellowOnion.runAction(SKAction.rotateByAngle(CGFloat(M_PI), duration: 2),completion:{
+                        parent.YellowOnion.runAction(SKAction.sequence([SKAction.waitForDuration(9),SKAction.rotateByAngle(CGFloat(-M_PI), duration: 3)]))
+                    })
+                    parent.YellowOnion.runAction(SKAction.moveTo(CGPoint(x: self.position.x + 200,y: self.position.y - 2700), duration: 15),completion:{
+                        parent.ThePlayer.timeForSpace = false
+                        if allowRepopulation {
+                            parent.YellowOnion.dispelSeed()
+                        }
+                    })
                     parent.YellowOnion.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Onion_Yellow"),SKTexture(imageNamed:"Onion_Yellow2")], timePerFrame: 0.8, resize: true, restore: true)))
                 }
             })
