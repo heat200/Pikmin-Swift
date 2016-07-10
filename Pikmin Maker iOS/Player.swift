@@ -22,6 +22,7 @@ class Player:SKSpriteNode {
     var callSound = SKAudioNode(fileNamed: "call")
     var makeIdleSound = SKAudioNode(fileNamed: "call")
     var playerChars = ""
+    var halfHeight:CGFloat!
     
     var timeForSpace = false
     
@@ -61,12 +62,13 @@ class Player:SKSpriteNode {
             antenna.run(SKAction.repeatForever(glowEffect))
             self.addChild(antenna)
         }
+        halfHeight = self.size.height/2
     }
     
     func move() {
         if moveTo != "" {
             playerDirection = moveTo
-            self.zPosition = (self.position.y - self.size.height/2) * -1
+            self.zPosition = (self.position.y - halfHeight) * -1
         }
         
         let graphic = character + "_" + playerDirection + "_"
@@ -167,10 +169,10 @@ class Player:SKSpriteNode {
                 }
                 
                 func checkPikminOn() {
-                    if objectsPikminOn.count - attempts > 0 && !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) {
+                    if objectsPikminOn.count - attempts > 0 && !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) {
                         attempts += 1
                         objectPikminOn = objectsPikminOn[objectsPikminOn.count - attempts]
-                        if !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && objectsPikminOn.count - attempts > 0 {
+                        if !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) && objectsPikminOn.count - attempts > 0 {
                             checkPikminOn()
                         }
                     }
@@ -200,6 +202,11 @@ class Player:SKSpriteNode {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
                     let nutrient = objectPikminOn as! Nutrient
                     pikminChosen?.carryNutrient(nutrient)
+                } else if objectPikminOn is Monster {
+                    pikminChosen?.run((pikminChosen?.pikminLand)!)
+                    let monster = objectPikminOn as! Monster
+                    pikminChosen?.attackTarget = monster
+                    pikminChosen?.attacking = true
                 } else {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
                     pikminChosen?.busy = false

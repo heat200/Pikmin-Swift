@@ -16,6 +16,8 @@ class Monster:SKSpriteNode {
     var target = Pikmin()
     var moving = false
     var busy = false
+    var stunned = false
+    var dead = false
     var brain:Timer!
     var tickCount = 0
     var life_ticks = 0
@@ -23,6 +25,7 @@ class Monster:SKSpriteNode {
     var health:CGFloat = 160
     var maxHealth:CGFloat = 160
     var healthBar = SKShapeNode(rect: CGRect(x: 0, y: 30, width: 50, height: 5), cornerRadius: 5)
+    var halfHeight:CGFloat!
     
     
     func setUp() {
@@ -34,11 +37,12 @@ class Monster:SKSpriteNode {
         self.zPosition = (self.position.y - self.size.height/2) * -1
         target.isHidden = true
         brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Monster.thinking), userInfo: nil, repeats: true)
+        halfHeight = self.size.height/2
     }
     
     func move() {
         if !checkIfTooFar(target) && !target.isHidden && !target.dead {
-            self.zPosition = (self.position.y - self.size.height/2) * -1
+            self.zPosition = (self.position.y - halfHeight) * -1
             if abs(target.position.x - position.x) > abs(target.position.y - position.y) && !busy {
                 if target.position.x > position.x {
                     direction = "Right"
@@ -126,7 +130,7 @@ class Monster:SKSpriteNode {
     }
     
     func findNewTarget() {
-        if self.parent is GameScene {
+        if self.parent is GameScene && !stunned {
             let parent = self.parent as! GameScene
             var targetFound = false
             var index = 0
@@ -168,8 +172,44 @@ class Monster:SKSpriteNode {
             last_attack_tick = life_ticks
             removeAllActions()
             run(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Eat"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand")], timePerFrame: 0.14, resize: true, restore: false),completion:{
+                if self.target.pikminColor == "White" {
+                    self.takePikminDamage(damageType: "hitPoison")
+                }
                 self.target.kill()
                 self.busy = false
+            })
+        }
+    }
+    
+    func takePikminDamage(damageType:String) {
+        if damageType == "hitLeaf" {
+            health -= 1
+        } else if damageType == "hitBud" {
+            health -= 2
+        } else if damageType == "hitFlower" {
+            health -= 3
+        } else if damageType == "hitLeaf-Red" {
+            health -= 2
+        } else if damageType == "hitBud-Red" {
+            health -= 3
+        } else if damageType == "hitFlower-Red" {
+            health -= 4
+        } else if damageType == "hitPoison" {
+            health -= 25
+        } else if damageType == "hitStun" {
+            health -= 10
+            stunned = true
+            target = Pikmin()
+            run(SKAction.wait(forDuration: 1.5),completion:{
+                self.stunned = false
+            })
+        }
+        
+        if health <= 0 {
+            dead = true
+            brain.invalidate()
+            run(SKAction.wait(forDuration: 1.5),completion:{
+                self.kill()
             })
         }
     }

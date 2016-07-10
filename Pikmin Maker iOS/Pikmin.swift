@@ -19,8 +19,7 @@ class Pikmin:SKSpriteNode {
     var pikminTierLook = SKSpriteNode(imageNamed: "Leaf")
     var pikminIdleLook = SKSpriteNode(imageNamed:"RedGlow")
     var leader = Player()
-    var attackDamage = 1
-    var landDamage = 1
+    var attackTarget:Monster!
     var attacking = false
     var followPoint = CGPoint()
     var dead = false
@@ -30,6 +29,7 @@ class Pikmin:SKSpriteNode {
     var returning = false
     var brain:Timer!
     var throwHeight:CGFloat = 140
+    var halfHeight:CGFloat!
     var dispX:CGFloat = 0
     var dispY:CGFloat = 0
     var pikminSqueel = SKAction.playSoundFileNamed("pikminSqueel", waitForCompletion: false)
@@ -88,10 +88,10 @@ class Pikmin:SKSpriteNode {
         dispY = randY
         followPoint = CGPoint(x: leader.position.x + randX, y: leader.position.y + randY)
         brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Pikmin.thinking), userInfo: nil, repeats: true)
+        halfHeight = self.size.height/2
     }
     
     func move() {
-        self.zPosition = (self.position.y - self.size.height/2) * -1
         if !attacking {
             if abs(leader.position.x - position.x) > abs(leader.position.y - position.y) && !busy {
                 if leader.position.x > position.x {
@@ -106,8 +106,21 @@ class Pikmin:SKSpriteNode {
                     direction = "Down"
                 }
             }
-        } /*else {
-            if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) && !busy {
+        } else {
+            if abs(attackTarget.position.x - position.x) <= 15 && abs(attackTarget.position.y - position.y) <= 15 {
+                if attackTarget.dead || attackTarget == nil {
+                    attacking = false
+                } else {
+                    if pikminColor != "Red" {
+                        attackTarget.takePikminDamage(damageType: "hit" + self.pikminTier)
+                        self.busy = false
+                    } else {
+                        attackTarget.takePikminDamage(damageType: "hit" + self.pikminTier + "-Red")
+                        self.busy = false
+                    }
+                }
+                
+            } else if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) && !busy {
                 if attackTarget.position.x > position.x {
                     direction = "Right"
                 } else if attackTarget.position.x < position.x {
@@ -120,7 +133,7 @@ class Pikmin:SKSpriteNode {
                     direction = "Down"
                 }
             }
-        }*/
+        }
         updateLooks()
     }
     
@@ -131,17 +144,14 @@ class Pikmin:SKSpriteNode {
             followPoint = CGPoint(x: leader.position.x - dispX, y: leader.position.y)
         } else if leader.playerDirection == "Up" {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y - dispY)
-            zPosition = BackLayer + 1
         } else if leader.playerDirection == "Down" {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y + dispY)
-            if !busy {
-                zPosition = BackLayer - 1
-            }
         }
         pikminIdleLook.position = pikminTierLook.position
         move()
         if position != followPoint && !idle && !busy {
             moving = true
+            self.zPosition = (self.position.y - halfHeight) * -1
         } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace {
             moving = false
             returning = false
@@ -152,13 +162,20 @@ class Pikmin:SKSpriteNode {
             }
         }
         
-        if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y && self.idle {
+        if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y {
+            if idle || attacking {
+                run(pikminBumped)
+                if attacking {
+                    busy = false
+                }
+            }
             idle = false
+            attacking = false
+            attackTarget = nil
             pikminIdleLook.isHidden = true
             if !leader.pikminFollowing.contains(self) {
                 leader.pikminFollowing.append(self)
             }
-            run(pikminBumped)
         }
         
         if leader.timeForSpace && !movingToHome && !inHome {
