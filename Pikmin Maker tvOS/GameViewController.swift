@@ -1,6 +1,6 @@
 //
 //  GameViewController.swift
-//  Pikmin Maker iOS
+//  Pikmin Maker
 //
 //  Created by Bryan Mazariegos on 4/30/16.
 //  Copyright (c) 2016 Bryan Mazariegos. All rights reserved.
@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-
+    var gameScene:GameScene!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,30 +24,23 @@ class GameViewController: UIViewController {
             skView.ignoresSiblingOrder = true
             
             /* Set the scale mode to scale to fit the window */
-            scene.scaleMode = .resizeFill
+            scene.scaleMode = .ResizeFill
             
             skView.presentScene(scene)
+            gameScene = scene
         }
     }
 
-    override func shouldAutorotate() -> Bool {
-        return true
+    override func pressesBegan(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
+        gameScene.pressesBegan(presses, withEvent: event)
     }
-
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.current().userInterfaceIdiom == .phone {
-            return .landscape
-        } else {
-            return .landscape
-        }
+    
+    override func pressesEnded(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
+        gameScene.pressesEnded(presses, withEvent: event)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
-    }
-
-    override func prefersStatusBarHidden() -> Bool {
-        return true
     }
 }

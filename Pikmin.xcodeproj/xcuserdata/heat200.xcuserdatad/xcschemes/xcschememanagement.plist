@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>Pikmin Maker tvOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Pikmin Maker.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,6 +22,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>7D40F9671CF30A9700BA588A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7D488C3B1CC67EAF00A412D9</key>
 		<dict>
 			<key>primary</key>

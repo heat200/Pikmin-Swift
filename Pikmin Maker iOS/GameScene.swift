@@ -8,17 +8,17 @@
 
 import SpriteKit
 
-let BackmostLayer:CGFloat = 0
-let BackLayer:CGFloat = 5
-let MidLayer:CGFloat = 10
-let FrontLayer:CGFloat = 15
-let UILayer:CGFloat = 20
+let BackmostLayer:CGFloat = -999999
+let BackLayer:CGFloat = 10
+let MidLayer:CGFloat = 20
+let FrontLayer:CGFloat = 30
+let UILayer:CGFloat = 999999
 
 enum UIUserInterfaceIdiom : Int {
-    case Unspecified
+    case unspecified
     
-    case Phone
-    case Pad
+    case phone
+    case pad
 }
 
 class GameScene:SKScene {
@@ -39,6 +39,8 @@ class GameScene:SKScene {
     var IDLE_BTN = SKShapeNode(circleOfRadius: 35)
     var ZOOM_BTN = SKShapeNode(circleOfRadius: 35)
     
+    var sundial = SKShapeNode(circleOfRadius: 20)
+    
     let backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
     
     let MAP = SKSpriteNode(imageNamed:"map1")
@@ -47,40 +49,53 @@ class GameScene:SKScene {
     var existingPikmin = [Pikmin]()
     var population = 0
     
+    var redPopulation = 0
+    var bluePopulation = 0
+    var yellowPopulation = 0
+    
+    var whitePopulation = 0
+    var purplePopulation = 0
+    
     var movingSpace = false
     
     var lastTime = 0.0
     var day = true
     var gameTime = 12
     
-    override func didMoveToView(view: SKView) {
+    var trueSemiWidth:CGFloat!
+    var trueSemiHeight:CGFloat!
+    
+    override func didMove(to view: SKView) {
+        trueSemiWidth = self.frame.width/2
+        trueSemiHeight = self.frame.height/2
         MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         MAP.zPosition = BackmostLayer
         
         ThePlayer.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        ThePlayer.zPosition = BackLayer
+        ThePlayer.zPosition = (ThePlayer.position.y - ThePlayer.size.height/2) * -1
         ThePlayer.setUp()
         
         RedOnion.onionColor = "Red"
-        RedOnion.zPosition = MidLayer
+        RedOnion.zPosition = (RedOnion.position.y - RedOnion.size.height/2) * -1
         
         BlueOnion.onionColor = "Blue"
-        BlueOnion.zPosition = MidLayer
+        BlueOnion.zPosition = (BlueOnion.position.y - BlueOnion.size.height/2) * -1
         
         YellowOnion.onionColor = "Yellow"
-        YellowOnion.zPosition = MidLayer
+        YellowOnion.zPosition = (YellowOnion.position.y - YellowOnion.size.height/2) * -1
         
         backgroundMusic.autoplayLooped = true
         
         let PurpleFlower = Flower(imageNamed:"Flower_Purple_Open")
-        PurpleFlower.zPosition = MidLayer
+        PurpleFlower.zPosition = PurpleFlower.position.y - PurpleFlower.size.height/2
         PurpleFlower.flowerColor = "Purple"
         
         let WhiteFlower = Flower(imageNamed:"Flower_White_Open")
-        WhiteFlower.zPosition = MidLayer
+        WhiteFlower.zPosition = WhiteFlower.position.y - WhiteFlower.size.height/2
         
         TheShip.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 300)
-        TheShip.zPosition = FrontLayer
+        TheShip.zPosition = (TheShip.position.y - TheShip.size.height/2) * -1
+        TheShip.setUp()
         
         Space.zPosition = BackmostLayer - 1
         Space.position = CGPoint(x: self.frame.midX, y: self.frame.midY + self.size.height/2)
@@ -89,88 +104,94 @@ class GameScene:SKScene {
         nightOverlay = SKShapeNode(rect: self.frame)
         nightOverlay.zPosition = -1
         nightOverlay.position = CGPoint(x: -self.frame.width/2, y: -self.frame.height/2)
-        nightOverlay.fillColor = SKColor.blackColor()
+        nightOverlay.fillColor = SKColor.black()
         nightOverlay.alpha = 0.0
-        nightOverlay.strokeColor = SKColor.clearColor()
+        nightOverlay.strokeColor = SKColor.clear()
         self.camera!.addChild(nightOverlay)
         
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        sundial.zPosition = 1
+        sundial.position = CGPoint(x: 0, y: self.frame.height/2 - 20)
+        sundial.fillColor = SKColor.yellow()
+        sundial.alpha = 1
+        self.camera!.addChild(sundial)
+        
+        if UIDevice.current().userInterfaceIdiom == .pad {
             let semiWidth = self.frame.width/2
             let semiHeight = self.frame.height/2
-            UP_BTN.fillColor = SKColor.grayColor()
+            UP_BTN.fillColor = SKColor.gray()
             UP_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 + 50)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.grayColor()
+            DOWN_BTN.fillColor = SKColor.gray()
             DOWN_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 - 50)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.grayColor()
+            LEFT_BTN.fillColor = SKColor.gray()
             LEFT_BTN.position = CGPoint(x: -semiWidth + 100 - 50, y: -semiHeight + 100)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.grayColor()
+            RIGHT_BTN.fillColor = SKColor.gray()
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 100 + 50, y: -semiHeight + 100)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.greenColor()
+            ACTION_BTN.fillColor = SKColor.green()
             ACTION_BTN.position = CGPoint(x: semiWidth - 100, y: -semiHeight + 100)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.grayColor()
+            IDLE_BTN.fillColor = SKColor.gray()
             IDLE_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 + 50)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.redColor()
+            CALL_BTN.fillColor = SKColor.red()
             CALL_BTN.position = CGPoint(x: semiWidth - 100 - 50, y: -semiHeight + 100 - 50)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyanColor()
+            ZOOM_BTN.fillColor = SKColor.cyan()
             ZOOM_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 - 50)
             ZOOM_BTN.alpha = 0.65
-        } else if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            UP_BTN = SKShapeNode(circleOfRadius: 45)
-            DOWN_BTN = SKShapeNode(circleOfRadius: 45)
-            LEFT_BTN = SKShapeNode(circleOfRadius: 45)
-            RIGHT_BTN = SKShapeNode(circleOfRadius: 45)
-            ACTION_BTN = SKShapeNode(circleOfRadius: 45)
-            CALL_BTN = SKShapeNode(circleOfRadius: 45)
-            IDLE_BTN = SKShapeNode(circleOfRadius: 45)
-            ZOOM_BTN = SKShapeNode(circleOfRadius: 35)
+        } else if UIDevice.current().userInterfaceIdiom == .phone {
+            UP_BTN = SKShapeNode(circleOfRadius: 35)
+            DOWN_BTN = SKShapeNode(circleOfRadius: 35)
+            LEFT_BTN = SKShapeNode(circleOfRadius: 35)
+            RIGHT_BTN = SKShapeNode(circleOfRadius: 35)
+            ACTION_BTN = SKShapeNode(circleOfRadius: 35)
+            CALL_BTN = SKShapeNode(circleOfRadius: 35)
+            IDLE_BTN = SKShapeNode(circleOfRadius: 35)
+            ZOOM_BTN = SKShapeNode(circleOfRadius: 25)
             
             let semiWidth = self.frame.width/3
             let semiHeight = self.frame.height/4
             
-            UP_BTN.fillColor = SKColor.grayColor()
-            UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 + 65)
+            UP_BTN.fillColor = SKColor.gray()
+            UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 60)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.grayColor()
-            DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 - 65)
+            DOWN_BTN.fillColor = SKColor.gray()
+            DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight - 40)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.grayColor()
-            LEFT_BTN.position = CGPoint(x: -semiWidth - 65, y: -semiHeight + 120)
+            LEFT_BTN.fillColor = SKColor.gray()
+            LEFT_BTN.position = CGPoint(x: -semiWidth - 50, y: -semiHeight + 10)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.grayColor()
-            RIGHT_BTN.position = CGPoint(x: -semiWidth + 65, y: -semiHeight + 120)
+            RIGHT_BTN.fillColor = SKColor.gray()
+            RIGHT_BTN.position = CGPoint(x: -semiWidth + 50, y: -semiHeight + 10)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.greenColor()
-            ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 120)
+            ACTION_BTN.fillColor = SKColor.green()
+            ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 10)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.grayColor()
-            IDLE_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 + 65)
+            IDLE_BTN.fillColor = SKColor.gray()
+            IDLE_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight + 60)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.redColor()
-            CALL_BTN.position = CGPoint(x: semiWidth - 65, y: -semiHeight + 120 - 65)
+            CALL_BTN.fillColor = SKColor.red()
+            CALL_BTN.position = CGPoint(x: semiWidth - 50, y: -semiHeight - 40)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyanColor()
-            ZOOM_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 - 65)
+            ZOOM_BTN.fillColor = SKColor.cyan()
+            ZOOM_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight - 40)
             ZOOM_BTN.alpha = 0.65
         }
         
@@ -203,8 +224,23 @@ class GameScene:SKScene {
             let nutrient = Nutrient(imageNamed:"Nutrient_" + color)
             nutrient.nutrientColor = color
             nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
-            nutrient.zPosition = MidLayer - 3
+            nutrient.zPosition = (nutrient.position.y - nutrient.size.height/2) * -1
             self.addChild(nutrient)
+        }
+        
+        var timeBubblesAdded = 0
+        while timeBubblesAdded < 13 {
+            var radius:CGFloat = 5
+            if timeBubblesAdded == 0 || timeBubblesAdded == 6 || timeBubblesAdded == 12 {
+                radius = 10
+            }
+            let timeBubble = SKShapeNode(circleOfRadius: radius)
+            timeBubble.position = CGPoint(x: -trueSemiWidth + 25 + (43 * CGFloat(timeBubblesAdded)), y: trueSemiHeight - 20)
+            timeBubblesAdded += 1
+            timeBubble.name = "TimeBubble" + String(timeBubblesAdded)
+            timeBubble.fillColor = SKColor.gray()
+            timeBubble.alpha = 0.65
+            self.camera?.addChild(timeBubble)
         }
         
         self.addChild(ThePlayer)
@@ -227,11 +263,11 @@ class GameScene:SKScene {
         PurpleFlower.randomizePosition()
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
-            let objectTouched = self.nodeAtPoint(location)
-            let objectsPlayerOn = self.nodesAtPoint(ThePlayer.position)
+            let location = touch.location(in: self)
+            let objectTouched = self.atPoint(location)
+            let objectsPlayerOn = self.nodes(at: ThePlayer.position)
             var attempts = 1
             var objectPlayerOn = objectsPlayerOn[objectsPlayerOn.count - attempts]
             
@@ -290,6 +326,9 @@ class GameScene:SKScene {
                 if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
                     let onion = objectPlayerOn as! Onion
                     onion.wake()
+                } else if (objectPlayerOn is Onion) && ((objectPlayerOn as? Onion)?.awakened)! {
+                    let onion = objectPlayerOn as! Onion
+                    onion.toggleMenuOverlay()
                 } else if objectPlayerOn is Seed {
                     let seed = objectPlayerOn as! Seed
                     seed.unrootPikmin(ThePlayer)
@@ -305,20 +344,22 @@ class GameScene:SKScene {
                 ThePlayer.recallPikmin()
             } else if objectTouched == ZOOM_BTN {
                 if self.camera!.xScale == 1 {
-                    self.camera!.runAction(SKAction.scaleTo(0.75, duration: 0.25))
+                    self.camera!.run(SKAction.scale(to: 0.75, duration: 0.25))
                 } else if self.camera!.xScale == 0.75 {
-                    self.camera!.runAction(SKAction.scaleTo(0.5, duration: 0.25))
+                    self.camera!.run(SKAction.scale(to: 0.5, duration: 0.25))
                 } else if self.camera!.xScale == 0.5 {
-                    self.camera!.runAction(SKAction.scaleTo(1, duration: 0.25))
+                    self.camera!.run(SKAction.scale(to: 5, duration: 0.25))
+                } else if self.camera!.xScale == 5 {
+                    self.camera!.run(SKAction.scale(to: 1, duration: 0.25))
                 }
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
-            let objectTouched = self.nodeAtPoint(location)
+            let location = touch.location(in: self)
+            let objectTouched = self.atPoint(location)
             if objectTouched == UP_BTN || objectTouched == DOWN_BTN || objectTouched == LEFT_BTN || objectTouched == RIGHT_BTN {
                 ThePlayer.moveTo = ""
             }
@@ -327,11 +368,16 @@ class GameScene:SKScene {
                 if ThePlayer.pikminToThrow != nil {
                     ThePlayer.throwPikmin()
                 }
+            } else if objectTouched == CALL_BTN {
+                ThePlayer.recallCircle.removeAllActions()
+                ThePlayer.recallCircle.run(SKAction.scale(to: 1, duration: 0.15),completion:{
+                    self.ThePlayer.callingPikmin = false
+                })
             }
         }
     }
     
-    override func update(currentTime: NSTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         let timeFrame:Double = 30
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
@@ -341,7 +387,56 @@ class GameScene:SKScene {
                 gameTime += 1
             }
             
-            if gameTime > 20 || gameTime < 7 {
+            if gameTime == 7 {
+                sundial.fillColor = SKColor.yellow()
+                let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
+                let marker2 = self.camera!.childNode(withName: "TimeBubble2")!
+                sundial.position = marker1.position
+                sundial.run(SKAction.move(to: marker2.position, duration: timeFrame - 0.5))
+            } else if gameTime == 8 {
+                let marker3 = self.camera!.childNode(withName: "TimeBubble3")!
+                sundial.run(SKAction.move(to: marker3.position, duration: timeFrame - 0.5))
+            } else if gameTime == 9 {
+                let marker4 = self.camera!.childNode(withName: "TimeBubble4")!
+                sundial.run(SKAction.move(to: marker4.position, duration: timeFrame - 0.5))
+            } else if gameTime == 10 {
+                let marker5 = self.camera!.childNode(withName: "TimeBubble5")!
+                sundial.run(SKAction.move(to: marker5.position, duration: timeFrame - 0.5))
+            } else if gameTime == 11 {
+                let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
+                sundial.run(SKAction.move(to: marker6.position, duration: timeFrame - 0.5))
+            } else if gameTime == 12 {
+                let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
+                let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
+                sundial.position = marker6.position
+                sundial.run(SKAction.move(to: marker7.position, duration: timeFrame - 0.5))
+            } else if gameTime == 13 {
+                let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
+                let marker8 = self.camera!.childNode(withName: "TimeBubble8")!
+                sundial.position = marker7.position
+                sundial.run(SKAction.move(to: marker8.position, duration: timeFrame - 0.5))
+            } else if gameTime == 14 {
+                let marker9 = self.camera!.childNode(withName: "TimeBubble9")!
+                sundial.run(SKAction.move(to: marker9.position, duration: timeFrame - 0.5))
+            } else if gameTime == 15 {
+                let marker10 = self.camera!.childNode(withName: "TimeBubble10")!
+                sundial.run(SKAction.move(to: marker10.position, duration: timeFrame - 0.5))
+            } else if gameTime == 16 {
+                let marker11 = self.camera!.childNode(withName: "TimeBubble11")!
+                sundial.run(SKAction.move(to: marker11.position, duration: timeFrame - 0.5))
+            } else if gameTime == 17 {
+                let marker12 = self.camera!.childNode(withName: "TimeBubble12")!
+                sundial.run(SKAction.move(to: marker12.position, duration: timeFrame - 0.5))
+            } else if gameTime == 18 {
+                let marker13 = self.camera!.childNode(withName: "TimeBubble13")!
+                sundial.run(SKAction.move(to: marker13.position, duration: timeFrame - 0.5))
+            } else if gameTime == 19 {
+                let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
+                sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 12) - 0.5))
+                sundial.fillColor = SKColor.white()
+            }
+            
+            if gameTime > 19 || gameTime < 7 {
                 let aMonster = Monster(imageNamed:"Monster_Red_Bulborb_Down_Stand")
                 aMonster.zPosition = BackLayer
                 aMonster.monsterSpecies = "Red_Bulborb"
@@ -351,13 +446,13 @@ class GameScene:SKScene {
             }
             
             if day {
-                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
                 if nightOverlay.alpha >= 0.7 {
                     nightOverlay.alpha = 0.7
                     day = false
                 }
             } else {
-                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
                 if nightOverlay.alpha <= 0.0 {
                     nightOverlay.alpha = 0.0
                     day = true
@@ -374,20 +469,20 @@ class GameScene:SKScene {
                 movingSpace = true
                 if !TheShip.returning {
                     Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: -750), duration: 9),SKAction.runBlock({
+                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: -750), duration: 9),SKAction.run({
                         self.Space.position.x = self.TheShip.position.x
                         self.Space.position.y = self.TheShip.position.y + 1100
                     })])
                     Space.position.y = TheShip.position.y + 1550
-                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                    Space.run(SKAction.repeatForever(spaceZoom))
                 } else {
                     Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: 500), duration: 6),SKAction.runBlock({
+                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: 500), duration: 6),SKAction.run({
                         self.Space.position.x = self.TheShip.position.x
                         self.Space.position.y = self.TheShip.position.y - 1200
                     })])
                     Space.position.y = TheShip.position.y - 1550
-                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                    Space.run(SKAction.repeatForever(spaceZoom))
                 }
             }
         }

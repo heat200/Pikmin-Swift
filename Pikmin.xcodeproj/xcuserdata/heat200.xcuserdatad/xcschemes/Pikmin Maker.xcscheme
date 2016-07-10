@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7D51C68D1CD568D6002FB2F8"
-               BuildableName = "Pikmin Maker iOS.app"
-               BlueprintName = "Pikmin Maker iOS"
-               ReferencedContainer = "container:Pikmin Maker.xcodeproj">
+               BlueprintIdentifier = "7D488C3B1CC67EAF00A412D9"
+               BuildableName = "Pikmin Maker.app"
+               BlueprintName = "Pikmin Maker"
+               ReferencedContainer = "container:Pikmin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7D51C68D1CD568D6002FB2F8"
-            BuildableName = "Pikmin Maker iOS.app"
-            BlueprintName = "Pikmin Maker iOS"
-            ReferencedContainer = "container:Pikmin Maker.xcodeproj">
+            BlueprintIdentifier = "7D488C3B1CC67EAF00A412D9"
+            BuildableName = "Pikmin Maker.app"
+            BlueprintName = "Pikmin Maker"
+            ReferencedContainer = "container:Pikmin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7D51C68D1CD568D6002FB2F8"
-            BuildableName = "Pikmin Maker iOS.app"
-            BlueprintName = "Pikmin Maker iOS"
-            ReferencedContainer = "container:Pikmin Maker.xcodeproj">
+            BlueprintIdentifier = "7D488C3B1CC67EAF00A412D9"
+            BuildableName = "Pikmin Maker.app"
+            BlueprintName = "Pikmin Maker"
+            ReferencedContainer = "container:Pikmin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7D51C68D1CD568D6002FB2F8"
-            BuildableName = "Pikmin Maker iOS.app"
-            BlueprintName = "Pikmin Maker iOS"
-            ReferencedContainer = "container:Pikmin Maker.xcodeproj">
+            BlueprintIdentifier = "7D488C3B1CC67EAF00A412D9"
+            BuildableName = "Pikmin Maker.app"
+            BlueprintName = "Pikmin Maker"
+            ReferencedContainer = "container:Pikmin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

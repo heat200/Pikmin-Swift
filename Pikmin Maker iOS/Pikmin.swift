@@ -19,13 +19,16 @@ class Pikmin:SKSpriteNode {
     var pikminTierLook = SKSpriteNode(imageNamed: "Leaf")
     var pikminIdleLook = SKSpriteNode(imageNamed:"RedGlow")
     var leader = Player()
+    var attackDamage = 1
+    var landDamage = 1
+    var attacking = false
     var followPoint = CGPoint()
     var dead = false
     var idle = false
     var moving = false
     var busy = false
     var returning = false
-    var brain:NSTimer!
+    var brain:Timer!
     var throwHeight:CGFloat = 140
     var dispX:CGFloat = 0
     var dispY:CGFloat = 0
@@ -35,14 +38,15 @@ class Pikmin:SKSpriteNode {
     var pikminLeft = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
     var pikminThrow = SKAction.playSoundFileNamed("throw", waitForCompletion: false)
     
+    
     var movingToHome = false
     var inHome = false
     
     func setTier() {
-        pikminIdleLook.runAction(SKAction.setTexture(SKTexture(imageNamed:pikminColor + "Glow"), resize: true))
+        pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:pikminColor + "Glow"), resize: true))
         pikminIdleLook.setScale(1)
-        let group = SKAction.sequence([SKAction.scaleTo(1.9, duration: 0.75),SKAction.scaleTo(2.4, duration: 0.75)])
-        pikminIdleLook.runAction(SKAction.repeatActionForever(group))
+        let group = SKAction.sequence([SKAction.scale(to: 1.9, duration: 0.75),SKAction.scale(to: 2.4, duration: 0.75)])
+        pikminIdleLook.run(SKAction.repeatForever(group))
         
         if pikminColor == "White" || pikminColor == "Purple" {
             flowerColor = "P"
@@ -62,15 +66,15 @@ class Pikmin:SKSpriteNode {
         
         if pikminTier == "Leaf" {
             movementSpeed = baseMoveSpeed
-            pikminTierLook.runAction(SKAction.setTexture(SKTexture(imageNamed:"Leaf")))
+            pikminTierLook.run(SKAction.setTexture(SKTexture(imageNamed:"Leaf")))
         } else if pikminTier == "Bud" {
             movementSpeed = baseMoveSpeed + 25
-            pikminTierLook.runAction(SKAction.setTexture(SKTexture(imageNamed:"Bud" + flowerColor)))
+            pikminTierLook.run(SKAction.setTexture(SKTexture(imageNamed:"Bud" + flowerColor)))
         } else if pikminTier == "Flower" {
             movementSpeed = baseMoveSpeed + 50
-            pikminTierLook.runAction(SKAction.setTexture(SKTexture(imageNamed:"Flower" + flowerColor)))
+            pikminTierLook.run(SKAction.setTexture(SKTexture(imageNamed:"Flower" + flowerColor)))
         }
-        pikminIdleLook.hidden = true
+        pikminIdleLook.isHidden = true
         pikminIdleLook.zPosition = -1
         self.addChild(pikminIdleLook)
         self.addChild(pikminTierLook)
@@ -83,23 +87,40 @@ class Pikmin:SKSpriteNode {
         dispX = randX
         dispY = randY
         followPoint = CGPoint(x: leader.position.x + randX, y: leader.position.y + randY)
-        brain = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(Pikmin.thinking), userInfo: nil, repeats: true)
+        brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Pikmin.thinking), userInfo: nil, repeats: true)
     }
     
     func move() {
-        if abs(leader.position.x - position.x) > abs(leader.position.y - position.y) && !busy {
-            if leader.position.x > position.x {
-                direction = "Right"
-            } else if leader.position.x < position.x {
-                direction = "Left"
+        self.zPosition = (self.position.y - self.size.height/2) * -1
+        if !attacking {
+            if abs(leader.position.x - position.x) > abs(leader.position.y - position.y) && !busy {
+                if leader.position.x > position.x {
+                    direction = "Right"
+                } else if leader.position.x < position.x {
+                    direction = "Left"
+                }
+            } else if abs(leader.position.x - position.x) < abs(leader.position.y - position.y) && !busy{
+                if leader.position.y > position.y {
+                    direction = "Up"
+                } else if leader.position.y < position.y {
+                    direction = "Down"
+                }
             }
-        } else if abs(leader.position.x - position.x) < abs(leader.position.y - position.y) && !busy{
-            if leader.position.y > position.y {
-                direction = "Up"
-            } else if leader.position.y < position.y {
-                direction = "Down"
+        } /*else {
+            if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) && !busy {
+                if attackTarget.position.x > position.x {
+                    direction = "Right"
+                } else if attackTarget.position.x < position.x {
+                    direction = "Left"
+                }
+            } else if abs(attackTarget.position.x - position.x) < abs(attackTarget.position.y - position.y) && !busy{
+                if attackTarget.position.y > position.y {
+                    direction = "Up"
+                } else if attackTarget.position.y < position.y {
+                    direction = "Down"
+                }
             }
-        }
+        }*/
         updateLooks()
     }
     
@@ -125,17 +146,19 @@ class Pikmin:SKSpriteNode {
             moving = false
             returning = false
             self.removeAllActions()
-            self.runAction(SKAction.setTexture(SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Stand"), resize: true))
+            self.run(SKAction.setTexture(SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Stand"), resize: true))
             if idle {
-                pikminIdleLook.hidden = false
+                pikminIdleLook.isHidden = false
             }
         }
         
         if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y && self.idle {
             idle = false
-            pikminIdleLook.hidden = true
-            leader.pikminFollowing.append(self)
-            runAction(pikminBumped)
+            pikminIdleLook.isHidden = true
+            if !leader.pikminFollowing.contains(self) {
+                leader.pikminFollowing.append(self)
+            }
+            run(pikminBumped)
         }
         
         if leader.timeForSpace && !movingToHome && !inHome {
@@ -186,11 +209,11 @@ class Pikmin:SKSpriteNode {
             let pos1 = CGPoint(x: onionPosition.x, y: onionPosition.y - 50)
             let pos2 = CGPoint(x: onionPosition.x, y: onionPosition.y + 25)
             
-            runAction(SKAction.moveTo(pos1, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y - 40),2))/Double(self.movementSpeed)),completion:{
-                self.runAction(SKAction.moveTo(pos2, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y + 30),2))/Double(self.movementSpeed)),completion:{
+            run(SKAction.move(to: pos1, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y - 40),2))/Double(self.movementSpeed)),completion:{
+                self.run(SKAction.move(to: pos2, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y + 30),2))/Double(self.movementSpeed)),completion:{
                     self.movingToHome = false
                     self.inHome = true
-                    self.hidden = true
+                    self.isHidden = true
                 })
             })
         } else if leader.timeForSpace && inHome {
@@ -237,7 +260,7 @@ class Pikmin:SKSpriteNode {
             }
         } else if !leader.timeForSpace {
             inHome = false
-            hidden = false
+            isHidden = false
         }
     }
     
@@ -248,14 +271,14 @@ class Pikmin:SKSpriteNode {
                     self.busy = false
                     self.returning = false
                     self.idle = true
-                    self.runAction(SKAction.sequence([SKAction.waitForDuration(0.025),pikminLeft]))
+                    self.run(SKAction.sequence([SKAction.wait(forDuration: 0.025),pikminLeft]))
                     var index = -1
                     var found = false
                     while index < self.leader.pikminFollowing.count - 1 && !found {
                         index += 1
                         if self == self.leader.pikminFollowing[index] {
                             found = true
-                            self.leader.pikminFollowing.removeAtIndex(index)
+                            self.leader.pikminFollowing.remove(at: index)
                         }
                     }
                 }
@@ -266,25 +289,25 @@ class Pikmin:SKSpriteNode {
                 pikminTierLook.position = CGPoint(x: 6, y: 20)
                 pikminTierLook.xScale = 1
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Up" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 6, y: 20)
                 pikminTierLook.xScale = 1
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Right" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: -7, y: 20)
                 pikminTierLook.xScale = -1
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Left" && (direction != oldDirection || !moving) && !busy && !leader.timeForSpace {
                 oldDirection = direction
                 pikminTierLook.position = CGPoint(x: 7, y: 20)
                 pikminTierLook.xScale = 1
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             }
             
             var moveSpeedPatch = 1.00
@@ -292,11 +315,11 @@ class Pikmin:SKSpriteNode {
                 moveSpeedPatch = 0.8
             }
             
-            runAction(SKAction.moveTo(followPoint, duration: sqrt(pow(Double(self.position.x - followPoint.x),2) + pow(Double(self.position.y - followPoint.y),2))/(Double(self.movementSpeed) * moveSpeedPatch)))
+            run(SKAction.move(to: followPoint, duration: sqrt(pow(Double(self.position.x - followPoint.x),2) + pow(Double(self.position.y - followPoint.y),2))/(Double(self.movementSpeed) * moveSpeedPatch)))
         }
     }
     
-    func carryNutrient(nutrient:Nutrient) {
+    func carryNutrient(_ nutrient:Nutrient) {
         busy = true
         if parent is GameScene {
             let parent = (self.parent as! GameScene)
@@ -349,16 +372,17 @@ class Pikmin:SKSpriteNode {
             } else if direction == "Down" {
                 walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
+                nutrient.zPosition = self.zPosition + 2
             }
             
-            self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-            self.runAction(SKAction.moveTo(walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
-                nutrient.runAction(SKAction.moveTo(locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
+            self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+            self.run(SKAction.move(to: walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
+                nutrient.run(SKAction.move(to: locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
                     self.busy = false
                     self.returning = true
                     onionToTakeTo.absorbNutrient(nutrient)
                 })
-                self.runAction(SKAction.moveTo(walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
+                self.run(SKAction.move(to: walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
             })
         } else if parent is MultiGameScene {
             let parent = (self.parent as! MultiGameScene)
@@ -413,14 +437,14 @@ class Pikmin:SKSpriteNode {
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
             }
             
-            self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
-            self.runAction(SKAction.moveTo(walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
-                nutrient.runAction(SKAction.moveTo(locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
+            self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+            self.run(SKAction.move(to: walkSpot1, duration: sqrt(pow(Double(self.position.x - walkSpot1.x),2) + pow(Double(self.position.y - walkSpot1.y),2))/Double(self.movementSpeed)),completion:{
+                nutrient.run(SKAction.move(to: locationToTakeTo, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)),completion:{
                     self.busy = false
                     self.returning = true
                     onionToTakeTo.absorbNutrient(nutrient)
                 })
-                self.runAction(SKAction.moveTo(walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
+                self.run(SKAction.move(to: walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
             })
         }
     }
@@ -437,25 +461,61 @@ class Pikmin:SKSpriteNode {
     }
     
     func kill() {
-        if self.parent is GameScene {
-            let parent = self.parent as! GameScene
-            parent.population -= 1
-            print("New Population: " + String(parent.population))
-        }
-        
-        let NewGhost = Ghost(imageNamed: "Ghost_" + self.pikminColor + "1")
-        NewGhost.position = self.position
-        NewGhost.ghostColor = self.pikminColor
-        NewGhost.zPosition = FrontLayer
-        self.parent!.addChild(NewGhost)
-        NewGhost.setUp()
-        
-        runAction(pikminSqueel,completion: {
+        run(pikminSqueel,completion: {
+            if self.parent is GameScene {
+                let parent = self.parent as! GameScene
+                parent.population -= 1
+                
+                if self.pikminColor == "Red" {
+                    parent.redPopulation -= 1
+                } else if self.pikminColor == "Blue" {
+                    parent.bluePopulation -= 1
+                } else if self.pikminColor == "Yellow" {
+                    parent.yellowPopulation -= 1
+                } else if self.pikminColor == "White" {
+                    parent.whitePopulation -= 1
+                } else if self.pikminColor == "Purple" {
+                    parent.purplePopulation -= 1
+                }
+                
+                print("New Population: " + String(parent.population))
+                if parent.existingPikmin.contains(self) {
+                    var index = -1
+                    var found = false
+                    while index < parent.existingPikmin.count - 1 && !found {
+                        index += 1
+                        if self == parent.existingPikmin[index] {
+                            found = true
+                            parent.existingPikmin.remove(at: index)
+                        }
+                    }
+                }
+            }
+            
+            if self.leader.pikminFollowing.contains(self) {
+                var index = -1
+                var found = false
+                while index < self.leader.pikminFollowing.count - 1 && !found {
+                    index += 1
+                    if self == self.leader.pikminFollowing[index] {
+                        found = true
+                        self.leader.pikminFollowing.remove(at: index)
+                    }
+                }
+            }
+            
+            let NewGhost = Ghost(imageNamed: "Ghost_" + self.pikminColor + "1")
+            NewGhost.position = self.position
+            NewGhost.ghostColor = self.pikminColor
+            NewGhost.zPosition = FrontLayer
+            self.parent!.addChild(NewGhost)
+            NewGhost.setUp()
+            
+            self.dead = true
             self.brain.invalidate()
             self.removeAllActions()
             self.removeAllChildren()
             self.removeFromParent()
         })
-        dead = true
     }
 }

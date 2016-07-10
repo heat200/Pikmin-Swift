@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Pikmin Maker.xcodeproj">
+      location = "self:/Users/heat200/Desktop/Work/App Dev/Pikmin Maker/Pikmin.xcodeproj">
    </FileRef>
 </Workspace>

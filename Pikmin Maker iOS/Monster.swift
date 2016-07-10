@@ -12,22 +12,32 @@ class Monster:SKSpriteNode {
     var monsterSpecies = "Red_Bulborb"
     var direction = "Down"
     var oldDirection = ""
-    var baseMoveSpeed = 90
+    var baseMoveSpeed = 0
     var target = Pikmin()
     var moving = false
     var busy = false
-    var brain:NSTimer!
+    var brain:Timer!
     var tickCount = 0
+    var life_ticks = 0
+    var last_attack_tick = 0
+    var health:CGFloat = 160
+    var maxHealth:CGFloat = 160
+    var healthBar = SKShapeNode(rect: CGRect(x: 0, y: 30, width: 50, height: 5), cornerRadius: 5)
     
     
     func setUp() {
+        healthBar.fillColor = SKColor.green()
+        healthBar.strokeColor = SKColor.black()
+        self.addChild(healthBar)
+        healthBar.position.x = self.position.x - self.size.width/2
+        baseMoveSpeed = 90
         zPosition = MidLayer - 2
-        target.hidden = true
-        brain = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(Monster.thinking), userInfo: nil, repeats: true)
+        target.isHidden = true
+        brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Monster.thinking), userInfo: nil, repeats: true)
     }
     
     func move() {
-        if !checkIfTooFar(target) && !target.hidden && !target.dead {
+        if !checkIfTooFar(target) && !target.isHidden && !target.dead {
             if abs(target.position.x - position.x) > abs(target.position.y - position.y) && !busy {
                 if target.position.x > position.x {
                     direction = "Right"
@@ -49,24 +59,24 @@ class Monster:SKSpriteNode {
                     removeAllActions()
                     tickCount = 0
                     direction = "Right"
-                    runAction(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
+                    run(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
                 } else if direction == "Right" && tickCount >= 30 {
                     removeAllActions()
                     tickCount = 0
                     direction = "Down"
                     zPosition = BackLayer - 2
-                    runAction(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
+                    run(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
                 } else if direction == "Down" && tickCount >= 30 {
                     removeAllActions()
                     tickCount = 0
                     direction = "Left"
-                    runAction(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
+                    run(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
                 } else if direction == "Left" && tickCount >= 30 {
                     removeAllActions()
                     tickCount = 0
                     direction = "Up"
                     zPosition = BackLayer + 2
-                    runAction(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
+                    run(SKAction.setTexture(SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand"), resize: true))
                 }
             }
         }
@@ -75,33 +85,34 @@ class Monster:SKSpriteNode {
     
     func thinking() {
         move()
-        
-        if position != target.position && !busy && !target.dead && !target.hidden {
+        healthBar.xScale = health/maxHealth
+        life_ticks += 1
+        if position != target.position && !busy && !target.dead && !target.isHidden {
             moving = true
-        } else if (position.x > target.position.x - 10 && position.x < target.position.x + 10) && (position.y > target.position.y - 10 && position.y < target.position.y + 10) && !busy && !target.hidden && !target.dead {
+        } else if (position.x > target.position.x - 10 && position.x < target.position.x + 10) && (position.y > target.position.y - 10 && position.y < target.position.y + 10) && !busy && !target.isHidden && !target.dead {
             eatTarget()
             moving = false
         } 
     }
     
     func updateLooks() {
-        if !busy && !checkIfTooFar(target) && !target.hidden && !target.dead {
+        if !busy && !checkIfTooFar(target) && !target.isHidden && !target.dead {
             if direction == "Down" && (direction != oldDirection || !moving) && !busy {
                 oldDirection = direction
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Up" && (direction != oldDirection || !moving) && !busy {
                 oldDirection = direction
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Right" && (direction != oldDirection || !moving) && !busy {
                 oldDirection = direction
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             } else if direction == "Left" && (direction != oldDirection || !moving) && !busy {
                 oldDirection = direction
                 self.removeAllActions()
-                self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
+                self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run1"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run2"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run3"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Run4")], timePerFrame: 0.12)))
             }
             
             var moveSpeedPatch = 1.00
@@ -109,7 +120,7 @@ class Monster:SKSpriteNode {
                 moveSpeedPatch = 0.8
             }
             
-            runAction(SKAction.moveTo(target.position, duration: sqrt(pow(Double(self.position.x - target.position.x),2) + pow(Double(self.position.y - target.position.y),2))/(Double(self.baseMoveSpeed) * moveSpeedPatch)))
+            run(SKAction.move(to: target.position, duration: sqrt(pow(Double(self.position.x - target.position.x),2) + pow(Double(self.position.y - target.position.y),2))/(Double(self.baseMoveSpeed) * moveSpeedPatch)))
         }
     }
     
@@ -120,7 +131,7 @@ class Monster:SKSpriteNode {
             var index = 0
             if parent.existingPikmin.count > 0 {
                 while !targetFound && index < parent.existingPikmin.count {
-                    if !checkIfTooFar(parent.existingPikmin[index]) && !parent.existingPikmin[index].dead && !parent.existingPikmin[index].hidden {
+                    if !checkIfTooFar(parent.existingPikmin[index]) && !parent.existingPikmin[index].dead && !parent.existingPikmin[index].isHidden {
                         target = parent.existingPikmin[index]
                         targetFound = true
                     } else {
@@ -131,7 +142,7 @@ class Monster:SKSpriteNode {
         }
     }
     
-    func checkIfTooFar(pikmin:Pikmin) -> Bool {
+    func checkIfTooFar(_ pikmin:Pikmin) -> Bool {
         var tooFar = false
         let distance = sqrt(pow(Double(self.position.x - pikmin.position.x),2) + pow(Double(self.position.y - pikmin.position.y),2))
         
@@ -150,13 +161,16 @@ class Monster:SKSpriteNode {
     }
     
     func eatTarget() {
-        print("Eating Target")
-        busy = true
-        removeAllActions()
-        runAction(SKAction.animateWithTextures([SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Eat"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand")], timePerFrame: 0.14, resize: true, restore: true),completion:{
-            self.target.kill()
-            self.busy = false
-        })
+        if life_ticks - last_attack_tick >= 40 {
+            print("Eating Target")
+            busy = true
+            last_attack_tick = life_ticks
+            removeAllActions()
+            run(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Eat"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand")], timePerFrame: 0.14, resize: true, restore: false),completion:{
+                self.target.kill()
+                self.busy = false
+            })
+        }
     }
     
     func randomizePosition() {

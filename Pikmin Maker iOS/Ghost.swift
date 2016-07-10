@@ -13,14 +13,14 @@ class Ghost:SKSpriteNode {
     //NEED GHOST ANIMATIONS AND SOUNDS
     func setUp() {
         let textures = [SKTexture(imageNamed: "Ghost_" + ghostColor + "1"),SKTexture(imageNamed: "Ghost_" + ghostColor + "2"),SKTexture(imageNamed: "Ghost_" + ghostColor + "3"),SKTexture(imageNamed: "Ghost_" + ghostColor + "4")]
-        let action1 = SKAction.animateWithTextures(textures, timePerFrame: 0.3, resize: true, restore: true)
-        let action2 = SKAction.sequence([SKAction.moveBy(CGVector(dx: 20, dy: 25), duration: 0.59),SKAction.moveBy(CGVector(dx: -20, dy: 25), duration: 0.59)])
-        let action3 = SKAction.fadeOutWithDuration(3)
+        let action1 = SKAction.animate(with: textures, timePerFrame: 0.3, resize: true, restore: true)
+        let action2 = SKAction.sequence([SKAction.move(by: CGVector(dx: 20, dy: 25), duration: 0.59),SKAction.move(by: CGVector(dx: -20, dy: 25), duration: 0.59)])
+        let action3 = SKAction.fadeOut(withDuration: 3)
         
-        runAction(SKAction.playSoundFileNamed("pikminGhost", waitForCompletion: false))
-        runAction(SKAction.repeatActionForever(action1))
-        runAction(SKAction.repeatActionForever(action2))
-        runAction(action3, completion:{
+        run(SKAction.playSoundFileNamed("pikminGhost", waitForCompletion: false))
+        run(SKAction.repeatForever(action1))
+        run(SKAction.repeatForever(action2))
+        run(action3, completion:{
             self.removeAllActions()
             self.removeAllChildren()
             self.removeFromParent()
