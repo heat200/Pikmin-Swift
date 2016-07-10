@@ -30,14 +30,15 @@ class Monster:SKSpriteNode {
         healthBar.strokeColor = SKColor.black()
         self.addChild(healthBar)
         healthBar.position.x = self.position.x - self.size.width/2
-        baseMoveSpeed = 90
-        zPosition = MidLayer - 2
+        baseMoveSpeed = 65
+        self.zPosition = (self.position.y - self.size.height/2) * -1
         target.isHidden = true
         brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Monster.thinking), userInfo: nil, repeats: true)
     }
     
     func move() {
         if !checkIfTooFar(target) && !target.isHidden && !target.dead {
+            self.zPosition = (self.position.y - self.size.height/2) * -1
             if abs(target.position.x - position.x) > abs(target.position.y - position.y) && !busy {
                 if target.position.x > position.x {
                     direction = "Right"
