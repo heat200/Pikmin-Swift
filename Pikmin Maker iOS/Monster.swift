@@ -159,7 +159,6 @@ class Monster:SKSpriteNode {
     }
     
     func kill() {
-        brain.invalidate()
         self.removeAllActions()
         self.removeAllChildren()
         self.removeFromParent()
@@ -207,7 +206,32 @@ class Monster:SKSpriteNode {
         
         if health <= 0 {
             dead = true
+            isHidden = true
             brain.invalidate()
+            
+            var nutrientsAdded = 0
+            while nutrientsAdded < 5 {
+                nutrientsAdded += 1
+                var color = "Red"
+                let rand = Int(arc4random_uniform(3) + 1)
+                let randX:CGFloat = CGFloat(Int(arc4random_uniform(120)) - 60)
+                let randY:CGFloat = CGFloat(Int(arc4random_uniform(120)) - 60)
+                
+                if rand == 1 {
+                    color = "Red"
+                } else if rand == 2 {
+                    color = "Blue"
+                } else {
+                    color = "Yellow"
+                }
+                
+                let nutrient = Nutrient(imageNamed:"Nutrient_" + color)
+                nutrient.nutrientColor = color
+                nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
+                nutrient.zPosition = (nutrient.position.y - nutrient.size.height/2) * -1
+                self.addChild(nutrient)
+            }
+            
             run(SKAction.wait(forDuration: 1.5),completion:{
                 self.kill()
             })
