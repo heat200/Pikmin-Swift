@@ -229,7 +229,7 @@ class Monster:SKSpriteNode {
                 nutrient.nutrientColor = color
                 nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
                 nutrient.zPosition = (nutrient.position.y - nutrient.size.height/2) * -1
-                self.addChild(nutrient)
+                self.parent!.addChild(nutrient)
             }
             
             run(SKAction.wait(forDuration: 1.5),completion:{
