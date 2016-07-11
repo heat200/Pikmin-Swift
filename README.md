@@ -2,7 +2,7 @@
 Pikmin Game in Swift
 Includes 3 targets, one for each of the following: macOS, tvOS, and iOS
 
-iOS target has the most work behind it
+iOS target has the most work behind it,
 macOS has the 2nd most, should be close to the same amount as iOS
 tvOS should be a reasonable amount behind considering I have no screen for debugging it and I can't work while it's hooked up to the TV
 ============================
