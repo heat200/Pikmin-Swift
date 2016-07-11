@@ -11,11 +11,13 @@ import SpriteKit
 class MenuOverlay:SKShapeNode {
     var title = SKLabelNode()
     var pikminOut = SKLabelNode()
+    var menuColor = ""
     var morePikmin = SKShapeNode(circleOfRadius: 20)
     var lessPikmin = SKShapeNode(circleOfRadius: 20)
     
     
     func setUp(_ onion:Onion) {
+        isHidden = true
         zPosition = UILayer
         position.x = onion.position.x
         position.y = onion.position.y + 225
@@ -27,10 +29,15 @@ class MenuOverlay:SKShapeNode {
         } else if onion.onionColor == "Yellow" {
             self.fillColor = SKColor.yellow()
         }
+        menuColor = onion.onionColor
         
         title.text = onion.onionColor + " Onion"
         title.position.y = 70
         title.fontColor = SKColor.black()
+        
+        if menuColor == "Yellow" {
+            pikminOut.fontColor = SKColor.black()
+        }
         
         morePikmin.fillColor = SKColor.gray()
         morePikmin.position.y = 25

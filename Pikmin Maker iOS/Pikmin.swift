@@ -152,7 +152,7 @@ class Pikmin:SKSpriteNode {
         if position != followPoint && !idle && !busy {
             moving = true
             self.zPosition = (self.position.y - halfHeight) * -1
-        } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace {
+        } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace && !movingToHome && !inHome {
             moving = false
             returning = false
             self.removeAllActions()
@@ -275,14 +275,65 @@ class Pikmin:SKSpriteNode {
                     //self.position = parent.TheShip.position
                 }
             }
-        } else if !leader.timeForSpace {
-            inHome = false
-            isHidden = false
+        } else if !leader.timeForSpace && movingToHome && !inHome {
+            var onionPosition = CGPoint(x: 0, y: 0)
+            if pikminColor == "Red" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.RedOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.RedOnion.position
+                }
+            } else if pikminColor == "Blue" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.BlueOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.BlueOnion.position
+                }
+            } else if pikminColor == "Yellow" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.YellowOnion.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.YellowOnion.position
+                }
+            } else if pikminColor == "White" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.TheShip.position
+                }
+            } else if pikminColor == "Purple" {
+                if self.parent is GameScene {
+                    let parent = (self.parent as! GameScene)
+                    onionPosition = parent.TheShip.position
+                } else {
+                    //let parent = (self.parent as! MultiGameScene)
+                    //onionPosition = parent.TheShip.position
+                }
+            }
+            
+            let pos1 = CGPoint(x: onionPosition.x, y: onionPosition.y - 50)
+            let pos2 = CGPoint(x: onionPosition.x, y: onionPosition.y + 25)
+            
+            run(SKAction.move(to: pos1, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y - 40),2))/Double(self.movementSpeed)),completion:{
+                self.run(SKAction.move(to: pos2, duration: sqrt(pow(Double(self.position.x - onionPosition.x),2) + pow(Double(self.position.y - onionPosition.y + 30),2))/Double(self.movementSpeed)),completion:{
+                    self.movingToHome = false
+                    self.inHome = true
+                    self.isHidden = true
+                })
+            })
         }
     }
     
     func updateLooks() {
-        if !busy && !leader.timeForSpace {
+        if !busy && !leader.timeForSpace && !inHome && !movingToHome {
             if self.checkIfTooFar() {
                 if !idle {
                     self.busy = false

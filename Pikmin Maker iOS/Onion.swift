@@ -16,6 +16,7 @@ class Onion:SKSpriteNode {
     var randXMultiplayer:CGFloat = 0
     var receivedMsg = false
     var menuOverlay = MenuOverlay(rectOf: CGSize(width: 300, height: 200), cornerRadius: 10)
+    var pikminBeingHeld = 0
     
     func randomizePosition() {
         let randX:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
@@ -34,7 +35,7 @@ class Onion:SKSpriteNode {
                     self.position.y -= 40
                     self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Onion_" + self.onionColor),SKTexture(imageNamed:"Onion_" + self.onionColor + "2")], timePerFrame: 0.9, resize: true, restore: true)))
                     self.awakened = true
-                    self.zPosition = (self.position.y - self.size.height/2) * -1
+                    self.zPosition = (self.position.y - self.size.height/2 - 10) * -1
                     self.dispelSeed()
                 })
             })
@@ -131,7 +132,6 @@ class Onion:SKSpriteNode {
     }
     
     func toggleMenuOverlay() {
-        print("===========TOGGLED==OVERLAY==========")
         menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
         if menuOverlay.isHidden && self.awakened {
             if self.onionColor == "Red" {

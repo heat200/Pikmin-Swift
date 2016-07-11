@@ -41,6 +41,8 @@ class GameScene:SKScene {
     
     var sundial = SKShapeNode(circleOfRadius: 20)
     
+    var pikminCount = SKLabelNode()
+    
     let backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
     
     let MAP = SKSpriteNode(imageNamed:"map1")
@@ -64,6 +66,8 @@ class GameScene:SKScene {
     
     var trueSemiWidth:CGFloat!
     var trueSemiHeight:CGFloat!
+    
+    let timeFrame:Double = 30
     
     override func didMove(to view: SKView) {
         trueSemiWidth = self.frame.width/2
@@ -114,6 +118,11 @@ class GameScene:SKScene {
         sundial.fillColor = SKColor.yellow()
         sundial.alpha = 1
         self.camera!.addChild(sundial)
+        
+        pikminCount.zPosition = 1
+        pikminCount.position = CGPoint(x: self.frame.width/2 - 50, y: self.frame.height/2 - 26)
+        pikminCount.alpha = 1
+        self.camera!.addChild(pikminCount)
         
         if UIDevice.current().userInterfaceIdiom == .pad {
             let semiWidth = self.frame.width/2
@@ -352,6 +361,50 @@ class GameScene:SKScene {
                 } else if self.camera!.xScale == 5 {
                     self.camera!.run(SKAction.scale(to: 1, duration: 0.25))
                 }
+            } else if (objectTouched.parent! is MenuOverlay) {
+                let objectParent = objectTouched.parent as! MenuOverlay
+                let pikminColor = objectParent.menuColor
+                
+                print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(color: pikminColor)))
+                
+                if objectTouched == objectParent.morePikmin {
+                    print("Depositing Pikmin. Color: " + pikminColor)
+                    
+                    if self.pikminCount(color: pikminColor) > 0 {
+                        var index = -1
+                        var found = false
+                        while index < ThePlayer.pikminFollowing.count - 1 && !found {
+                            index += 1
+                            
+                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome {
+                                
+                                ThePlayer.pikminFollowing[index].movingToHome = true
+                                ThePlayer.pikminFollowing[index].idle = true
+                                ThePlayer.pikminFollowing[index].returning = false
+                                ThePlayer.pikminFollowing[index].run(SKAction.sequence([SKAction.wait(forDuration: Double(index)/100),ThePlayer.pikminFollowing[index].pikminLeft]))
+                                ThePlayer.pikminFollowing.remove(at: index)
+                                found = true
+                            }
+                        }
+                    }
+                } else if objectTouched == objectParent.lessPikmin {
+                    print("Withdrawing Pikmin. Color: " + pikminColor)
+                    
+                    if self.pikminCount2(color: pikminColor) > 0 {
+                        var index = -1
+                        var found = false
+                        while index < existingPikmin.count - 1 && !found {
+                            index += 1
+                            
+                            if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikminColor {
+                                
+                                existingPikmin[index].inHome = false
+                                existingPikmin[index].isHidden = false
+                                found = true
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -377,8 +430,39 @@ class GameScene:SKScene {
         }
     }
     
+    func pikminCount(color:String) -> Int {
+        var pikminCounted = 0
+        var index = -1
+        if ThePlayer.pikminFollowing.count > 0 {
+            while index < ThePlayer.pikminFollowing.count - 1 {
+                index += 1
+                if ThePlayer.pikminFollowing[index].pikminColor == color {
+                    pikminCounted += 1
+                }
+            }
+        }
+        
+        return pikminCounted
+    }
+    
+    func pikminCount2(color:String) -> Int {
+        var pikminCounted = 0
+        var index = -1
+        if existingPikmin.count > 0 {
+            while index < existingPikmin.count - 1 {
+                index += 1
+                if existingPikmin[index].pikminColor == color {
+                    pikminCounted += 1
+                }
+            }
+        }
+        
+        return pikminCounted
+    }
+    
     override func update(_ currentTime: TimeInterval) {
-        let timeFrame:Double = 30
+        pikminCount.text = String(ThePlayer.pikminFollowing.count) + "/" + String(existingPikmin.count)
+        
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
             if gameTime == 23 {
