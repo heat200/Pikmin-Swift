@@ -131,8 +131,14 @@ class Onion:SKSpriteNode {
         }
     }
     
+    func updateMenuPositioning() {
+        if !menuOverlay.isHidden {
+            menuOverlay.updatePos(self)
+        }
+    }
+    
     func toggleMenuOverlay() {
-        menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
+        //menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
         if menuOverlay.isHidden && self.awakened {
             if self.onionColor == "Red" {
                 menuOverlay.pikminOut.text = String((self.parent as! GameScene).redPopulation)

@@ -68,41 +68,41 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         
         backgroundMusic.autoplayLooped = true
         
-        if UIDevice.current().userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             let semiWidth = self.frame.width/2
             let semiHeight = self.frame.height/2
-            UP_BTN.fillColor = SKColor.gray()
+            UP_BTN.fillColor = SKColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 + 50)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray()
+            DOWN_BTN.fillColor = SKColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 - 50)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray()
+            LEFT_BTN.fillColor = SKColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth + 100 - 50, y: -semiHeight + 100)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray()
+            RIGHT_BTN.fillColor = SKColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 100 + 50, y: -semiHeight + 100)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green()
+            ACTION_BTN.fillColor = SKColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth - 100, y: -semiHeight + 100)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray()
+            IDLE_BTN.fillColor = SKColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 + 50)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red()
+            CALL_BTN.fillColor = SKColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 100 - 50, y: -semiHeight + 100 - 50)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan()
+            ZOOM_BTN.fillColor = SKColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 - 50)
             ZOOM_BTN.alpha = 0.65
-        } else if UIDevice.current().userInterfaceIdiom == .phone {
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
             UP_BTN = SKShapeNode(circleOfRadius: 45)
             DOWN_BTN = SKShapeNode(circleOfRadius: 45)
             LEFT_BTN = SKShapeNode(circleOfRadius: 45)
@@ -115,35 +115,35 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
             let semiWidth = self.frame.width/3
             let semiHeight = self.frame.height/4
             
-            UP_BTN.fillColor = SKColor.gray()
+            UP_BTN.fillColor = SKColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 + 65)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray()
+            DOWN_BTN.fillColor = SKColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 - 65)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray()
+            LEFT_BTN.fillColor = SKColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth - 65, y: -semiHeight + 120)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray()
+            RIGHT_BTN.fillColor = SKColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 65, y: -semiHeight + 120)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green()
+            ACTION_BTN.fillColor = SKColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 120)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray()
+            IDLE_BTN.fillColor = SKColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 + 65)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red()
+            CALL_BTN.fillColor = SKColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 65, y: -semiHeight + 120 - 65)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan()
+            ZOOM_BTN.fillColor = SKColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 - 65)
             ZOOM_BTN.alpha = 0.65
         }
@@ -166,14 +166,14 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         incMoveCount = 0
         outMoveCount = 0
         
-        appDelegate = UIApplication.shared().delegate as! AppDelegate
-        appDelegate.mpcHandler.setupPeerWithDisplayName(UIDevice.current().name)
+        appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.mpcHandler.setupPeerWithDisplayName(UIDevice.current.name)
         appDelegate.mpcHandler.setupSession()
         appDelegate.mpcHandler.advertiseSelf(true)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.peerChangedStateWithNotification), name: "MPC_DidChangeStateNotification" as NSNotification.Name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.peerChangedStateWithNotification), name: NSNotification.Name(rawValue: "MPC_DidChangeStateNotification"), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.handleReceivedDataWithNotification), name: "MPC_DidReceiveDataNotification" as NSNotification.Name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.handleReceivedDataWithNotification), name:  NSNotification.Name(rawValue: "MPC_DidReceiveDataNotification"), object: nil)
         
         connectWithPlayer()
     }
@@ -228,7 +228,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                 let incCount:Int? = Int((message.object(forKey: "outCount") as? String)!)
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if playerName != nil {
-                    if incCount >= incMoveCount {
+                    if incCount! >= incMoveCount {
                         incMoveCount = incCount!
                         TheEnemy.moveTo = playerDirection!
                         TheEnemy.playerChars = playerChars!
@@ -349,7 +349,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func sendNutrient(_ nutrient:Nutrient) {
-        let messageDict = ["nutrientColor":nutrient.nutrientColor,"nutrientWorth":nutrient.worth, "nutrientX":(nutrient.position.x as! Int),"nutrientY":(nutrient.position.y as! Int)]
+        let messageDict = ["nutrientColor":nutrient.nutrientColor,"nutrientWorth":nutrient.worth, "nutrientX":Int(nutrient.position.x),"nutrientY":(Int(nutrient.position.y))] as [String : Any]
         
         let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
@@ -362,7 +362,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func sendOnion(_ onion:Onion) {
-        let messageDict = ["onionColor":onion.onionColor,"onionX":onion.position.x,"onionY":onion.position.y]
+        let messageDict = ["onionColor":onion.onionColor,"onionX":onion.position.x,"onionY":onion.position.y] as [String : Any]
         
         let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
@@ -375,7 +375,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func sendFlower(_ flower:Flower) {
-        let messageDict = ["flowerColor":flower.flowerColor,"flowerX":flower.position.x,"flowerY":flower.position.y]
+        let messageDict = ["flowerColor":flower.flowerColor,"flowerX":flower.position.x,"flowerY":flower.position.y] as [String : Any]
         
         let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
@@ -413,7 +413,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func sendOnionNum(_ onion:Onion,randX:CGFloat) {
-        let messageDict = ["randXSeed":randX,"forOnion":onion.onionColor]
+        let messageDict = ["randXSeed":randX,"forOnion":onion.onionColor] as [String : Any]
         
         let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
@@ -426,7 +426,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func sendFlowerNum(_ flower:Flower,randX:CGFloat) {
-        let messageDict = ["randXSeed":randX,"forFlower":flower.flowerColor]
+        let messageDict = ["randXSeed":randX,"forFlower":flower.flowerColor] as [String : Any]
         
         let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         

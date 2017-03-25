@@ -26,10 +26,10 @@ class Onion:SKSpriteNode {
     func wake() {
         if !awake {
             awake = true
-            runAction(SKAction.moveBy(CGVector(dx: 0, dy: 100), duration: 2), completion:{
-                self.runAction(SKAction.setTexture(SKTexture(imageNamed:"Onion_" + self.onionColor), resize: true),completion:{
+            run(SKAction.move(by: CGVector(dx: 0, dy: 100), duration: 2), completion:{
+                self.run(SKAction.setTexture(SKTexture(imageNamed:"Onion_" + self.onionColor), resize: true),completion:{
                     self.position.y -= 40
-                    self.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Onion_" + self.onionColor),SKTexture(imageNamed:"Onion_" + self.onionColor + "2")], timePerFrame: 0.9, resize: true, restore: true)))
+                    self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Onion_" + self.onionColor),SKTexture(imageNamed:"Onion_" + self.onionColor + "2")], timePerFrame: 0.9, resize: true, restore: true)))
                     self.awakened = true
                     self.dispelSeed()
                 })
@@ -63,31 +63,31 @@ class Onion:SKSpriteNode {
                 seed.zRotation = CGFloat(M_PI * 3)
                 seed.position.x = self.position.x
                 seed.position.y = self.position.y + 50
-                seed.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures([SKTexture(imageNamed:"Seed_" + onionColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
+                seed.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Seed_" + onionColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
                 
                 if randX > 0 {
-                    seed.runAction(SKAction.rotateToAngle(original, duration: 0.8,shortestUnitArc:true))
+                    seed.run(SKAction.rotate(toAngle: original, duration: 0.8,shortestUnitArc:true))
                 } else {
-                    seed.runAction((SKAction.rotateByAngle(CGFloat(M_PI), duration: 0.8)))
+                    seed.run((SKAction.rotate(byAngle: CGFloat(M_PI), duration: 0.8)))
                 }
                 
-                seed.pikminIdleLook.runAction(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
+                seed.pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
                 seed.pikminIdleLook.setScale(1)
                 seed.pikminIdleLook.zPosition = -1
-                seed.pikminIdleLook.hidden = true
-                let group = SKAction.sequence([SKAction.scaleTo(1.9, duration: 0.75),SKAction.scaleTo(2.4, duration: 0.75)])
-                seed.pikminIdleLook.runAction(SKAction.repeatActionForever(group))
-                seed.pikminPluck.positional = true
+                seed.pikminIdleLook.isHidden = true
+                let group = SKAction.sequence([SKAction.scale(to: 1.9, duration: 0.75),SKAction.scale(to: 2.4, duration: 0.75)])
+                seed.pikminIdleLook.run(SKAction.repeatForever(group))
+                seed.pikminPluck.isPositional = true
                 seed.pikminPluck.autoplayLooped = false
                 seed.addChild(seed.pikminIdleLook)
                 seed.addChild(seed.pikminPluck)
-                seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.4, dy: 30), duration: 0.8),completion:{
-                    seed.runAction(SKAction.moveBy(CGVector(dx: randX * 0.6, dy: -140 + (abs(randX) * 0.5)), duration: 1.7), completion:{
+                seed.run(SKAction.move(by: CGVector(dx: randX * 0.4, dy: 30), duration: 0.8),completion:{
+                    seed.run(SKAction.move(by: CGVector(dx: randX * 0.6, dy: -140 + (abs(randX) * 0.5)), duration: 1.7), completion:{
                         seed.removeAllActions()
                         seed.rooted = true
-                        seed.pikminIdleLook.hidden = false
+                        seed.pikminIdleLook.isHidden = false
                         seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
-                        seed.runAction(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.onionColor + "_Falling2"), resize: true))
+                        seed.run(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.onionColor + "_Falling2"), resize: true))
                     })
                 })
                 self.parent!.addChild(seed)
@@ -95,10 +95,10 @@ class Onion:SKSpriteNode {
         }
     }
     
-    func absorbNutrient(nutrient:Nutrient) {
+    func absorbNutrient(_ nutrient:Nutrient) {
         if !nutrient.beingAbsorbed {
             nutrient.beingAbsorbed = true
-            nutrient.runAction(SKAction.moveBy(CGVector(dx: 0, dy: 60), duration: 2),completion:{
+            nutrient.run(SKAction.move(by: CGVector(dx: 0, dy: 60), duration: 2),completion:{
                 if nutrient.nutrientColor == self.onionColor {
                     nutrient.worth *= 2
                 }

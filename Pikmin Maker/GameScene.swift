@@ -35,7 +35,7 @@ class GameScene:SKScene {
     var lastTime:Double = 0
     var day = true
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         MAP.zPosition = BackmostLayer
         
@@ -71,9 +71,9 @@ class GameScene:SKScene {
         nightOverlay = SKShapeNode(rect: self.frame)
         nightOverlay.zPosition = -1
         nightOverlay.position = CGPoint(x: -self.frame.width/2, y: -self.frame.height/2)
-        nightOverlay.fillColor = SKColor.blackColor()
+        nightOverlay.fillColor = SKColor.black
         nightOverlay.alpha = 0.0
-        nightOverlay.strokeColor = SKColor.clearColor()
+        nightOverlay.strokeColor = SKColor.clear
         self.camera!.addChild(nightOverlay)
         
         var nutrientsAdded = 0
@@ -117,18 +117,18 @@ class GameScene:SKScene {
         PurpleFlower.randomizePosition()
     }
     
-    override func keyDown(theEvent: NSEvent) {
-        let location = theEvent.locationInNode(self)
-        let objectTouched = self.nodeAtPoint(location)
-        let objectPlayerOn = self.nodeAtPoint(ThePlayer.position)
+    override func keyDown(with theEvent: NSEvent) {
+        let location = theEvent.location(in: self)
+        let objectTouched = self.atPoint(location)
+        let objectPlayerOn = self.atPoint(ThePlayer.position)
         let chars = theEvent.characters!
-        if chars.containsString("w") {
+        if chars.contains("w") {
             if TheShip.followShip {
                 TheShip.toMultiplayer()
             } else {
                 ThePlayer.moveTo = "Up"
             }
-        } else if chars.containsString("d") {
+        } else if chars.contains("d") {
             if TheShip.followShip {
                 if TheShip.player == "1" {
                     TheShip.player = "2"
@@ -139,7 +139,7 @@ class GameScene:SKScene {
             } else {
                 ThePlayer.moveTo = "Right"
             }
-        } else if chars.containsString("a") {
+        } else if chars.contains("a") {
             if TheShip.followShip {
                 if TheShip.player == "1" {
                     TheShip.player = "2"
@@ -150,7 +150,7 @@ class GameScene:SKScene {
             } else {
                 ThePlayer.moveTo = "Left"
             }
-        } else if chars.containsString("s") {
+        } else if chars.contains("s") {
             if TheShip.followShip {
                 TheShip.backToEarth()
             } else {
@@ -158,7 +158,7 @@ class GameScene:SKScene {
             }
         }
         
-        if chars.containsString(" ") {
+        if chars.contains(" ") {
             if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
                 let onion = objectPlayerOn as! Onion
                 onion.wake()
@@ -171,38 +171,38 @@ class GameScene:SKScene {
             } else {
                 ThePlayer.grabPikmin()
             }
-        } else if chars.containsString("q") {
+        } else if chars.contains("q") {
             ThePlayer.makePikminIdle()
-        } else if chars.containsString("b") {
+        } else if chars.contains("b") {
             ThePlayer.recallPikmin()
         }
     }
     
-    override func keyUp(theEvent: NSEvent) {
+    override func keyUp(with theEvent: NSEvent) {
         let chars = theEvent.characters!
-        if chars.containsString("w") || chars.containsString("a") || chars.containsString("s") || chars.containsString("d") {
+        if chars.contains("w") || chars.contains("a") || chars.contains("s") || chars.contains("d") {
             ThePlayer.moveTo = ""
         }
         
-        if chars.containsString(" ") {
+        if chars.contains(" ") {
             if ThePlayer.pikminToThrow != nil {
                 ThePlayer.throwPikmin()
             }
         }
     }
     
-    override func update(currentTime: NSTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         let timeFrame:Double = 2
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
             if day {
-                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
                 if nightOverlay.alpha >= 0.7 {
                     nightOverlay.alpha = 0.7
                     day = false
                 }
             } else {
-                nightOverlay.runAction(SKAction.fadeAlphaTo(nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
                 if nightOverlay.alpha <= 0.0 {
                     nightOverlay.alpha = 0.0
                     day = true
@@ -219,20 +219,20 @@ class GameScene:SKScene {
                 movingSpace = true
                 if !TheShip.returning {
                     Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: -750), duration: 9),SKAction.runBlock({
+                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: -750), duration: 9),SKAction.run({
                         self.Space.position.x = self.TheShip.position.x
                         self.Space.position.y = self.TheShip.position.y + 1100
                     })])
                     Space.position.y = TheShip.position.y + 1550
-                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                    Space.run(SKAction.repeatForever(spaceZoom))
                 } else {
                     Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: 500), duration: 6),SKAction.runBlock({
+                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: 500), duration: 6),SKAction.run({
                         self.Space.position.x = self.TheShip.position.x
                         self.Space.position.y = self.TheShip.position.y - 900
                     })])
                     Space.position.y = TheShip.position.y - 1550
-                    Space.runAction(SKAction.repeatActionForever(spaceZoom))
+                    Space.run(SKAction.repeatForever(spaceZoom))
                 }
             }
         }

@@ -49,6 +49,7 @@ class GameScene:SKScene {
     var nightOverlay = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 10, height: 10)))
     
     var existingPikmin = [Pikmin]()
+    var pikminOut = 0
     var population = 0
     
     var redPopulation = 0
@@ -67,7 +68,7 @@ class GameScene:SKScene {
     var trueSemiWidth:CGFloat!
     var trueSemiHeight:CGFloat!
     
-    let timeFrame:Double = 30
+    var timeFrame:Double = 30
     
     override func didMove(to view: SKView) {
         trueSemiWidth = self.frame.width/2
@@ -108,57 +109,58 @@ class GameScene:SKScene {
         nightOverlay = SKShapeNode(rect: self.frame)
         nightOverlay.zPosition = -1
         nightOverlay.position = CGPoint(x: -self.frame.width/2, y: -self.frame.height/2)
-        nightOverlay.fillColor = SKColor.black()
+        nightOverlay.fillColor = SKColor.black
         nightOverlay.alpha = 0.0
-        nightOverlay.strokeColor = SKColor.clear()
+        nightOverlay.strokeColor = SKColor.clear
         self.camera!.addChild(nightOverlay)
         
         sundial.zPosition = 1
         sundial.position = CGPoint(x: 0, y: self.frame.height/2 - 20)
-        sundial.fillColor = SKColor.yellow()
+        sundial.fillColor = SKColor.yellow
         sundial.alpha = 1
         self.camera!.addChild(sundial)
         
         pikminCount.zPosition = 1
+        pikminCount.horizontalAlignmentMode = .right
         pikminCount.position = CGPoint(x: self.frame.width/2 - 50, y: self.frame.height/2 - 26)
         pikminCount.alpha = 1
         self.camera!.addChild(pikminCount)
         
-        if UIDevice.current().userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             let semiWidth = self.frame.width/2
             let semiHeight = self.frame.height/2
-            UP_BTN.fillColor = SKColor.gray()
+            UP_BTN.fillColor = SKColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 + 50)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray()
+            DOWN_BTN.fillColor = SKColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 - 50)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray()
+            LEFT_BTN.fillColor = SKColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth + 100 - 50, y: -semiHeight + 100)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray()
+            RIGHT_BTN.fillColor = SKColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 100 + 50, y: -semiHeight + 100)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green()
+            ACTION_BTN.fillColor = SKColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth - 100, y: -semiHeight + 100)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray()
+            IDLE_BTN.fillColor = SKColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 + 50)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red()
+            CALL_BTN.fillColor = SKColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 100 - 50, y: -semiHeight + 100 - 50)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan()
+            ZOOM_BTN.fillColor = SKColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 - 50)
             ZOOM_BTN.alpha = 0.65
-        } else if UIDevice.current().userInterfaceIdiom == .phone {
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
             UP_BTN = SKShapeNode(circleOfRadius: 35)
             DOWN_BTN = SKShapeNode(circleOfRadius: 35)
             LEFT_BTN = SKShapeNode(circleOfRadius: 35)
@@ -171,35 +173,35 @@ class GameScene:SKScene {
             let semiWidth = self.frame.width/3
             let semiHeight = self.frame.height/4
             
-            UP_BTN.fillColor = SKColor.gray()
+            UP_BTN.fillColor = SKColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 60)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray()
+            DOWN_BTN.fillColor = SKColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight - 40)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray()
+            LEFT_BTN.fillColor = SKColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth - 50, y: -semiHeight + 10)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray()
+            RIGHT_BTN.fillColor = SKColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 50, y: -semiHeight + 10)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green()
+            ACTION_BTN.fillColor = SKColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 10)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray()
+            IDLE_BTN.fillColor = SKColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight + 60)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red()
+            CALL_BTN.fillColor = SKColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 50, y: -semiHeight - 40)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan()
+            ZOOM_BTN.fillColor = SKColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight - 40)
             ZOOM_BTN.alpha = 0.65
         }
@@ -247,7 +249,7 @@ class GameScene:SKScene {
             timeBubble.position = CGPoint(x: -trueSemiWidth + 25 + (43 * CGFloat(timeBubblesAdded)), y: trueSemiHeight - 20)
             timeBubblesAdded += 1
             timeBubble.name = "TimeBubble" + String(timeBubblesAdded)
-            timeBubble.fillColor = SKColor.gray()
+            timeBubble.fillColor = SKColor.gray
             timeBubble.alpha = 0.65
             self.camera?.addChild(timeBubble)
         }
@@ -364,7 +366,7 @@ class GameScene:SKScene {
             } else if (objectTouched.parent! is MenuOverlay) {
                 let objectParent = objectTouched.parent as! MenuOverlay
                 let pikminColor = objectParent.menuColor
-                
+                pikminOut = pikminCount3()
                 print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(color: pikminColor)))
                 
                 if objectTouched == objectParent.morePikmin {
@@ -418,10 +420,12 @@ class GameScene:SKScene {
             }
             
             if objectTouched == ACTION_BTN {
+                pikminOut = pikminCount3()
                 if ThePlayer.pikminToThrow != nil {
                     ThePlayer.throwPikmin()
                 }
             } else if objectTouched == CALL_BTN {
+                pikminOut = pikminCount3()
                 ThePlayer.recallCircle.removeAllActions()
                 ThePlayer.recallCircle.run(SKAction.scale(to: 1, duration: 0.15),completion:{
                     self.ThePlayer.callingPikmin = false
@@ -460,8 +464,27 @@ class GameScene:SKScene {
         return pikminCounted
     }
     
+    func pikminCount3() -> Int {
+        var pikminCounted = 0
+        var index = -1
+        if existingPikmin.count > 0 {
+            while index < existingPikmin.count - 1 {
+                index += 1
+                if !existingPikmin[index].isHidden && !existingPikmin[index].dead {
+                    pikminCounted += 1
+                }
+            }
+        }
+        print(pikminCounted)
+        return pikminCounted
+    }
+    
     override func update(_ currentTime: TimeInterval) {
-        pikminCount.text = String(ThePlayer.pikminFollowing.count) + "/" + String(existingPikmin.count)
+        pikminCount.text = String(ThePlayer.pikminFollowing.count) + "/" + String(pikminOut) + "/" + String(existingPikmin.count)
+        
+        RedOnion.updateMenuPositioning()
+        BlueOnion.updateMenuPositioning()
+        YellowOnion.updateMenuPositioning()
         
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
@@ -471,8 +494,10 @@ class GameScene:SKScene {
                 gameTime += 1
             }
             
+            print("Current Time: " + String(gameTime))
+            
             if gameTime == 7 {
-                sundial.fillColor = SKColor.yellow()
+                sundial.fillColor = SKColor.yellow
                 let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
                 let marker2 = self.camera!.childNode(withName: "TimeBubble2")!
                 sundial.position = marker1.position
@@ -516,8 +541,8 @@ class GameScene:SKScene {
                 sundial.run(SKAction.move(to: marker13.position, duration: timeFrame - 0.5))
             } else if gameTime == 19 {
                 let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
-                sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 12) - 0.5))
-                sundial.fillColor = SKColor.white()
+                sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 11) - (0.5 * 11)))
+                sundial.fillColor = SKColor.white
             }
             
             if gameTime > 19 || gameTime < 7 {
@@ -531,8 +556,8 @@ class GameScene:SKScene {
             
             if day {
                 nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
-                if nightOverlay.alpha >= 0.7 {
-                    nightOverlay.alpha = 0.7
+                if nightOverlay.alpha >= 0.55 {
+                    nightOverlay.alpha = 0.55
                     day = false
                 }
             } else {

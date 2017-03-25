@@ -459,6 +459,7 @@
 					7D488C3B1CC67EAF00A412D9 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = N4MWNVQDSJ;
+						LastSwiftMigration = 0800;
 					};
 					7D51C68D1CD568D6002FB2F8 = {
 						CreatedOnToolsVersion = 7.3;
@@ -790,6 +791,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -804,6 +806,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

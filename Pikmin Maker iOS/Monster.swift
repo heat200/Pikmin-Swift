@@ -29,8 +29,8 @@ class Monster:SKSpriteNode {
     
     
     func setUp() {
-        healthBar.fillColor = SKColor.green()
-        healthBar.strokeColor = SKColor.black()
+        healthBar.fillColor = SKColor.green
+        healthBar.strokeColor = SKColor.black
         self.addChild(healthBar)
         healthBar.position.x = self.position.x - self.size.width/2
         baseMoveSpeed = 55

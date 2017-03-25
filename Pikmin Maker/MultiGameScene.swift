@@ -8,6 +8,26 @@
 
 import SpriteKit
 import MultipeerConnectivity
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     var ThePlayer = Player(imageNamed:"Olimar_Down_Stand")
@@ -34,7 +54,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     
     var lastEnemyButton = ""
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         MAP.zPosition = BackmostLayer
         
@@ -71,14 +91,14 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         incMoveCount = 0
         outMoveCount = 0
         
-        appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate = NSApplication.shared().delegate as! AppDelegate
         appDelegate.mpcHandler.setupPeerWithDisplayName(NSUserName())
         appDelegate.mpcHandler.setupSession()
         appDelegate.mpcHandler.advertiseSelf(true)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MultiGameScene.peerChangedStateWithNotification), name: "MPC_DidChangeStateNotification", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.peerChangedStateWithNotification), name: NSNotification.Name(rawValue: "MPC_DidChangeStateNotification"), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MultiGameScene.handleReceivedDataWithNotification), name: "MPC_DidReceiveDataNotification", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MultiGameScene.handleReceivedDataWithNotification), name: NSNotification.Name(rawValue: "MPC_DidReceiveDataNotification"), object: nil)
         
         connectWithPlayer()
     }
@@ -92,26 +112,27 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         }
     }
     
-    func peerChangedStateWithNotification(notification:NSNotification){
-        let userInfo = NSDictionary(dictionary: notification.userInfo!)
-        let state = userInfo.objectForKey("state") as! Int
+    func peerChangedStateWithNotification(_ notification:Notification){
+        let userInfo = NSDictionary(dictionary: (notification as NSNotification).userInfo!)
+        let state = userInfo.object(forKey: "state") as! Int
         
-        if state == MCSessionState.Connected.rawValue {
+        if state == MCSessionState.connected.rawValue {
             print("Connected")
             print(connected)
             sendPlayerNum()
         }
     }
-    func handleReceivedDataWithNotification(notification:NSNotification){
-        let userInfo = notification.userInfo! as Dictionary
-        let receivedData:NSData = userInfo["data"] as! NSData
-        let message = try! NSJSONSerialization.JSONObjectWithData(receivedData, options: NSJSONReadingOptions.AllowFragments) as! NSDictionary
+    
+    func handleReceivedDataWithNotification(_ notification:Notification){
+        let userInfo = (notification as NSNotification).userInfo! as Dictionary
+        let receivedData:Data = userInfo["data"] as! Data
+        let message = try! JSONSerialization.jsonObject(with: receivedData, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
         let senderPeerId:MCPeerID = userInfo["peerID"] as! MCPeerID
         let senderDisplayName = senderPeerId.displayName
         
-        if message.objectForKey("player") != nil {
-            let player:String? = message.objectForKey("player") as? String
-            let playerID:String? = message.objectForKey("playerID") as? String
+        if message.object(forKey: "player") != nil {
+            let player:String? = message.object(forKey: "player") as? String
+            let playerID:String? = message.object(forKey: "playerID") as? String
             //print("Received Player#, Going to read it")
             if player != nil {
                 if player == currentPlayer {
@@ -123,12 +144,12 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     changeinPlayStatus()
                 }
             }
-        } else if message.objectForKey("playerName") != nil {
+        } else if message.object(forKey: "playerName") != nil {
             if currentPlayer == "2" {
-                let playerName:String? = message.objectForKey("playerName") as? String
-                let playerDirection:String? = message.objectForKey("direction") as? String
-                let playerChars:String? = message.objectForKey("chars") as? String
-                let incCount:Int? = Int((message.objectForKey("outCount") as? String)!)
+                let playerName:String? = message.object(forKey: "playerName") as? String
+                let playerDirection:String? = message.object(forKey: "direction") as? String
+                let playerChars:String? = message.object(forKey: "chars") as? String
+                let incCount:Int? = Int((message.object(forKey: "outCount") as? String)!)
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if playerName != nil {
                     if incCount >= incMoveCount {
@@ -140,21 +161,21 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     }
                 }
             } else if currentPlayer == "1" {
-                let playerName:String? = message.objectForKey("playerName") as? String
-                let playerChars:String? = message.objectForKey("chars") as? String
-                let playerDirection:String? = message.objectForKey("direction") as? String
+                let playerName:String? = message.object(forKey: "playerName") as? String
+                let playerChars:String? = message.object(forKey: "chars") as? String
+                let playerDirection:String? = message.object(forKey: "direction") as? String
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if playerName != nil {
                     TheEnemy.moveTo = playerDirection!
                     TheEnemy.playerChars = playerChars!
                 }
             }
-        } else if message.objectForKey("nutrientColor") != nil {
+        } else if message.object(forKey: "nutrientColor") != nil {
             if currentPlayer == "2" {
-                let nutrientColor:String? = message.objectForKey("nutrientColor") as? String
-                let nutrientWorth:Int? = message.objectForKey("nutrientWorth") as? Int
-                let nutrientXPos:Int? = message.objectForKey("nutrientX") as? Int
-                let nutrientYPos:Int? = message.objectForKey("nutrientY") as? Int
+                let nutrientColor:String? = message.object(forKey: "nutrientColor") as? String
+                let nutrientWorth:Int? = message.object(forKey: "nutrientWorth") as? Int
+                let nutrientXPos:Int? = message.object(forKey: "nutrientX") as? Int
+                let nutrientYPos:Int? = message.object(forKey: "nutrientY") as? Int
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if nutrientColor != nil {
                     let nutrient = Nutrient(imageNamed:"Nutrient_" + nutrientColor!)
@@ -165,11 +186,11 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     self.addChild(nutrient)
                 }
             }
-        } else if message.objectForKey("onionColor") != nil {
+        } else if message.object(forKey: "onionColor") != nil {
             if currentPlayer == "2" {
-                let onionColor:String? = message.objectForKey("onionColor") as? String
-                let onionXPos:Int? = message.objectForKey("onionX") as? Int
-                let onionYPos:Int? = message.objectForKey("onionY") as? Int
+                let onionColor:String? = message.object(forKey: "onionColor") as? String
+                let onionXPos:Int? = message.object(forKey: "onionX") as? Int
+                let onionYPos:Int? = message.object(forKey: "onionY") as? Int
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if onionColor != nil {
                     let onion = Onion(imageNamed:"Onion_Inactive")
@@ -188,11 +209,11 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     }
                 }
             }
-        } else if message.objectForKey("flowerColor") != nil {
+        } else if message.object(forKey: "flowerColor") != nil {
             if currentPlayer == "2" {
-                let flowerColor:String? = message.objectForKey("flowerColor") as? String
-                let flowerXPos:Int? = message.objectForKey("flowerX") as? Int
-                let flowerYPos:Int? = message.objectForKey("flowerY") as? Int
+                let flowerColor:String? = message.object(forKey: "flowerColor") as? String
+                let flowerXPos:Int? = message.object(forKey: "flowerX") as? Int
+                let flowerYPos:Int? = message.object(forKey: "flowerY") as? Int
                 //print("Received PlayerInfo#, Going to read and assign it")
                 if flowerColor != nil {
                     let flower = Flower(imageNamed:"Flower_" + flowerColor! + "_Open")
@@ -203,16 +224,16 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     self.addChild(flower)
                 }
             }
-        } else if message.objectForKey("correctXPos") != nil {
-            let correctXPos:CGFloat? = message.objectForKey("correctXPos") as? CGFloat
-            let correctYPos:CGFloat? = message.objectForKey("correctYPos") as? CGFloat
+        } else if message.object(forKey: "correctXPos") != nil {
+            let correctXPos:CGFloat? = message.object(forKey: "correctXPos") as? CGFloat
+            let correctYPos:CGFloat? = message.object(forKey: "correctYPos") as? CGFloat
             //print("Received PlayerInfo#, Going to read and assign it")
             if correctXPos != nil {
                 TheEnemy.position = CGPoint(x: correctXPos!, y: correctYPos!)
             }
-        } else if message.objectForKey("forOnion") != nil {
-            let randX:CGFloat? = message.objectForKey("randXSeed") as? CGFloat
-            let onionColor:String? = message.objectForKey("forOnion") as? String
+        } else if message.object(forKey: "forOnion") != nil {
+            let randX:CGFloat? = message.object(forKey: "randXSeed") as? CGFloat
+            let onionColor:String? = message.object(forKey: "forOnion") as? String
             //print("Received PlayerInfo#, Going to read and assign it")
             if randX != nil {
                 if onionColor == "Red" {
@@ -229,13 +250,13 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                     YellowOnion.dispelSeed()
                 }
             }
-        }  else if message.objectForKey("forFlower") != nil {
-            let randX:CGFloat? = message.objectForKey("randXSeed") as? CGFloat
-            let flowerColor:String? = message.objectForKey("forFlower") as? String
+        }  else if message.object(forKey: "forFlower") != nil {
+            let randX:CGFloat? = message.object(forKey: "randXSeed") as? CGFloat
+            let flowerColor:String? = message.object(forKey: "forFlower") as? String
             print("Received FlowerSeed Request")
             if randX != nil {
-                let whiteFlower = self.childNodeWithName("Flower_White") as! Flower
-                let purpleFlower = self.childNodeWithName("Flower_Purple") as! Flower
+                let whiteFlower = self.childNode(withName: "Flower_White") as! Flower
+                let purpleFlower = self.childNode(withName: "Flower_Purple") as! Flower
                 if flowerColor == "White" {
                     print("Attempt to expel white")
                     whiteFlower.receivedMsg = true
@@ -251,39 +272,39 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         }
     }
     
-    func sendNutrient(nutrient:Nutrient) {
-        let messageDict = ["nutrientColor":nutrient.nutrientColor,"nutrientWorth":nutrient.worth, "nutrientX":Int(nutrient.position.x),"nutrientY":Int(nutrient.position.y)]
+    func sendNutrient(_ nutrient:Nutrient) {
+        let messageDict = ["nutrientColor":nutrient.nutrientColor,"nutrientWorth":nutrient.worth, "nutrientX":Int(nutrient.position.x),"nutrientY":Int(nutrient.position.y)] as [String : Any]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
         }
     }
     
-    func sendOnion(onion:Onion) {
-        let messageDict = ["onionColor":onion.onionColor,"onionX":onion.position.x,"onionY":onion.position.y]
+    func sendOnion(_ onion:Onion) {
+        let messageDict = ["onionColor":onion.onionColor,"onionX":onion.position.x,"onionY":onion.position.y] as [String : Any]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
         }
     }
     
-    func sendFlower(flower:Flower) {
-        let messageDict = ["flowerColor":flower.flowerColor,"flowerX":flower.position.x,"flowerY":flower.position.y]
+    func sendFlower(_ flower:Flower) {
+        let messageDict = ["flowerColor":flower.flowerColor,"flowerX":flower.position.x,"flowerY":flower.position.y] as [String : Any]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
@@ -293,48 +314,48 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     func sendPlayerNum() {
         let messageDict = ["player":self.currentPlayer]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
         }
     }
     
-    func sendCorrectedPos(player:Player) {
+    func sendCorrectedPos(_ player:Player) {
         let messageDict = ["correctXPos":CGFloat(player.position.x),"correctYPos":CGFloat(player.position.y)]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
         } catch {
             print("Error: Couldn't send Player#")
         }
     }
     
-    func sendOnionNum(onion:Onion,randX:CGFloat) {
-        let messageDict = ["randXSeed":randX,"forOnion":onion.onionColor]
+    func sendOnionNum(_ onion:Onion,randX:CGFloat) {
+        let messageDict = ["randXSeed":randX,"forOnion":onion.onionColor] as [String : Any]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
         }
     }
     
-    func sendFlowerNum(flower:Flower,randX:CGFloat) {
-        let messageDict = ["randXSeed":randX,"forFlower":flower.flowerColor]
+    func sendFlowerNum(_ flower:Flower,randX:CGFloat) {
+        let messageDict = ["randXSeed":randX,"forFlower":flower.flowerColor] as [String : Any]
         
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.PrettyPrinted)
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.prettyPrinted)
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Reliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.reliable)
             //print("Sent Player#")
         } catch {
             print("Error: Couldn't send Player#")
@@ -349,10 +370,10 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         } else if currentPlayer == "2" {
             messageDict = ["playerName":ThePlayer.character,"direction":ThePlayer.moveTo,"chars":ThePlayer.playerChars]
         }
-        let messageData = try! NSJSONSerialization.dataWithJSONObject(messageDict, options: NSJSONWritingOptions.init(rawValue: 0))
+        let messageData = try! JSONSerialization.data(withJSONObject: messageDict, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         
         do {
-            try appDelegate.mpcHandler.session.sendData(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, withMode: MCSessionSendDataMode.Unreliable)
+            try appDelegate.mpcHandler.session.send(messageData, toPeers: appDelegate.mpcHandler.session.connectedPeers, with: MCSessionSendDataMode.unreliable)
             //print("Sent PlayerInfo")
         } catch {
             print("Error: Couldn't send PlayerInfo")
@@ -416,28 +437,28 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         inPlay = true
     }
     
-    func browserViewControllerDidFinish(browserViewController: MCBrowserViewController) {
+    func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
         appDelegate.mpcHandler.browser.dismissViewController(appDelegate.mpcHandler.browser)
     }
     
-    func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController) {
+    func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
         appDelegate.mpcHandler.browser.dismissViewController(appDelegate.mpcHandler.browser)
     }
     
-    override func keyDown(theEvent: NSEvent) {
-        let location = theEvent.locationInNode(self)
-        let objectTouched = self.nodeAtPoint(location)
-        let objectPlayerOn = self.nodeAtPoint(ThePlayer.position)
+    override func keyDown(with theEvent: NSEvent) {
+        let location = theEvent.location(in: self)
+        let objectTouched = self.atPoint(location)
+        let objectPlayerOn = self.atPoint(ThePlayer.position)
         let chars = theEvent.characters!
-        if chars.containsString("w") {
+        if chars.contains("w") {
             ThePlayer.moveTo = "Up"
-        } else if chars.containsString("d") {
+        } else if chars.contains("d") {
             ThePlayer.moveTo = "Right"
-        } else if chars.containsString("a") {
+        } else if chars.contains("a") {
             ThePlayer.moveTo = "Left"
-        } else if chars.containsString("s") {
+        } else if chars.contains("s") {
             ThePlayer.moveTo = "Down"
-        } else if chars.containsString(" ") {
+        } else if chars.contains(" ") {
             ThePlayer.playerChars = chars
             if objectPlayerOn is Onion {
                 let onion = objectPlayerOn as! Onion
@@ -451,20 +472,20 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
             } else  {
                 ThePlayer.grabPikmin()
             }
-        } else if chars.containsString("q") {
+        } else if chars.contains("q") {
             ThePlayer.playerChars = chars
             ThePlayer.makePikminIdle()
-        } else if chars.containsString("b") {
+        } else if chars.contains("b") {
             ThePlayer.playerChars = chars
             ThePlayer.recallPikmin()
         }
     }
     
-    override func keyUp(theEvent: NSEvent) {
+    override func keyUp(with theEvent: NSEvent) {
         let chars = theEvent.characters!
-        if chars.containsString("w") || chars.containsString("a") || chars.containsString("s") || chars.containsString("d") {
+        if chars.contains("w") || chars.contains("a") || chars.contains("s") || chars.contains("d") {
             ThePlayer.moveTo = ""
-        } else if chars.containsString(" ") {
+        } else if chars.contains(" ") {
             if ThePlayer.pikminToThrow != nil {
                 ThePlayer.throwPikmin()
                 ThePlayer.playerChars = ""
@@ -475,9 +496,9 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func enemyExtras() {
-        let objectEnemyOn = self.nodeAtPoint(TheEnemy.position)
+        let objectEnemyOn = self.atPoint(TheEnemy.position)
         let chars = TheEnemy.playerChars
-        if chars.containsString(" ") {
+        if chars.contains(" ") {
             if objectEnemyOn is Onion {
                 let onion = objectEnemyOn as! Onion
                 onion.wake()
@@ -491,10 +512,10 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
                 TheEnemy.grabPikmin()
                 lastEnemyButton = " "
             }
-        } else if chars.containsString("q") {
+        } else if chars.contains("q") {
             lastEnemyButton = "q"
             TheEnemy.makePikminIdle()
-        } else if chars.containsString("b") {
+        } else if chars.contains("b") {
             lastEnemyButton = "b"
             TheEnemy.recallPikmin()
         } else if chars == "" {
@@ -505,7 +526,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         }
     }
     
-    override func update(currentTime: NSTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         self.camera!.position = ThePlayer.position
         ThePlayer.move()
         TheEnemy.move()

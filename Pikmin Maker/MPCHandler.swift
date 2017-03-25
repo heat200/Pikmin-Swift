@@ -14,7 +14,7 @@ class MPCHandler: NSObject, MCSessionDelegate {
     var browser:MCBrowserViewController!
     var advertiser:MCAdvertiserAssistant? = nil
     
-    func setupPeerWithDisplayName(displayName:String) {
+    func setupPeerWithDisplayName(_ displayName:String) {
         peerID = MCPeerID(displayName: displayName)
     }
     
@@ -28,7 +28,7 @@ class MPCHandler: NSObject, MCSessionDelegate {
     
     }
     
-    func advertiseSelf(advertise:Bool) {
+    func advertiseSelf(_ advertise:Bool) {
         if advertise {
             advertiser = MCAdvertiserAssistant(serviceType: "my-game", discoveryInfo: nil, session: session)
             advertiser!.start()
@@ -38,31 +38,31 @@ class MPCHandler: NSObject, MCSessionDelegate {
         }
     }
     
-    func session(session: MCSession, peer peerID: MCPeerID, didChangeState state: MCSessionState) {
-        let userInfo = ["peerID":peerID,"state":state.rawValue]
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            NSNotificationCenter.defaultCenter().postNotificationName("MPC_DidChangeStateNotification", object: nil, userInfo: userInfo)
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        let userInfo = ["peerID":peerID,"state":state.rawValue] as [String : Any]
+        DispatchQueue.main.async(execute: { () -> Void in
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "MPC_DidChangeStateNotification"), object: nil, userInfo: userInfo)
         })
         
     }
     
-    func session(session: MCSession, didReceiveData data: NSData, fromPeer peerID: MCPeerID) {
-        let userInfo = ["data":data, "peerID":peerID]
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            NSNotificationCenter.defaultCenter().postNotificationName("MPC_DidReceiveDataNotification", object: nil, userInfo: userInfo)
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+        let userInfo = ["data":data, "peerID":peerID] as [String : Any]
+        DispatchQueue.main.async(execute: { () -> Void in
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "MPC_DidReceiveDataNotification"), object: nil, userInfo: userInfo)
         })
         
     }
     
-    func session(session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, atURL localURL: NSURL, withError error: NSError?) {
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
         
     }
     
-    func session(session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, withProgress progress: NSProgress) {
+    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         
     }
     
-    func session(session: MCSession, didReceiveStream stream: NSInputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         
     }
 }

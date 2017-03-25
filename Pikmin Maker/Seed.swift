@@ -15,9 +15,9 @@ class Seed:SKSpriteNode {
     var pikminIdleLook = SKSpriteNode()
     var pikminPluck = SKAudioNode(fileNamed: "pikminPluck")
     
-    func unrootPikmin(player:Player) {
+    func unrootPikmin(_ player:Player) {
         if rooted {
-            self.pikminPluck.runAction(SKAction.play(),completion: {
+            self.pikminPluck.run(SKAction.play(),completion: {
                 let NewPikmin = Pikmin(imageNamed: "Pikmin_" + self.seedColor + "_Down_Stand")
                 NewPikmin.direction = "Down"
                 NewPikmin.position = self.position

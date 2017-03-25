@@ -37,4 +37,16 @@ class Seed:SKSpriteNode {
             })
         }
     }
+    
+    func pikminTierUpdate() {
+        if rooted {
+            if seedTier == "Leaf" {
+                seedTier = "Bud"
+            } else if seedTier == "Bud" {
+                seedTier = "Flower"
+            } else {
+                seedTier = "Leaf"
+            }
+        }
+    }
 }
