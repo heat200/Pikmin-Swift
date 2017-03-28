@@ -113,20 +113,22 @@ class Pikmin:SKSpriteNode {
                 } else {
                     if pikminColor != "Red" {
                         attackTarget.takePikminDamage("hit" + self.pikminTier)
-                        self.busy = false
+                        busy = false
                     } else {
                         attackTarget.takePikminDamage("hit" + self.pikminTier + "-Red")
-                        self.busy = false
+                        busy = false
                     }
                 }
                 
-            } else if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) && !busy {
+            } else if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) {
+                followPoint = attackTarget.position
                 if attackTarget.position.x > position.x {
                     direction = "Right"
                 } else if attackTarget.position.x < position.x {
                     direction = "Left"
                 }
-            } else if abs(attackTarget.position.x - position.x) < abs(attackTarget.position.y - position.y) && !busy{
+            } else if abs(attackTarget.position.x - position.x) < abs(attackTarget.position.y - position.y) {
+                followPoint = attackTarget.position
                 if attackTarget.position.y > position.y {
                     direction = "Up"
                 } else if attackTarget.position.y < position.y {
@@ -154,13 +156,13 @@ class Pikmin:SKSpriteNode {
     }
     
     func thinking() {
-        if leader.playerDirection == "Left" {
+        if leader.playerDirection == "Left" && !attacking {
             followPoint = CGPoint(x: leader.position.x + dispX, y: leader.position.y)
-        } else if leader.playerDirection == "Right" {
+        } else if leader.playerDirection == "Right" && !attacking {
             followPoint = CGPoint(x: leader.position.x - dispX, y: leader.position.y)
-        } else if leader.playerDirection == "Up" {
+        } else if leader.playerDirection == "Up" && !attacking {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y - dispY)
-        } else if leader.playerDirection == "Down" {
+        } else if leader.playerDirection == "Down" && !attacking {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y + dispY)
         }
         pikminIdleLook.position = pikminTierLook.position
@@ -584,15 +586,23 @@ class Pikmin:SKSpriteNode {
                 NewGhost.position = self.position
                 NewGhost.ghostColor = self.pikminColor
                 NewGhost.zPosition = FrontLayer
-                self.parent!.addChild(NewGhost)
-                NewGhost.setUp()
+                if self.parent != nil {
+                    self.parent!.addChild(NewGhost)
+                    NewGhost.setUp()
+                }
+                
+                self.dead = true
+                self.brain.invalidate()
+                self.removeAllActions()
+                self.removeAllChildren()
+                self.removeFromParent()
+            } else {
+                self.dead = true
+                self.brain.invalidate()
+                self.removeAllActions()
+                self.removeAllChildren()
+                self.removeFromParent()
             }
-            
-            self.dead = true
-            self.brain.invalidate()
-            self.removeAllActions()
-            self.removeAllChildren()
-            self.removeFromParent()
         })
     }
 }

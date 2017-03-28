@@ -14,11 +14,33 @@ class Ship:SKSpriteNode {
     var allowedToLeave = true
     var returning = false
     var shipDoor = SKSpriteNode(imageNamed:"Ship_Door1")
+    var menuOverlay = MenuOverlay(rectOf: CGSize(width: 300, height: 200), cornerRadius: 10)
     
     func setUp() {
         shipDoor.position = CGPoint(x: 0, y: -60)
         shipDoor.zPosition = 1
         self.addChild(shipDoor)
+        
+        self.run(SKAction.wait(forDuration: 2.5),completion:{
+            self.menuOverlay.setUpShip(self)
+        })
+    }
+    
+    func updateMenuPositioning() {
+        if !menuOverlay.isHidden {
+            menuOverlay.updatePosShip(self)
+        }
+    }
+    
+    func toggleMenuOverlay() {
+        //menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
+        if menuOverlay.isHidden && !returning && !followShip && allowedToLeave {
+            menuOverlay.pikminOut.text = String((self.parent as! GameScene).whitePopulation)
+            menuOverlay.pikminOut2.text = String((self.parent as! GameScene).purplePopulation)
+            menuOverlay.isHidden = false
+        } else {
+            menuOverlay.isHidden = true
+        }
     }
     
     func getIn(_ player:Player) {

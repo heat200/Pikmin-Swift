@@ -345,7 +345,7 @@ class GameScene:SKScene {
                     seed.unrootPikmin(ThePlayer)
                 } else if objectPlayerOn is Ship {
                     let ship = objectPlayerOn as! Ship
-                    ship.getIn(ThePlayer)
+                    ship.toggleMenuOverlay()
                 } else {
                     ThePlayer.grabPikmin()
                 }
@@ -366,8 +366,13 @@ class GameScene:SKScene {
             } else if (objectTouched.parent! is MenuOverlay) {
                 let objectParent = objectTouched.parent as! MenuOverlay
                 let pikminColor:String = objectParent.menuColor
+                let pikminColor2:String = objectParent.menuColor2
                 pikminOut = pikminCount3()
                 print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(pikminColor)))
+                
+                if pikminColor2 != "" {
+                    print(pikminColor2 + " Pikmin following Player: " + String(self.pikminCount(pikminColor2)))
+                }
                 
                 if objectTouched == objectParent.morePikmin {
                     print("Depositing Pikmin. Color: " + pikminColor)
@@ -399,7 +404,6 @@ class GameScene:SKScene {
                             index += 1
                             
                             if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikminColor {
-                                
                                 existingPikmin[index].inHome = false
                                 existingPikmin[index].isHidden = false
                                 existingPikmin[index].becomeAwareToFollow()
@@ -407,6 +411,50 @@ class GameScene:SKScene {
                             }
                         }
                     }
+                }
+                
+                if objectTouched == objectParent.morePikmin2 {
+                    print("Depositing Pikmin. Color: " + pikminColor2)
+                    
+                    if self.pikminCount(pikminColor) > 0 {
+                        var index = -1
+                        var found = false
+                        while index < ThePlayer.pikminFollowing.count - 1 && !found {
+                            index += 1
+                            
+                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome && ThePlayer.pikminFollowing[index].pikminColor == pikminColor2 {
+                                
+                                ThePlayer.pikminFollowing[index].movingToHome = true
+                                ThePlayer.pikminFollowing[index].idle = true
+                                ThePlayer.pikminFollowing[index].returning = false
+                                ThePlayer.pikminFollowing[index].run(SKAction.sequence([SKAction.wait(forDuration: Double(index)/100),ThePlayer.pikminFollowing[index].pikminLeft]))
+                                ThePlayer.pikminFollowing.remove(at: index)
+                                found = true
+                            }
+                        }
+                    }
+                } else if objectTouched == objectParent.lessPikmin2 {
+                    print("Withdrawing Pikmin. Color: " + pikminColor2)
+                    
+                    if self.pikminCount2(pikminColor2) > 0 {
+                        var index = -1
+                        var found = false
+                        while index < existingPikmin.count - 1 && !found {
+                            index += 1
+                            
+                            if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikminColor2 {
+                                existingPikmin[index].inHome = false
+                                existingPikmin[index].isHidden = false
+                                existingPikmin[index].becomeAwareToFollow()
+                                found = true
+                            }
+                        }
+                    }
+                }
+                
+                if objectTouched == objectParent.takeFlightButton {
+                    TheShip.getIn(ThePlayer)
+                    TheShip.toggleMenuOverlay()
                 }
             }
         }
@@ -486,6 +534,7 @@ class GameScene:SKScene {
         RedOnion.updateMenuPositioning()
         BlueOnion.updateMenuPositioning()
         YellowOnion.updateMenuPositioning()
+        TheShip.updateMenuPositioning()
         
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
