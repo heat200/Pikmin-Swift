@@ -196,9 +196,7 @@ class Player:SKSpriteNode {
                     }
                     
                     pikminFollowing.remove(at: index)
-                    pikminChosen?.removeFromParent()
-                    pikminChosen?.removeAllActions()
-                    pikminChosen?.removeAllChildren()
+                    pikminChosen?.kill(true)
                 } else if objectPikminOn is Nutrient {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
                     let nutrient = objectPikminOn as! Nutrient

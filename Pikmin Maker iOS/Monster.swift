@@ -174,7 +174,7 @@ class Monster:SKSpriteNode {
                 if self.target.pikminColor == "White" {
                     self.takePikminDamage("hitPoison")
                 }
-                self.target.kill()
+                self.target.kill(false)
                 self.busy = false
             })
         }

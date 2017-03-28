@@ -137,6 +137,22 @@ class Pikmin:SKSpriteNode {
         updateLooks()
     }
     
+    func becomeAwareToFollow() {
+        if (idle || attacking) && !isHidden {
+            run(pikminBumped)
+            if attacking {
+                busy = false
+            }
+        }
+        idle = false
+        attacking = false
+        attackTarget = nil
+        pikminIdleLook.isHidden = true
+        if !leader.pikminFollowing.contains(self) {
+            leader.pikminFollowing.append(self)
+        }
+    }
+    
     func thinking() {
         if leader.playerDirection == "Left" {
             followPoint = CGPoint(x: leader.position.x + dispX, y: leader.position.y)
@@ -163,19 +179,7 @@ class Pikmin:SKSpriteNode {
         }
         
         if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y && !isHidden {
-            if (idle || attacking) && !isHidden {
-                run(pikminBumped)
-                if attacking {
-                    busy = false
-                }
-            }
-            idle = false
-            attacking = false
-            attackTarget = nil
-            pikminIdleLook.isHidden = true
-            if !leader.pikminFollowing.contains(self) {
-                leader.pikminFollowing.append(self)
-            }
+            becomeAwareToFollow()
         }
         
         if leader.timeForSpace && !movingToHome && !inHome {
@@ -528,11 +532,14 @@ class Pikmin:SKSpriteNode {
         return tooFar
     }
     
-    func kill() {
+    func kill(_ flower:Bool) {
         run(pikminSqueel,completion: {
             if self.parent is GameScene {
                 let parent = self.parent as! GameScene
-                parent.population -= 1
+                
+                if !flower {
+                    parent.population -= 1
+                }
                 
                 if self.pikminColor == "Red" {
                     parent.redPopulation -= 1
@@ -572,12 +579,14 @@ class Pikmin:SKSpriteNode {
                 }
             }
             
-            let NewGhost = Ghost(imageNamed: "Ghost_" + self.pikminColor + "1")
-            NewGhost.position = self.position
-            NewGhost.ghostColor = self.pikminColor
-            NewGhost.zPosition = FrontLayer
-            self.parent!.addChild(NewGhost)
-            NewGhost.setUp()
+            if !flower {
+                let NewGhost = Ghost(imageNamed: "Ghost_" + self.pikminColor + "1")
+                NewGhost.position = self.position
+                NewGhost.ghostColor = self.pikminColor
+                NewGhost.zPosition = FrontLayer
+                self.parent!.addChild(NewGhost)
+                NewGhost.setUp()
+            }
             
             self.dead = true
             self.brain.invalidate()

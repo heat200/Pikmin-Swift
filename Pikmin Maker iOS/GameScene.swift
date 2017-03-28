@@ -378,7 +378,7 @@ class GameScene:SKScene {
                         while index < ThePlayer.pikminFollowing.count - 1 && !found {
                             index += 1
                             
-                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome {
+                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome && ThePlayer.pikminFollowing[index].pikminColor == pikminColor {
                                 
                                 ThePlayer.pikminFollowing[index].movingToHome = true
                                 ThePlayer.pikminFollowing[index].idle = true
@@ -402,6 +402,7 @@ class GameScene:SKScene {
                                 
                                 existingPikmin[index].inHome = false
                                 existingPikmin[index].isHidden = false
+                                existingPikmin[index].becomeAwareToFollow()
                                 found = true
                             }
                         }
