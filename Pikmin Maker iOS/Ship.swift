@@ -130,7 +130,7 @@ class Ship:SKSpriteNode {
                     
                     parent.RedOnion.run(SKAction.move(to: CGPoint(x: self.position.x - 200,y: self.position.y - 2700), duration: 15),completion:{
                         parent.ThePlayer.timeForSpace = false
-                        if allowRepopulation {
+                        if allowRepopulation || parent.redPopulation == 0 {
                             parent.RedOnion.dispelSeed()
                         }
                     })
@@ -146,7 +146,7 @@ class Ship:SKSpriteNode {
                     })
                     parent.BlueOnion.run(SKAction.move(to: CGPoint(x: self.position.x,y: self.position.y - 2625), duration: 15),completion:{
                         parent.ThePlayer.timeForSpace = false
-                        if allowRepopulation {
+                        if allowRepopulation || parent.bluePopulation == 0 {
                             parent.BlueOnion.dispelSeed()
                         }
                     })
@@ -160,7 +160,7 @@ class Ship:SKSpriteNode {
                     })
                     parent.YellowOnion.run(SKAction.move(to: CGPoint(x: self.position.x + 200,y: self.position.y - 2700), duration: 15),completion:{
                         parent.ThePlayer.timeForSpace = false
-                        if allowRepopulation {
+                        if allowRepopulation || parent.yellowPopulation == 0 {
                             parent.YellowOnion.dispelSeed()
                         }
                     })
