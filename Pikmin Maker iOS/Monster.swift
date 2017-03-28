@@ -172,7 +172,7 @@ class Monster:SKSpriteNode {
             removeAllActions()
             run(SKAction.animate(with: [SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Eat"),SKTexture(imageNamed:"Monster_" + monsterSpecies + "_" + direction + "_Stand")], timePerFrame: 0.14, resize: true, restore: false),completion:{
                 if self.target.pikminColor == "White" {
-                    self.takePikminDamage(damageType: "hitPoison")
+                    self.takePikminDamage("hitPoison")
                 }
                 self.target.kill()
                 self.busy = false
@@ -180,7 +180,7 @@ class Monster:SKSpriteNode {
         }
     }
     
-    func takePikminDamage(damageType:String) {
+    func takePikminDamage(_ damageType:String) {
         if damageType == "hitLeaf" {
             health -= 1
         } else if damageType == "hitBud" {

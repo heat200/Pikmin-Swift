@@ -9,7 +9,7 @@
 import SpriteKit
 import MultipeerConnectivity
 
-class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
+class MultiGameScene:SKScene {
     var ThePlayer = Player(imageNamed:"Olimar_Down_Stand")
     var TheEnemy = Player(imageNamed:"Olimar_Down_Stand")
     var RedOnion = Onion(imageNamed:"Onion_Inactive")
@@ -71,35 +71,35 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let semiWidth = self.frame.width/2
             let semiHeight = self.frame.height/2
-            UP_BTN.fillColor = SKColor.gray
+            UP_BTN.fillColor = UIColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 + 50)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray
+            DOWN_BTN.fillColor = UIColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 - 50)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray
+            LEFT_BTN.fillColor = UIColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth + 100 - 50, y: -semiHeight + 100)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray
+            RIGHT_BTN.fillColor = UIColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 100 + 50, y: -semiHeight + 100)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green
+            ACTION_BTN.fillColor = UIColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth - 100, y: -semiHeight + 100)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray
+            IDLE_BTN.fillColor = UIColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 + 50)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red
+            CALL_BTN.fillColor = UIColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 100 - 50, y: -semiHeight + 100 - 50)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan
+            ZOOM_BTN.fillColor = UIColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 - 50)
             ZOOM_BTN.alpha = 0.65
         } else if UIDevice.current.userInterfaceIdiom == .phone {
@@ -115,35 +115,35 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
             let semiWidth = self.frame.width/3
             let semiHeight = self.frame.height/4
             
-            UP_BTN.fillColor = SKColor.gray
+            UP_BTN.fillColor = UIColor.gray
             UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 + 65)
             UP_BTN.alpha = 0.65
             
-            DOWN_BTN.fillColor = SKColor.gray
+            DOWN_BTN.fillColor = UIColor.gray
             DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 120 - 65)
             DOWN_BTN.alpha = 0.65
             
-            LEFT_BTN.fillColor = SKColor.gray
+            LEFT_BTN.fillColor = UIColor.gray
             LEFT_BTN.position = CGPoint(x: -semiWidth - 65, y: -semiHeight + 120)
             LEFT_BTN.alpha = 0.65
             
-            RIGHT_BTN.fillColor = SKColor.gray
+            RIGHT_BTN.fillColor = UIColor.gray
             RIGHT_BTN.position = CGPoint(x: -semiWidth + 65, y: -semiHeight + 120)
             RIGHT_BTN.alpha = 0.65
             
-            ACTION_BTN.fillColor = SKColor.green
+            ACTION_BTN.fillColor = UIColor.green
             ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 120)
             ACTION_BTN.alpha = 0.65
             
-            IDLE_BTN.fillColor = SKColor.gray
+            IDLE_BTN.fillColor = UIColor.gray
             IDLE_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 + 65)
             IDLE_BTN.alpha = 0.65
             
-            CALL_BTN.fillColor = SKColor.red
+            CALL_BTN.fillColor = UIColor.red
             CALL_BTN.position = CGPoint(x: semiWidth - 65, y: -semiHeight + 120 - 65)
             CALL_BTN.alpha = 0.65
             
-            ZOOM_BTN.fillColor = SKColor.cyan
+            ZOOM_BTN.fillColor = UIColor.cyan
             ZOOM_BTN.position = CGPoint(x: semiWidth + 65, y: -semiHeight + 120 - 65)
             ZOOM_BTN.alpha = 0.65
         }
@@ -181,7 +181,7 @@ class MultiGameScene:SKScene, MCBrowserViewControllerDelegate {
     func connectWithPlayer() {
         if appDelegate.mpcHandler.session != nil {
             appDelegate.mpcHandler.setupBrowser()
-            appDelegate.mpcHandler.browser.delegate = self
+            //appDelegate.mpcHandler.browser.delegate = self
             self.view?.window?.rootViewController!.present(appDelegate.mpcHandler.browser, animated: true,completion:{
                 self.connected = true
             })

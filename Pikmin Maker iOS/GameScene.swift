@@ -365,14 +365,14 @@ class GameScene:SKScene {
                 }
             } else if (objectTouched.parent! is MenuOverlay) {
                 let objectParent = objectTouched.parent as! MenuOverlay
-                let pikminColor = objectParent.menuColor
+                let pikminColor:String = objectParent.menuColor
                 pikminOut = pikminCount3()
-                print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(color: pikminColor)))
+                print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(pikminColor)))
                 
                 if objectTouched == objectParent.morePikmin {
                     print("Depositing Pikmin. Color: " + pikminColor)
                     
-                    if self.pikminCount(color: pikminColor) > 0 {
+                    if self.pikminCount(pikminColor) > 0 {
                         var index = -1
                         var found = false
                         while index < ThePlayer.pikminFollowing.count - 1 && !found {
@@ -392,7 +392,7 @@ class GameScene:SKScene {
                 } else if objectTouched == objectParent.lessPikmin {
                     print("Withdrawing Pikmin. Color: " + pikminColor)
                     
-                    if self.pikminCount2(color: pikminColor) > 0 {
+                    if self.pikminCount2(pikminColor) > 0 {
                         var index = -1
                         var found = false
                         while index < existingPikmin.count - 1 && !found {
@@ -434,7 +434,7 @@ class GameScene:SKScene {
         }
     }
     
-    func pikminCount(color:String) -> Int {
+    func pikminCount(_ color:String) -> Int {
         var pikminCounted = 0
         var index = -1
         if ThePlayer.pikminFollowing.count > 0 {
@@ -449,7 +449,7 @@ class GameScene:SKScene {
         return pikminCounted
     }
     
-    func pikminCount2(color:String) -> Int {
+    func pikminCount2(_ color:String) -> Int {
         var pikminCounted = 0
         var index = -1
         if existingPikmin.count > 0 {
@@ -488,85 +488,7 @@ class GameScene:SKScene {
         
         if currentTime - lastTime >= timeFrame {
             lastTime = currentTime
-            if gameTime == 23 {
-                gameTime = 0
-            } else {
-                gameTime += 1
-            }
-            
-            print("Current Time: " + String(gameTime))
-            
-            if gameTime == 7 {
-                sundial.fillColor = SKColor.yellow
-                let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
-                let marker2 = self.camera!.childNode(withName: "TimeBubble2")!
-                sundial.position = marker1.position
-                sundial.run(SKAction.move(to: marker2.position, duration: timeFrame - 0.5))
-            } else if gameTime == 8 {
-                let marker3 = self.camera!.childNode(withName: "TimeBubble3")!
-                sundial.run(SKAction.move(to: marker3.position, duration: timeFrame - 0.5))
-            } else if gameTime == 9 {
-                let marker4 = self.camera!.childNode(withName: "TimeBubble4")!
-                sundial.run(SKAction.move(to: marker4.position, duration: timeFrame - 0.5))
-            } else if gameTime == 10 {
-                let marker5 = self.camera!.childNode(withName: "TimeBubble5")!
-                sundial.run(SKAction.move(to: marker5.position, duration: timeFrame - 0.5))
-            } else if gameTime == 11 {
-                let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
-                sundial.run(SKAction.move(to: marker6.position, duration: timeFrame - 0.5))
-            } else if gameTime == 12 {
-                let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
-                let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
-                sundial.position = marker6.position
-                sundial.run(SKAction.move(to: marker7.position, duration: timeFrame - 0.5))
-            } else if gameTime == 13 {
-                let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
-                let marker8 = self.camera!.childNode(withName: "TimeBubble8")!
-                sundial.position = marker7.position
-                sundial.run(SKAction.move(to: marker8.position, duration: timeFrame - 0.5))
-            } else if gameTime == 14 {
-                let marker9 = self.camera!.childNode(withName: "TimeBubble9")!
-                sundial.run(SKAction.move(to: marker9.position, duration: timeFrame - 0.5))
-            } else if gameTime == 15 {
-                let marker10 = self.camera!.childNode(withName: "TimeBubble10")!
-                sundial.run(SKAction.move(to: marker10.position, duration: timeFrame - 0.5))
-            } else if gameTime == 16 {
-                let marker11 = self.camera!.childNode(withName: "TimeBubble11")!
-                sundial.run(SKAction.move(to: marker11.position, duration: timeFrame - 0.5))
-            } else if gameTime == 17 {
-                let marker12 = self.camera!.childNode(withName: "TimeBubble12")!
-                sundial.run(SKAction.move(to: marker12.position, duration: timeFrame - 0.5))
-            } else if gameTime == 18 {
-                let marker13 = self.camera!.childNode(withName: "TimeBubble13")!
-                sundial.run(SKAction.move(to: marker13.position, duration: timeFrame - 0.5))
-            } else if gameTime == 19 {
-                let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
-                sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 11) - (0.5 * 11)))
-                sundial.fillColor = SKColor.white
-            }
-            
-            if gameTime > 19 || gameTime < 7 {
-                let aMonster = Monster(imageNamed:"Monster_Red_Bulborb_Down_Stand")
-                aMonster.zPosition = BackLayer
-                aMonster.monsterSpecies = "Red_Bulborb"
-                aMonster.setUp()
-                self.addChild(aMonster)
-                aMonster.randomizePosition()
-            }
-            
-            if day {
-                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
-                if nightOverlay.alpha >= 0.55 {
-                    nightOverlay.alpha = 0.55
-                    day = false
-                }
-            } else {
-                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
-                if nightOverlay.alpha <= 0.0 {
-                    nightOverlay.alpha = 0.0
-                    day = true
-                }
-            }
+            sundialUpdate()
         }
         
         if !TheShip.followShip {
@@ -593,6 +515,99 @@ class GameScene:SKScene {
                     Space.position.y = TheShip.position.y - 1550
                     Space.run(SKAction.repeatForever(spaceZoom))
                 }
+            }
+        }
+    }
+    
+    func sundialUpdate() {
+        sundial.removeAllActions()
+        
+        if gameTime == 23 {
+            gameTime = 0
+        } else {
+            gameTime += 1
+        }
+        
+        print("Current Time: " + String(gameTime))
+        
+        if gameTime == 7 {
+            let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
+            let marker2 = self.camera!.childNode(withName: "TimeBubble2")!
+            sundial.position = marker1.position
+            sundial.run(SKAction.move(to: marker2.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 8 {
+            let marker3 = self.camera!.childNode(withName: "TimeBubble3")!
+            sundial.run(SKAction.move(to: marker3.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 9 {
+            let marker4 = self.camera!.childNode(withName: "TimeBubble4")!
+            sundial.run(SKAction.move(to: marker4.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 10 {
+            let marker5 = self.camera!.childNode(withName: "TimeBubble5")!
+            sundial.run(SKAction.move(to: marker5.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 11 {
+            let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
+            sundial.run(SKAction.move(to: marker6.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 12 {
+            let marker6 = self.camera!.childNode(withName: "TimeBubble6")!
+            let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
+            sundial.position = marker6.position
+            sundial.run(SKAction.move(to: marker7.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 13 {
+            let marker7 = self.camera!.childNode(withName: "TimeBubble7")!
+            let marker8 = self.camera!.childNode(withName: "TimeBubble8")!
+            sundial.position = marker7.position
+            sundial.run(SKAction.move(to: marker8.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 14 {
+            let marker9 = self.camera!.childNode(withName: "TimeBubble9")!
+            sundial.run(SKAction.move(to: marker9.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 15 {
+            let marker10 = self.camera!.childNode(withName: "TimeBubble10")!
+            sundial.run(SKAction.move(to: marker10.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 16 {
+            let marker11 = self.camera!.childNode(withName: "TimeBubble11")!
+            sundial.run(SKAction.move(to: marker11.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 17 {
+            let marker12 = self.camera!.childNode(withName: "TimeBubble12")!
+            sundial.run(SKAction.move(to: marker12.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime == 18 {
+            let marker13 = self.camera!.childNode(withName: "TimeBubble13")!
+            sundial.run(SKAction.move(to: marker13.position, duration: timeFrame - 0.5))
+            day = true
+        } else if gameTime >= 19 || gameTime < 7 {
+            let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
+            sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 12) - (0.5 * 12)))
+            day = false
+        }
+        
+        if gameTime > 19 || gameTime < 7 {
+            let aMonster = Monster(imageNamed:"Monster_Red_Bulborb_Down_Stand")
+            aMonster.zPosition = BackLayer
+            aMonster.monsterSpecies = "Red_Bulborb"
+            aMonster.setUp()
+            self.addChild(aMonster)
+            aMonster.randomizePosition()
+        }
+        
+        if day {
+            sundial.fillColor = SKColor.yellow
+            if nightOverlay.alpha >= 0.55 {
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
+            }
+        } else {
+            sundial.fillColor = SKColor.white
+            if nightOverlay.alpha <= 0.0 {
+                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
             }
         }
     }

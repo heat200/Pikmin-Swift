@@ -112,10 +112,10 @@ class Pikmin:SKSpriteNode {
                     attacking = false
                 } else {
                     if pikminColor != "Red" {
-                        attackTarget.takePikminDamage(damageType: "hit" + self.pikminTier)
+                        attackTarget.takePikminDamage("hit" + self.pikminTier)
                         self.busy = false
                     } else {
-                        attackTarget.takePikminDamage(damageType: "hit" + self.pikminTier + "-Red")
+                        attackTarget.takePikminDamage("hit" + self.pikminTier + "-Red")
                         self.busy = false
                     }
                 }
@@ -162,8 +162,8 @@ class Pikmin:SKSpriteNode {
             }
         }
         
-        if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y {
-            if idle || attacking {
+        if leader.position.x - leader.recallCircle.frame.width/2 <= position.x && leader.position.x + leader.recallCircle.frame.width/2 >= position.x && leader.position.y - leader.recallCircle.frame.height/2 <= position.y && leader.position.y + leader.recallCircle.frame.height/2 >= position.y && !isHidden {
+            if (idle || attacking) && !isHidden {
                 run(pikminBumped)
                 if attacking {
                     busy = false

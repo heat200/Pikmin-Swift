@@ -62,6 +62,7 @@ class Ship:SKSpriteNode {
         if parent is GameScene {
             let parent = self.parent as! GameScene
             parent.timeFrame = 5
+            parent.sundialUpdate()
             run(SKAction.moveBy(x: 0, y: 2800, duration: 10),completion:{
                 self.allowedToLeave = true
             })
