@@ -14,6 +14,7 @@ class Seed:SKSpriteNode {
     var rooted = false
     var pikminIdleLook = SKSpriteNode()
     var pikminPluck = SKAction.playSoundFileNamed("pikminPluck", waitForCompletion: false)
+    var seedExpelled = SKAction.playSoundFileNamed("pikminPluck", waitForCompletion: false)
     
     func pikminCycle() {
         self.run(SKAction.wait(forDuration: 7.5),completion:{

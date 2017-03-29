@@ -120,6 +120,7 @@ class Pikmin:SKSpriteNode {
                     }
                 }
             } else if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) {
+                busy = false
                 followPoint = attackTarget.position
                 if attackTarget.position.x > position.x {
                     direction = "Right"
@@ -127,6 +128,7 @@ class Pikmin:SKSpriteNode {
                     direction = "Left"
                 }
             } else if abs(attackTarget.position.x - position.x) < abs(attackTarget.position.y - position.y) {
+                busy = false
                 followPoint = attackTarget.position
                 if attackTarget.position.y > position.y {
                     direction = "Up"

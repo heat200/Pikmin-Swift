@@ -28,13 +28,45 @@ class Monster:SKSpriteNode {
     var halfHeight:CGFloat!
     
     
+    func randomizeSpecies() -> String {
+        let choice = Int(arc4random_uniform(4) + 1)
+        var speciesString = ""
+        
+        if choice <= 3 {
+            speciesString = "Red_Bulborb_Dwarf"
+        } else if choice == 4 {
+            speciesString = "Red_Bulborb"
+        }
+        
+        return speciesString
+    }
+    
     func setUp() {
+        monsterSpecies = randomizeSpecies()
+        
         healthBar.fillColor = SKColor.green
         healthBar.strokeColor = SKColor.black
         self.addChild(healthBar)
-        healthBar.position.x = self.position.x - self.size.width/2
-        baseMoveSpeed = 55
-        self.zPosition = (self.position.y - self.size.height/2) * -1
+        
+        if monsterSpecies == "Red_Bulborb" {
+            maxHealth = 2240
+            health = 2240
+            xScale = 1
+            yScale = 1
+            baseMoveSpeed = 50
+            healthBar.position.x = self.position.x - self.size.width/2
+            self.zPosition = (self.position.y - self.size.height/2) * -1
+        } else if monsterSpecies == "Red_Bulborb_Dwarf" {
+            maxHealth = 320
+            health = 320
+            xScale = 0.4
+            yScale = 0.4
+            baseMoveSpeed = 70
+            healthBar.position.x = self.position.x - self.size.width/2
+            healthBar.position.y = 150
+            self.zPosition = (self.position.y - self.size.height/2) * -1
+        }
+        
         target.isHidden = true
         brain = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(Monster.thinking), userInfo: nil, repeats: true)
         halfHeight = self.size.height/2
