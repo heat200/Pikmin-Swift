@@ -119,7 +119,6 @@ class Pikmin:SKSpriteNode {
                         busy = false
                     }
                 }
-                
             } else if abs(attackTarget.position.x - position.x) > abs(attackTarget.position.y - position.y) {
                 followPoint = attackTarget.position
                 if attackTarget.position.x > position.x {

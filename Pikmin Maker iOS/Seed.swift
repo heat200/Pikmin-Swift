@@ -15,8 +15,16 @@ class Seed:SKSpriteNode {
     var pikminIdleLook = SKSpriteNode()
     var pikminPluck = SKAction.playSoundFileNamed("pikminPluck", waitForCompletion: false)
     
+    func pikminCycle() {
+        self.run(SKAction.wait(forDuration: 7.5),completion:{
+            self.pikminTierUpdate()
+            self.pikminCycle()
+        })
+    }
+    
     func unrootPikmin(_ player:Player) {
         if rooted {
+            self.removeAllActions()
             self.run(self.pikminPluck,completion: {
                 let NewPikmin = Pikmin(imageNamed: "Pikmin_" + self.seedColor + "_Down_Stand")
                 NewPikmin.direction = "Down"
@@ -47,6 +55,7 @@ class Seed:SKSpriteNode {
             } else {
                 seedTier = "Leaf"
             }
+            self.run(SKAction.setTexture(SKTexture(imageNamed: "Rooted_" + self.seedColor + "_" + self.seedTier), resize: false))
         }
     }
 }

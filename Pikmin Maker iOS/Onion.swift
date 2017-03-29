@@ -104,6 +104,7 @@ class Onion:SKSpriteNode {
                         seed.pikminIdleLook.isHidden = false
                         seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
                         seed.run(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.onionColor + "_Falling2"), resize: true))
+                        seed.pikminCycle()
                     })
                 })
                 self.parent!.addChild(seed)
