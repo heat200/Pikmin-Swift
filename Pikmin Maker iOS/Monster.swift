@@ -51,19 +51,19 @@ class Monster:SKSpriteNode {
         if monsterSpecies == "Red_Bulborb" {
             maxHealth = 2240
             health = 2240
-            xScale = 1
-            yScale = 1
+            xScale = 1.2
+            yScale = 1.2
             baseMoveSpeed = 50
             healthBar.position.x = self.position.x - self.size.width/2
             self.zPosition = (self.position.y - self.size.height/2) * -1
         } else if monsterSpecies == "Red_Bulborb_Dwarf" {
             maxHealth = 320
             health = 320
-            xScale = 0.4
-            yScale = 0.4
-            baseMoveSpeed = 70
+            xScale = 0.5
+            yScale = 0.5
+            baseMoveSpeed = 65
             healthBar.position.x = self.position.x - self.size.width/2
-            healthBar.position.y = 150
+            healthBar.position.y = 50
             self.zPosition = (self.position.y - self.size.height/2) * -1
         }
         
