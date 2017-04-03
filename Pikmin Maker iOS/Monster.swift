@@ -63,7 +63,7 @@ class Monster:SKSpriteNode {
             yScale = 0.5
             baseMoveSpeed = 65
             healthBar.position.x = self.position.x - self.size.width/2
-            healthBar.position.y = 50
+            healthBar.position.y = 35
             self.zPosition = (self.position.y - self.size.height/2) * -1
         }
         

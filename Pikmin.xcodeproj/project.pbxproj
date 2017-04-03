@@ -71,6 +71,8 @@
 		7D51C6CD1CD56995002FB2F8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B71CD56995002FB2F8 /* Player.swift */; };
 		7D51C6CE1CD56995002FB2F8 /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B81CD56995002FB2F8 /* Seed.swift */; };
 		7D51C6CF1CD56995002FB2F8 /* throw.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B91CD56995002FB2F8 /* throw.mp3 */; };
+		7D6F9C971E8F48F6008C5E93 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F9C961E8F48F6008C5E93 /* Machine.swift */; };
+		7D6F9C981E8F5D63008C5E93 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F9C961E8F48F6008C5E93 /* Machine.swift */; };
 		7D83117C1CDAF3220061D5E4 /* MenuOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D83117B1CDAF3220061D5E4 /* MenuOverlay.swift */; };
 		7D9F109C1CDDB66900A98FD0 /* Map_AwakeningWood.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9F109A1CDDB66900A98FD0 /* Map_AwakeningWood.png */; };
 		7D9F109D1CDDB66900A98FD0 /* space_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9F109B1CDDB66900A98FD0 /* space_new.png */; };
@@ -171,6 +173,7 @@
 		7D51C6B71CD56995002FB2F8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		7D51C6B81CD56995002FB2F8 /* Seed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
 		7D51C6B91CD56995002FB2F8 /* throw.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = throw.mp3; sourceTree = "<group>"; };
+		7D6F9C961E8F48F6008C5E93 /* Machine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Machine.swift; sourceTree = "<group>"; };
 		7D83117B1CDAF3220061D5E4 /* MenuOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuOverlay.swift; sourceTree = "<group>"; };
 		7D9F109A1CDDB66900A98FD0 /* Map_AwakeningWood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Map_AwakeningWood.png; sourceTree = "<group>"; };
 		7D9F109B1CDDB66900A98FD0 /* space_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space_new.png; sourceTree = "<group>"; };
@@ -342,6 +345,7 @@
 				7D51C6D11CD569EF002FB2F8 /* Sounds */,
 				7D51C6A81CD56995002FB2F8 /* Flower.swift */,
 				7D51C6AD1CD56995002FB2F8 /* Ghost.swift */,
+				7D6F9C961E8F48F6008C5E93 /* Machine.swift */,
 				7D51C6B01CD56995002FB2F8 /* Monster.swift */,
 				7D51C6B11CD56995002FB2F8 /* Nutrient.swift */,
 				7D51C6B21CD56995002FB2F8 /* Onion.swift */,
@@ -463,7 +467,7 @@
 					};
 					7D51C68D1CD568D6002FB2F8 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = N4MWNVQDSJ;
+						DevelopmentTeam = JMNHZD683B;
 						LastSwiftMigration = 0820;
 					};
 				};
@@ -592,6 +596,7 @@
 				7DD42B871CD6329400A5B704 /* MPCHandler.swift in Sources */,
 				7DD29B131CCD7CDC0084D707 /* Flower.swift in Sources */,
 				7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */,
+				7D6F9C971E8F48F6008C5E93 /* Machine.swift in Sources */,
 				7D488C551CC6B4FC00A412D9 /* Onion.swift in Sources */,
 				7DCC0A3B1CCEDD250009197E /* Ghost.swift in Sources */,
 				7D488C511CC6850600A412D9 /* Player.swift in Sources */,
@@ -607,6 +612,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D6F9C981E8F5D63008C5E93 /* Machine.swift in Sources */,
 				7D51C6C81CD56995002FB2F8 /* Onion.swift in Sources */,
 				7D83117C1CDAF3220061D5E4 /* MenuOverlay.swift in Sources */,
 				7D51C6C61CD56995002FB2F8 /* Monster.swift in Sources */,
@@ -820,10 +826,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = JMNHZD683B;
 				INFOPLIST_FILE = "Pikmin Maker iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.PikminMaker-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0;
@@ -837,10 +844,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = JMNHZD683B;
 				INFOPLIST_FILE = "Pikmin Maker iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.Pikmin-Maker-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mazariegos.PikminMaker-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

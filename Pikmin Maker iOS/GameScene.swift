@@ -239,6 +239,17 @@ class GameScene:SKScene {
             self.addChild(nutrient)
         }
         
+        var devicesAdded = 0
+        while devicesAdded < 10 {
+            devicesAdded += 1
+            
+            let device = Machine(imageNamed:"Electrode_Inactive")
+            self.addChild(device)
+            device.randomizePosition()
+            device.setUp()
+            device.zPosition = (device.position.y - device.size.height/2) * -1
+        }
+        
         var timeBubblesAdded = 0
         while timeBubblesAdded < 13 {
             var radius:CGFloat = 5

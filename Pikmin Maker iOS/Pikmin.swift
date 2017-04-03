@@ -14,12 +14,14 @@ class Pikmin:SKSpriteNode {
     var flowerColor = "W"
     var direction = ""
     var oldDirection = ""
+    var inDistress = false
+    var distressType = ""
     var movementSpeed = 0
     var baseMoveSpeed = 100
     var pikminTierLook = SKSpriteNode(imageNamed: "Leaf")
     var pikminIdleLook = SKSpriteNode(imageNamed:"RedGlow")
     var leader = Player()
-    var attackTarget:Monster!
+    var attackTarget:AnyObject!
     var attacking = false
     var followPoint = CGPoint()
     var dead = false
@@ -37,7 +39,6 @@ class Pikmin:SKSpriteNode {
     var pikminBumped = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
     var pikminLeft = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
     var pikminThrow = SKAction.playSoundFileNamed("throw", waitForCompletion: false)
-    
     
     var movingToHome = false
     var inHome = false
@@ -91,6 +92,38 @@ class Pikmin:SKSpriteNode {
         halfHeight = self.size.height/2
     }
     
+    func inDistress(_ type:String) {
+        inDistress = true
+        distressType = type
+        attacking = false
+        
+        if distressType == "Electric" {
+            self.run(SKAction.setTexture(SKTexture(imageNamed:"Pikmin_Shocked_" + self.direction + "_Stand")))
+            self.pikminColor = "Shocked"
+            self.parent!.run(SKAction.wait(forDuration: 0.25),completion:{
+                self.kill(false)
+            })
+        } else if distressType == "Fire" {
+            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+                if self.inDistress && self.distressType == "Fire" {
+                    self.kill(false)
+                }
+            })
+        } else if distressType == "Water" {
+            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+                if self.inDistress && self.distressType == "Water" {
+                    self.kill(false)
+                }
+            })
+        } else if distressType == "Poison" {
+            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+                if self.inDistress && self.distressType == "Poison" {
+                    self.kill(false)
+                }
+            })
+        }
+    }
+    
     func move() {
         if !attacking {
             if abs(leader.position.x - position.x) > abs(leader.position.y - position.y) && !busy {
@@ -108,14 +141,32 @@ class Pikmin:SKSpriteNode {
             }
         } else {
             if abs(attackTarget.position.x - position.x) <= 15 && abs(attackTarget.position.y - position.y) <= 15 {
-                if attackTarget.dead || attackTarget == nil {
+                var targetDead = false
+                if attackTarget is Monster {
+                    print("ATKING MONSTER")
+                    targetDead = (attackTarget as! Monster).dead
+                } else if attackTarget is Machine {
+                    print("ATKING MACHINE")
+                    targetDead = (attackTarget as! Machine).dead
+                }
+                
+                if targetDead || attackTarget == nil {
                     attacking = false
+                    busy = false
                 } else {
                     if pikminColor != "Red" {
-                        attackTarget.takePikminDamage("hit" + self.pikminTier)
+                        if attackTarget is Monster {
+                            (attackTarget as! Monster).takePikminDamage("hit" + self.pikminTier)
+                        } else if attackTarget is Machine {
+                            (attackTarget as! Machine).takePikminDamage("hit" + self.pikminTier)
+                        }
                         busy = false
                     } else {
-                        attackTarget.takePikminDamage("hit" + self.pikminTier + "-Red")
+                        if attackTarget is Monster {
+                            (attackTarget as! Monster).takePikminDamage("hit" + self.pikminTier + "-Red")
+                        } else if attackTarget is Machine {
+                            (attackTarget as! Machine).takePikminDamage("hit" + self.pikminTier + "-Red")
+                        }
                         busy = false
                     }
                 }
@@ -148,6 +199,8 @@ class Pikmin:SKSpriteNode {
             }
         }
         idle = false
+        inDistress = false
+        distressType = ""
         attacking = false
         attackTarget = nil
         pikminIdleLook.isHidden = true
@@ -156,19 +209,50 @@ class Pikmin:SKSpriteNode {
         }
     }
     
+    func pickDistressPoint() -> CGPoint {
+        var newPoint = CGPoint(x: 0, y: 0)
+        
+        let xDiff:CGFloat = CGFloat(arc4random_uniform(50) + 1) - 25
+        let yDiff:CGFloat = CGFloat(arc4random_uniform(50) + 1) - 25
+        
+        newPoint.x = self.position.x + xDiff
+        newPoint.y = self.position.y + yDiff
+        
+        if abs(newPoint.x - position.x) > abs(newPoint.y - position.y) {
+            if newPoint.x > position.x {
+                direction = "Right"
+            } else if newPoint.x < position.x {
+                direction = "Left"
+            }
+        } else if abs(newPoint.x - position.x) < abs(newPoint.y - position.y) {
+            if newPoint.y > position.y {
+                direction = "Up"
+            } else if newPoint.y < position.y {
+                direction = "Down"
+            }
+        }
+        
+        return newPoint
+    }
+    
     func thinking() {
-        if leader.playerDirection == "Left" && !attacking {
+        if leader.playerDirection == "Left" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x + dispX, y: leader.position.y)
-        } else if leader.playerDirection == "Right" && !attacking {
+        } else if leader.playerDirection == "Right" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x - dispX, y: leader.position.y)
-        } else if leader.playerDirection == "Up" && !attacking {
+        } else if leader.playerDirection == "Up" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y - dispY)
-        } else if leader.playerDirection == "Down" && !attacking {
+        } else if leader.playerDirection == "Down" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y + dispY)
         }
+        
+        if inDistress {
+            followPoint = pickDistressPoint()
+        }
+        
         pikminIdleLook.position = pikminTierLook.position
         move()
-        if position != followPoint && !idle && !busy {
+        if position != followPoint && (!idle || inDistress) && !busy {
             moving = true
             self.zPosition = (self.position.y - halfHeight) * -1
         } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace && !movingToHome && !inHome {
@@ -587,13 +671,16 @@ class Pikmin:SKSpriteNode {
                 NewGhost.position = self.position
                 NewGhost.ghostColor = self.pikminColor
                 NewGhost.zPosition = FrontLayer
+                
+                self.dead = true
+                self.brain.invalidate()
+                
+                self.removeAllActions()
                 if self.parent != nil {
                     self.parent!.addChild(NewGhost)
                     NewGhost.setUp()
                 }
                 
-                self.dead = true
-                self.brain.invalidate()
                 self.removeAllActions()
                 self.removeAllChildren()
                 self.removeFromParent()

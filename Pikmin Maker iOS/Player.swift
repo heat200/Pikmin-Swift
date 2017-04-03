@@ -170,10 +170,10 @@ class Player:SKSpriteNode {
                 }
                 
                 func checkPikminOn() {
-                    if objectsPikminOn.count - attempts > 0 && !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) {
+                    if objectsPikminOn.count - attempts > 0 && !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) && !(objectPikminOn is Machine) {
                         attempts += 1
                         objectPikminOn = objectsPikminOn[objectsPikminOn.count - attempts]
-                        if !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) && objectsPikminOn.count - attempts > 0 {
+                        if !(objectPikminOn is Flower) && !(objectPikminOn is Nutrient) && !(objectPikminOn is Monster) && !(objectPikminOn is Machine) && objectsPikminOn.count - attempts > 0 {
                             checkPikminOn()
                         }
                     }
@@ -201,10 +201,10 @@ class Player:SKSpriteNode {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
                     let nutrient = objectPikminOn as! Nutrient
                     pikminChosen?.carryNutrient(nutrient)
-                } else if objectPikminOn is Monster {
+                } else if objectPikminOn is Monster || objectPikminOn is Machine {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
-                    let monster = objectPikminOn as! Monster
-                    pikminChosen?.attackTarget = monster
+                    let object = objectPikminOn
+                    pikminChosen?.attackTarget = object
                     pikminChosen?.attacking = true
                 } else {
                     pikminChosen?.run((pikminChosen?.pikminLand)!)
