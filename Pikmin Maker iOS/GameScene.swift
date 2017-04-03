@@ -647,7 +647,33 @@ class GameScene:SKScene {
             day = true
         } else if gameTime >= 19 || gameTime < 7 {
             let marker1 = self.camera!.childNode(withName: "TimeBubble1")!
-            sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * 12) - (0.5 * 12)))
+            var timeFrameMod:Double = 12
+            
+            if gameTime == 20 {
+                timeFrameMod = 11
+            } else if gameTime == 21 {
+                timeFrameMod = 10
+            } else if gameTime == 22 {
+                timeFrameMod = 9
+            } else if gameTime == 23 {
+                timeFrameMod = 8
+            } else if gameTime == 0 || gameTime == 24 {
+                timeFrameMod = 7
+            } else if gameTime == 1 {
+                timeFrameMod = 6
+            } else if gameTime == 2 {
+                timeFrameMod = 5
+            } else if gameTime == 3 {
+                timeFrameMod = 4
+            } else if gameTime == 4 {
+                timeFrameMod = 3
+            } else if gameTime == 5 {
+                timeFrameMod = 2
+            } else if gameTime == 6 {
+                timeFrameMod = 1
+            }
+            
+            sundial.run(SKAction.move(to: marker1.position, duration: (timeFrame * timeFrameMod) - (0.5 * timeFrameMod)))
             day = false
         }
         

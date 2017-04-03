@@ -34,6 +34,8 @@ class Pikmin:SKSpriteNode {
     var halfHeight:CGFloat!
     var dispX:CGFloat = 0
     var dispY:CGFloat = 0
+    var pikminZapped = SKAction.playSoundFileNamed("pikminZapped", waitForCompletion: false)
+    var pikminBurning = SKAction.playSoundFileNamed("pikminBurning", waitForCompletion: false)
     var pikminSqueel = SKAction.playSoundFileNamed("pikminSqueel", waitForCompletion: false)
     var pikminLand = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
     var pikminBumped = SKAction.playSoundFileNamed("pikminLand", waitForCompletion: false)
@@ -92,6 +94,23 @@ class Pikmin:SKSpriteNode {
         halfHeight = self.size.height/2
     }
     
+    func inDistressSound() {
+        if inDistress {
+            if distressType == "Electric" {
+                self.parent!.run(self.pikminZapped)
+            } else if distressType == "Fire" {
+                self.parent!.run(self.pikminBurning)
+                self.run(SKAction.wait(forDuration: 0.23),completion:{
+                    self.inDistressSound()
+                })
+            } else if distressType == "Water" {
+                
+            } else if distressType == "Poison" {
+                
+            }
+        }
+    }
+    
     func inDistress(_ type:String) {
         inDistress = true
         distressType = type
@@ -106,24 +125,26 @@ class Pikmin:SKSpriteNode {
                 self.kill(false)
             })
         } else if distressType == "Fire" {
-            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+            self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Fire" {
                     self.kill(false)
                 }
             })
         } else if distressType == "Water" {
-            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+            self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Water" {
                     self.kill(false)
                 }
             })
         } else if distressType == "Poison" {
-            self.parent?.run(SKAction.wait(forDuration: 2.51),completion:{
+            self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Poison" {
                     self.kill(false)
                 }
             })
         }
+        
+        inDistressSound()
     }
     
     func move() {
@@ -145,10 +166,10 @@ class Pikmin:SKSpriteNode {
             if abs(attackTarget.position.x - position.x) <= 15 && abs(attackTarget.position.y - position.y) <= 15 {
                 var targetDead = false
                 if attackTarget is Monster {
-                    print("ATKING MONSTER")
+                    //print("ATKING MONSTER")
                     targetDead = (attackTarget as! Monster).dead
                 } else if attackTarget is Machine {
-                    print("ATKING MACHINE")
+                    //print("ATKING MACHINE")
                     targetDead = (attackTarget as! Machine).dead
                 }
                 

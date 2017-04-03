@@ -100,6 +100,10 @@
 		7DD42B8C1CD632FD00A5B704 /* MultiGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B8A1CD632FD00A5B704 /* MultiGameScene.swift */; };
 		7DD42B8E1CD6D55100A5B704 /* space.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B8D1CD6D55100A5B704 /* space.png */; };
 		7DD42B901CD6D55A00A5B704 /* space.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B8F1CD6D55A00A5B704 /* space.png */; };
+		7DF40C0C1E9310040066C7C5 /* pikminBurning.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */; };
+		7DF40C0D1E9310040066C7C5 /* pikminZapped.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */; };
+		7DF40C0E1E93101B0066C7C5 /* pikminBurning.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */; };
+		7DF40C0F1E93101B0066C7C5 /* pikminZapped.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -202,6 +206,8 @@
 		7DD42B8A1CD632FD00A5B704 /* MultiGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiGameScene.swift; sourceTree = "<group>"; };
 		7DD42B8D1CD6D55100A5B704 /* space.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space.png; sourceTree = "<group>"; };
 		7DD42B8F1CD6D55A00A5B704 /* space.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space.png; sourceTree = "<group>"; };
+		7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminBurning.mp3; sourceTree = "<group>"; };
+		7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminZapped.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -379,6 +385,8 @@
 		7D51C6D11CD569EF002FB2F8 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */,
+				7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */,
 				7D9F109E1CDDB67100A98FD0 /* menuTheme.m4a */,
 				7D063FDC1CD5B49F0063539B /* pikminLand.mp3 */,
 				7D51C6A71CD56995002FB2F8 /* call.mp3 */,
@@ -535,8 +543,10 @@
 				7D488C571CC6E33900A412D9 /* map1.png in Resources */,
 				7DBFEF611CD47CFE00841727 /* throw.wav in Resources */,
 				7DBFEF651CD47F8C00841727 /* pikminPluck.wav in Resources */,
+				7DF40C0D1E9310040066C7C5 /* pikminZapped.mp3 in Resources */,
 				7D9F109D1CDDB66900A98FD0 /* space_new.png in Resources */,
 				7DC86A001CD143970086E146 /* Assets.xcassets in Resources */,
+				7DF40C0C1E9310040066C7C5 /* pikminBurning.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +554,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DF40C0E1E93101B0066C7C5 /* pikminBurning.mp3 in Resources */,
+				7DF40C0F1E93101B0066C7C5 /* pikminZapped.mp3 in Resources */,
 				7D51C6931CD568D6002FB2F8 /* GameScene.sks in Resources */,
 				7D51C69F1CD568D6002FB2F8 /* LaunchScreen.storyboard in Resources */,
 				7DD42B801CD616E800A5B704 /* forestNaval.mp3 in Resources */,
