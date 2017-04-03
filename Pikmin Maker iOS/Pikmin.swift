@@ -99,8 +99,10 @@ class Pikmin:SKSpriteNode {
         
         if distressType == "Electric" {
             self.run(SKAction.setTexture(SKTexture(imageNamed:"Pikmin_Shocked_" + self.direction + "_Stand")))
+            let priorColor = self.pikminColor
             self.pikminColor = "Shocked"
             self.parent!.run(SKAction.wait(forDuration: 0.25),completion:{
+                self.pikminColor = priorColor
                 self.kill(false)
             })
         } else if distressType == "Fire" {
