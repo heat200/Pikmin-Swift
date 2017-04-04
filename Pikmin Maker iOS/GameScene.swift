@@ -276,7 +276,8 @@ class GameScene:SKScene {
         self.addChild(Space)
         self.addChild(backgroundMusic)
         
-        
+        self.view?.ignoresSiblingOrder = true
+        self.view?.showsDrawCount = true
         
         RedOnion.randomizePosition()
         YellowOnion.randomizePosition()
