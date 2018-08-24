@@ -7,234 +7,78 @@
 //
 
 import SpriteKit
+import MultipeerConnectivity
 
-let BackmostLayer:CGFloat = 0
-let BackLayer:CGFloat = 5
-let MidLayer:CGFloat = 10
-let FrontLayer:CGFloat = 15
-let UILayer:CGFloat = 20
-
-class GameScene:SKScene {
-    var ThePlayer = Player(imageNamed:"Olimar_Down_Stand")
-    let RedOnion = Onion(imageNamed:"Onion_Inactive")
-    let BlueOnion = Onion(imageNamed:"Onion_Inactive")
-    let YellowOnion = Onion(imageNamed:"Onion_Inactive")
-    
-    let TheShip = Ship(imageNamed:"Ship_Empty")
-    
-    let Space = SKSpriteNode(imageNamed:"space")
-    
-    let backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
-    
-    let MAP = SKSpriteNode(imageNamed:"map1")
-    
-    var nightOverlay = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 10, height: 10)))
-    
-    var movingSpace = false
-    
-    var lastTime:Double = 0
-    var day = true
-    
-    override func didMove(to view: SKView) {
-        MAP.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        MAP.zPosition = BackmostLayer
-        
-        ThePlayer.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        ThePlayer.zPosition = BackLayer
-        ThePlayer.setUp()
-        
-        RedOnion.onionColor = "Red"
-        RedOnion.zPosition = MidLayer
-        
-        BlueOnion.onionColor = "Blue"
-        BlueOnion.zPosition = MidLayer
-        
-        YellowOnion.onionColor = "Yellow"
-        YellowOnion.zPosition = MidLayer
-        
-        backgroundMusic.autoplayLooped = true
-        
-        let PurpleFlower = Flower(imageNamed:"Flower_Purple_Open")
-        PurpleFlower.zPosition = MidLayer
-        PurpleFlower.flowerColor = "Purple"
-        
-        let WhiteFlower = Flower(imageNamed:"Flower_White_Open")
-        WhiteFlower.zPosition = MidLayer
-        
-        TheShip.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 300)
-        TheShip.zPosition = FrontLayer
-        
-        Space.zPosition = BackmostLayer - 1
-        Space.position = CGPoint(x: self.frame.midX, y: self.frame.midY + self.size.height/2)
-        Space.setScale(4)
-        
-        nightOverlay = SKShapeNode(rect: self.frame)
-        nightOverlay.zPosition = -1
-        nightOverlay.position = CGPoint(x: -self.frame.width/2, y: -self.frame.height/2)
-        nightOverlay.fillColor = SKColor.black
-        nightOverlay.alpha = 0.0
-        nightOverlay.strokeColor = SKColor.clear
-        self.camera!.addChild(nightOverlay)
-        
-        var nutrientsAdded = 0
-        while nutrientsAdded < 75 {
-            nutrientsAdded += 1
-            var color = "Red"
-            let rand = Int(arc4random_uniform(3) + 1)
-            let randX:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
-            let randY:CGFloat = CGFloat(Int(arc4random_uniform(1500)) - 750)
-            
-            if rand == 1 {
-                color = "Red"
-            } else if rand == 2 {
-                color = "Blue"
-            } else {
-                color = "Yellow"
-            }
-            
-            let nutrient = Nutrient(imageNamed:"Nutrient_" + color)
-            nutrient.nutrientColor = color
-            nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
-            nutrient.zPosition = MidLayer - 1
-            self.addChild(nutrient)
-        }
-        
-        self.addChild(ThePlayer)
-        self.addChild(MAP)
-        self.addChild(RedOnion)
-        self.addChild(BlueOnion)
-        self.addChild(YellowOnion)
-        self.addChild(PurpleFlower)
-        self.addChild(WhiteFlower)
-        self.addChild(TheShip)
-        self.addChild(Space)
-        self.addChild(backgroundMusic)
-        
-        RedOnion.randomizePosition()
-        YellowOnion.randomizePosition()
-        BlueOnion.randomizePosition()
-        WhiteFlower.randomizePosition()
-        PurpleFlower.randomizePosition()
-    }
+class GameScene:MainGameLogic {
     
     override func keyDown(with theEvent: NSEvent) {
         let location = theEvent.location(in: self)
         let objectTouched = self.atPoint(location)
-        let objectPlayerOn = self.atPoint(ThePlayer.position)
+        let objectsPlayerOn = self.nodes(at: ThePlayer.position)
         let chars = theEvent.characters!
         if chars.contains("w") {
-            if TheShip.followShip {
-                TheShip.toMultiplayer()
-            } else {
-                ThePlayer.moveTo = "Up"
-            }
+            receiveDownPressData(inputReceived: "Up", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         } else if chars.contains("d") {
-            if TheShip.followShip {
-                if TheShip.player == "1" {
-                    TheShip.player = "2"
-                } else {
-                    TheShip.player = "1"
-                }
-                print(TheShip.player)
-            } else {
-                ThePlayer.moveTo = "Right"
-            }
+            receiveDownPressData(inputReceived: "Right", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         } else if chars.contains("a") {
-            if TheShip.followShip {
-                if TheShip.player == "1" {
-                    TheShip.player = "2"
-                } else {
-                    TheShip.player = "1"
-                }
-                print(TheShip.player)
-            } else {
-                ThePlayer.moveTo = "Left"
-            }
+            receiveDownPressData(inputReceived: "Left", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         } else if chars.contains("s") {
-            if TheShip.followShip {
-                TheShip.backToEarth()
-            } else {
-                ThePlayer.moveTo = "Down"
-            }
+            receiveDownPressData(inputReceived: "Down", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         }
         
         if chars.contains(" ") {
-            if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
-                let onion = objectPlayerOn as! Onion
-                onion.wake()
-            } else if objectPlayerOn is Seed {
-                let seed = objectPlayerOn as! Seed
-                seed.unrootPikmin(ThePlayer)
-            } else if objectPlayerOn is Ship {
-                let ship = objectPlayerOn as! Ship
-                ship.getIn(ThePlayer)
-            } else {
-                ThePlayer.grabPikmin()
-            }
+            receiveDownPressData(inputReceived: "Action", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         } else if chars.contains("q") {
-            ThePlayer.makePikminIdle()
+            receiveDownPressData(inputReceived: "Idle", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         } else if chars.contains("b") {
-            ThePlayer.recallPikmin()
+            receiveDownPressData(inputReceived: "Recall", objectsPlayerOn: objectsPlayerOn, pikColor: "")
         }
     }
     
-    override func keyUp(with theEvent: NSEvent) {
-        let chars = theEvent.characters!
-        if chars.contains("w") || chars.contains("a") || chars.contains("s") || chars.contains("d") {
-            ThePlayer.moveTo = ""
+    override func mouseDown(with event: NSEvent) {
+        let location = event.location(in: self)
+        let objectsPlayerOn = self.nodes(at: ThePlayer.position)
+        
+        if self.atPoint(location).parent is MenuOverlay {
+            let menu = self.atPoint(location).parent as! MenuOverlay
+            let menuButton = self.atPoint(location)
+            if menuButton == menu.lessPikmin {
+                receiveDownPressData(inputReceived: "Withdraw", objectsPlayerOn: objectsPlayerOn, pikColor: "\(menu.menuColor)")
+            } else if menuButton == menu.morePikmin {
+                receiveDownPressData(inputReceived: "Deposit", objectsPlayerOn: objectsPlayerOn, pikColor: "\(menu.menuColor)")
+            } else if menuButton == menu.lessPikmin2 {
+                receiveDownPressData(inputReceived: "Withdraw", objectsPlayerOn: objectsPlayerOn, pikColor: "\(menu.menuColor2)")
+            } else if menuButton == menu.morePikmin2 {
+                receiveDownPressData(inputReceived: "Deposit", objectsPlayerOn: objectsPlayerOn, pikColor: "\(menu.menuColor2)")
+            } else if menuButton == menu.takeFlightButton {
+                receiveDownPressData(inputReceived: "EndDay", objectsPlayerOn: objectsPlayerOn, pikColor: "")
+            }
+        }
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        let chars = event.characters!
+        if chars.contains("w") {
+            receiveDePressData(inputReceived: "Up")
+        } else if chars.contains("a") {
+            receiveDePressData(inputReceived: "Left")
+        } else if chars.contains("s") {
+            receiveDePressData(inputReceived: "Down")
+        } else if chars.contains("d") {
+            receiveDePressData(inputReceived: "Right")
         }
         
         if chars.contains(" ") {
-            if ThePlayer.pikminToThrow != nil {
-                ThePlayer.throwPikmin()
-            }
+            receiveDePressData(inputReceived: "Action")
+        } else if chars.contains("b") {
+            receiveDePressData(inputReceived: "Recall")
+        } else if chars.contains("q") {
+            receiveDePressData(inputReceived: "Idle")
         }
     }
     
-    override func update(_ currentTime: TimeInterval) {
-        let timeFrame:Double = 2
-        if currentTime - lastTime >= timeFrame {
-            lastTime = currentTime
-            if day {
-                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha + 0.05, duration: timeFrame - timeFrame/60))
-                if nightOverlay.alpha >= 0.7 {
-                    nightOverlay.alpha = 0.7
-                    day = false
-                }
-            } else {
-                nightOverlay.run(SKAction.fadeAlpha(to: nightOverlay.alpha - 0.05, duration: timeFrame - timeFrame/60))
-                if nightOverlay.alpha <= 0.0 {
-                    nightOverlay.alpha = 0.0
-                    day = true
-                }
-            }
-        }
-        
-        if !TheShip.followShip {
-            self.camera!.position = ThePlayer.position
-            ThePlayer.move()
-        } else {
-            self.camera!.position = TheShip.position
-            if !movingSpace {
-                movingSpace = true
-                if !TheShip.returning {
-                    Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: -750), duration: 9),SKAction.run({
-                        self.Space.position.x = self.TheShip.position.x
-                        self.Space.position.y = self.TheShip.position.y + 1100
-                    })])
-                    Space.position.y = TheShip.position.y + 1550
-                    Space.run(SKAction.repeatForever(spaceZoom))
-                } else {
-                    Space.removeAllActions()
-                    let spaceZoom = SKAction.sequence([SKAction.move(by: CGVector(dx: 0, dy: 500), duration: 6),SKAction.run({
-                        self.Space.position.x = self.TheShip.position.x
-                        self.Space.position.y = self.TheShip.position.y - 900
-                    })])
-                    Space.position.y = TheShip.position.y - 1550
-                    Space.run(SKAction.repeatForever(spaceZoom))
-                }
-            }
-        }
+    override func runAppDelegateSetUpCode() {
+        appDelegate = NSApplication.shared().delegate as! AppDelegate
+        appDelegate.mpcHandler.setupPeerWithDisplayName(NSUserName())
     }
 }

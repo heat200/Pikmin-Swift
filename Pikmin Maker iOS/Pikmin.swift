@@ -15,6 +15,7 @@ class Pikmin:SKSpriteNode {
     var direction = ""
     var oldDirection = ""
     var inDistress = false
+    var inDistressSounding = false
     var distressType = ""
     var movementSpeed = 0
     var baseMoveSpeed = 100
@@ -96,16 +97,19 @@ class Pikmin:SKSpriteNode {
     
     func inDistressSound() {
         if inDistress {
-            if distressType == "Electric" {
+            if distressType == "Electric" && !inDistressSounding {
                 self.parent!.run(self.pikminZapped)
-            } else if distressType == "Fire" {
+                inDistressSounding = true
+            } else if distressType == "Fire" && !inDistressSounding {
                 self.parent!.run(self.pikminBurning)
-                self.run(SKAction.wait(forDuration: 0.23),completion:{
+                inDistressSounding = true
+                self.run(SKAction.wait(forDuration: 0.25, withRange: 0.15),completion:{
+                    self.inDistressSounding = false
                     self.inDistressSound()
                 })
-            } else if distressType == "Water" {
+            } else if distressType == "Water" && !inDistressSounding {
                 
-            } else if distressType == "Poison" {
+            } else if distressType == "Poison" && !inDistressSounding {
                 
             }
         }
@@ -120,31 +124,33 @@ class Pikmin:SKSpriteNode {
             self.run(SKAction.setTexture(SKTexture(imageNamed:"Pikmin_Shocked_" + self.direction + "_Stand")))
             let priorColor = self.pikminColor
             self.pikminColor = "Shocked"
+            inDistressSound()
             self.parent!.run(SKAction.wait(forDuration: 0.51),completion:{
                 self.pikminColor = priorColor
                 self.kill(false)
             })
         } else if distressType == "Fire" {
+            inDistressSound()
             self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Fire" {
                     self.kill(false)
                 }
             })
         } else if distressType == "Water" {
+            inDistressSound()
             self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Water" {
                     self.kill(false)
                 }
             })
         } else if distressType == "Poison" {
+            inDistressSound()
             self.parent?.run(SKAction.wait(forDuration: 5.01),completion:{
                 if self.inDistress && self.distressType == "Poison" {
                     self.kill(false)
                 }
             })
         }
-        
-        inDistressSound()
     }
     
     func move() {
@@ -155,7 +161,7 @@ class Pikmin:SKSpriteNode {
                 } else if leader.position.x < position.x {
                     direction = "Left"
                 }
-            } else if abs(leader.position.x - position.x) < abs(leader.position.y - position.y) && !busy{
+            } else if !busy {
                 if leader.position.y > position.y {
                     direction = "Up"
                 } else if leader.position.y < position.y {
@@ -223,6 +229,7 @@ class Pikmin:SKSpriteNode {
         }
         idle = false
         inDistress = false
+        inDistressSounding = false
         distressType = ""
         attacking = false
         attackTarget = nil
@@ -259,7 +266,9 @@ class Pikmin:SKSpriteNode {
     }
     
     func thinking() {
-        if leader.playerDirection == "Left" && !attacking && !inDistress {
+        if inDistress {
+            followPoint = pickDistressPoint()
+        } else if leader.playerDirection == "Left" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x + dispX, y: leader.position.y)
         } else if leader.playerDirection == "Right" && !attacking && !inDistress {
             followPoint = CGPoint(x: leader.position.x - dispX, y: leader.position.y)
@@ -269,15 +278,11 @@ class Pikmin:SKSpriteNode {
             followPoint = CGPoint(x: leader.position.x, y: leader.position.y + dispY)
         }
         
-        if inDistress {
-            followPoint = pickDistressPoint()
-        }
-        
         pikminIdleLook.position = pikminTierLook.position
         move()
         if position != followPoint && (!idle || inDistress) && !busy {
             moving = true
-            self.zPosition = (self.position.y - halfHeight) * -1
+            self.zPosition = MidLayer
         } else if (idle || (position.x > followPoint.x - 10 && position.x < followPoint.x + 10) && (position.y > followPoint.y - 10 && position.y < followPoint.y + 10)) && !busy && !leader.timeForSpace && !movingToHome && !inHome {
             moving = false
             returning = false
@@ -312,29 +317,14 @@ class Pikmin:SKSpriteNode {
                     //onionPosition = parent.BlueOnion.position
                 }
             } else if pikminColor == "Yellow" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.YellowOnion.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.YellowOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.YellowOnion.position
             } else if pikminColor == "White" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.TheShip.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.TheShip.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.TheShip.position
             } else if pikminColor == "Purple" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.TheShip.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.TheShip.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.TheShip.position
             }
             
             let pos1 = CGPoint(x: onionPosition.x, y: onionPosition.y - 50)
@@ -349,72 +339,32 @@ class Pikmin:SKSpriteNode {
             })
         } else if leader.timeForSpace && inHome {
             if pikminColor == "Red" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    self.position = parent.RedOnion.position
-                } else {
-                    let parent = (self.parent as! MultiGameScene)
-                    self.position = parent.RedOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                self.position = parent.RedOnion.position
             } else if pikminColor == "Blue" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    self.position = parent.BlueOnion.position
-                } else {
-                    let parent = (self.parent as! MultiGameScene)
-                    self.position = parent.BlueOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                self.position = parent.BlueOnion.position
             } else if pikminColor == "Yellow" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    self.position = parent.YellowOnion.position
-                } else {
-                    let parent = (self.parent as! MultiGameScene)
-                    self.position = parent.YellowOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                self.position = parent.YellowOnion.position
             } else if pikminColor == "White" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    self.position = parent.TheShip.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //self.position = parent.TheShip.position
-                }
+                let parent = (self.parent as! GameScene)
+                self.position = parent.TheShip.position
             } else if pikminColor == "Purple" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    self.position = parent.TheShip.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //self.position = parent.TheShip.position
-                }
+                let parent = (self.parent as! GameScene)
+                self.position = parent.TheShip.position
             }
         } else if !leader.timeForSpace && movingToHome && !inHome {
             var onionPosition = CGPoint(x: 0, y: 0)
             if pikminColor == "Red" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.RedOnion.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.RedOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.RedOnion.position
             } else if pikminColor == "Blue" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.BlueOnion.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.BlueOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.BlueOnion.position
             } else if pikminColor == "Yellow" {
-                if self.parent is GameScene {
-                    let parent = (self.parent as! GameScene)
-                    onionPosition = parent.YellowOnion.position
-                } else {
-                    //let parent = (self.parent as! MultiGameScene)
-                    //onionPosition = parent.YellowOnion.position
-                }
+                let parent = (self.parent as! GameScene)
+                onionPosition = parent.YellowOnion.position
             } else if pikminColor == "White" {
                 if self.parent is GameScene {
                     let parent = (self.parent as! GameScene)
@@ -448,21 +398,13 @@ class Pikmin:SKSpriteNode {
     
     func updateLooks() {
         if !busy && !leader.timeForSpace && !inHome && !movingToHome {
-            if self.checkIfTooFar() {
-                if !idle {
-                    self.busy = false
-                    self.returning = false
-                    self.idle = true
-                    self.run(SKAction.sequence([SKAction.wait(forDuration: 0.025),pikminLeft]))
-                    var index = -1
-                    var found = false
-                    while index < self.leader.pikminFollowing.count - 1 && !found {
-                        index += 1
-                        if self == self.leader.pikminFollowing[index] {
-                            found = true
-                            self.leader.pikminFollowing.remove(at: index)
-                        }
-                    }
+            if self.checkIfTooFar() && !idle {
+                self.busy = false
+                self.returning = false
+                self.idle = true
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 0.025),pikminLeft]))
+                if self.leader.pikminFollowing.contains(self) {
+                    self.leader.pikminFollowing.remove(at: self.leader.pikminFollowing.index(of: self)!)
                 }
             }
             
@@ -550,7 +492,6 @@ class Pikmin:SKSpriteNode {
             } else if direction == "Up" {
                 walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y - 5)
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y - 5)
-                nutrient.zPosition = self.zPosition - 2
             } else if direction == "Down" {
                 walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
@@ -566,8 +507,8 @@ class Pikmin:SKSpriteNode {
                 })
                 self.run(SKAction.move(to: walkSpot2, duration: sqrt(pow(Double(self.position.x - walkSpot2.x),2) + pow(Double(self.position.y - walkSpot2.y),2))/Double(self.movementSpeed)))
             })
-        } else if parent is MultiGameScene {
-            let parent = (self.parent as! MultiGameScene)
+        } else if (self.parent as! GameScene).connected {
+            let parent = (self.parent as! GameScene)
             var onionToTakeTo = parent.RedOnion
             if pikminColor == "Red" {
                 onionToTakeTo = parent.RedOnion
@@ -613,10 +554,10 @@ class Pikmin:SKSpriteNode {
             } else if direction == "Up" {
                 walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y - 5)
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y - 5)
-                nutrient.zPosition = self.zPosition - 2
             } else if direction == "Down" {
                 walkSpot1 = CGPoint(x: nutrient.position.x, y: nutrient.position.y + 20)
                 walkSpot2 = CGPoint(x: locationToTakeTo.x, y: locationToTakeTo.y + 20)
+                nutrient.zPosition = self.zPosition + 2
             }
             
             self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run1"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run2"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run3"),SKTexture(imageNamed:"Pikmin_" + pikminColor + "_" + direction + "_Run4")], timePerFrame: 0.12)))

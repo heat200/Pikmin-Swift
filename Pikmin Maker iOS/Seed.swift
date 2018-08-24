@@ -17,10 +17,12 @@ class Seed:SKSpriteNode {
     var seedExpelled = SKAction.playSoundFileNamed("pikminPluck", waitForCompletion: false)
     
     func pikminCycle() {
-        self.run(SKAction.wait(forDuration: 7.5),completion:{
-            self.pikminTierUpdate()
-            self.pikminCycle()
-        })
+        self.run(SKAction.run({
+            self.run(SKAction.wait(forDuration: 6),completion:{
+                self.pikminTierUpdate()
+                self.pikminCycle()
+            })
+        }, queue: .global()))
     }
     
     func unrootPikmin(_ player:Player) {

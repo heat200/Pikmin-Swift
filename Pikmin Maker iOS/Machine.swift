@@ -98,10 +98,10 @@ class Machine:SKSpriteNode {
     func checkForPikmin() {
         var listPosition = 0
         
-        while listPosition < (self.parent as! GameScene).existingPikmin.count {
-            let pikminInQuestion = (self.parent as! GameScene).existingPikmin[listPosition]
-            if self.contains(pikminInQuestion.position) && !pikminInQuestion.dead && !pikminInQuestion.isHidden {
-                if self.active {
+        if self.active {
+            while listPosition < (self.parent as! GameScene).existingPikmin.count {
+                let pikminInQuestion = (self.parent as! GameScene).existingPikmin[listPosition]
+                if self.contains(pikminInQuestion.position) && !pikminInQuestion.dead && !pikminInQuestion.isHidden {
                     if self.damageType == "Electric" && pikminInQuestion.pikminColor != "Yellow" {
                         pikminInQuestion.inDistress(self.damageType)
                     } else if self.damageType == "Fire" && pikminInQuestion.pikminColor != "Red" {
@@ -112,8 +112,8 @@ class Machine:SKSpriteNode {
                         pikminInQuestion.inDistress(self.damageType)
                     }
                 }
+                listPosition += 1
             }
-            listPosition += 1
         }
     }
     

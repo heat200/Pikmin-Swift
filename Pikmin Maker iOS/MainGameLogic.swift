@@ -1,13 +1,25 @@
 //
-//  GameScene.swift
-//  Pikmin Maker
+//  MainGameLogic.swift
+//  Pikmin
 //
-//  Created by Bryan Mazariegos on 4/19/16.
-//  Copyright © 2016 Bryan Mazariegos. All rights reserved.
+//  Created by Bryan Mazariegos on 8/23/18.
+//  Copyright © 2018 Bryan Mazariegos. All rights reserved.
 //
 
 import SpriteKit
 import MultipeerConnectivity
+
+let BackmostLayer:CGFloat = -999999
+let BackLayer:CGFloat = 10
+let MidLayer:CGFloat = 20
+let FrontLayer:CGFloat = 30
+let UILayer:CGFloat = 999999
+let ghostAtlas = SKTextureAtlas(named: "Ghosts")
+let machineAtlas = SKTextureAtlas(named: "Machines")
+let monsterAtlas = SKTextureAtlas(named: "Monsters")
+let pikminAtlas = SKTextureAtlas(named: "Pikmin")
+let playerAtlas = SKTextureAtlas(named: "Players")
+let worldAtlas = SKTextureAtlas(named: "World")
 
 enum UIUserInterfaceIdiom : Int {
     case unspecified
@@ -15,7 +27,7 @@ enum UIUserInterfaceIdiom : Int {
     case pad
 }
 
-class GameScene:SKScene, MCBrowserViewControllerDelegate {
+class MainGameLogic:SKScene, MCBrowserViewControllerDelegate {
     var ThePlayer = Player(texture: playerAtlas.textureNamed("Olimar_Down_Stand"))
     var TheEnemy = Player(imageNamed:"Olimar_Down_Stand")
     var TheShip = Ship(texture: worldAtlas.textureNamed("Ship_Empty"))
@@ -24,15 +36,6 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
     let YellowOnion = Onion(texture: worldAtlas.textureNamed("Onion_Inactive"))
     
     let Space = SKSpriteNode(imageNamed:"space")
-    
-    var UP_BTN = SKShapeNode(circleOfRadius: 35)
-    var DOWN_BTN = SKShapeNode(circleOfRadius: 35)
-    var LEFT_BTN = SKShapeNode(circleOfRadius: 35)
-    var RIGHT_BTN = SKShapeNode(circleOfRadius: 35)
-    var ACTION_BTN = SKShapeNode(circleOfRadius: 35)
-    var CALL_BTN = SKShapeNode(circleOfRadius: 35)
-    var IDLE_BTN = SKShapeNode(circleOfRadius: 35)
-    var ZOOM_BTN = SKShapeNode(circleOfRadius: 35)
     
     var sundial = SKShapeNode(circleOfRadius: 20)
     
@@ -136,98 +139,10 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
         pikminCount.alpha = 1
         self.camera!.addChild(pikminCount)
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            let semiWidth = self.frame.width/2
-            let semiHeight = self.frame.height/2
-            UP_BTN.fillColor = SKColor.gray
-            UP_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 + 50)
-            UP_BTN.alpha = 0.65
-            
-            DOWN_BTN.fillColor = SKColor.gray
-            DOWN_BTN.position = CGPoint(x: -semiWidth + 100, y: -semiHeight + 100 - 50)
-            DOWN_BTN.alpha = 0.65
-            
-            LEFT_BTN.fillColor = SKColor.gray
-            LEFT_BTN.position = CGPoint(x: -semiWidth + 100 - 50, y: -semiHeight + 100)
-            LEFT_BTN.alpha = 0.65
-            
-            RIGHT_BTN.fillColor = SKColor.gray
-            RIGHT_BTN.position = CGPoint(x: -semiWidth + 100 + 50, y: -semiHeight + 100)
-            RIGHT_BTN.alpha = 0.65
-            
-            ACTION_BTN.fillColor = SKColor.green
-            ACTION_BTN.position = CGPoint(x: semiWidth - 100, y: -semiHeight + 100)
-            ACTION_BTN.alpha = 0.65
-            
-            IDLE_BTN.fillColor = SKColor.gray
-            IDLE_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 + 50)
-            IDLE_BTN.alpha = 0.65
-            
-            CALL_BTN.fillColor = SKColor.red
-            CALL_BTN.position = CGPoint(x: semiWidth - 100 - 50, y: -semiHeight + 100 - 50)
-            CALL_BTN.alpha = 0.65
-            
-            ZOOM_BTN.fillColor = SKColor.cyan
-            ZOOM_BTN.position = CGPoint(x: semiWidth - 100 + 50, y: -semiHeight + 100 - 50)
-            ZOOM_BTN.alpha = 0.65
-        } else if UIDevice.current.userInterfaceIdiom == .phone {
-            UP_BTN = SKShapeNode(circleOfRadius: 35)
-            DOWN_BTN = SKShapeNode(circleOfRadius: 35)
-            LEFT_BTN = SKShapeNode(circleOfRadius: 35)
-            RIGHT_BTN = SKShapeNode(circleOfRadius: 35)
-            ACTION_BTN = SKShapeNode(circleOfRadius: 35)
-            CALL_BTN = SKShapeNode(circleOfRadius: 35)
-            IDLE_BTN = SKShapeNode(circleOfRadius: 35)
-            ZOOM_BTN = SKShapeNode(circleOfRadius: 25)
-            
-            let semiWidth = self.frame.width/3
-            let semiHeight = self.frame.height/4
-            
-            UP_BTN.fillColor = SKColor.gray
-            UP_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight + 60)
-            UP_BTN.alpha = 0.65
-            
-            DOWN_BTN.fillColor = SKColor.gray
-            DOWN_BTN.position = CGPoint(x: -semiWidth, y: -semiHeight - 40)
-            DOWN_BTN.alpha = 0.65
-            
-            LEFT_BTN.fillColor = SKColor.gray
-            LEFT_BTN.position = CGPoint(x: -semiWidth - 50, y: -semiHeight + 10)
-            LEFT_BTN.alpha = 0.65
-            
-            RIGHT_BTN.fillColor = SKColor.gray
-            RIGHT_BTN.position = CGPoint(x: -semiWidth + 50, y: -semiHeight + 10)
-            RIGHT_BTN.alpha = 0.65
-            
-            ACTION_BTN.fillColor = SKColor.green
-            ACTION_BTN.position = CGPoint(x: semiWidth, y: -semiHeight + 10)
-            ACTION_BTN.alpha = 0.65
-            
-            IDLE_BTN.fillColor = SKColor.gray
-            IDLE_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight + 60)
-            IDLE_BTN.alpha = 0.65
-            
-            CALL_BTN.fillColor = SKColor.red
-            CALL_BTN.position = CGPoint(x: semiWidth - 50, y: -semiHeight - 40)
-            CALL_BTN.alpha = 0.65
-            
-            ZOOM_BTN.fillColor = SKColor.cyan
-            ZOOM_BTN.position = CGPoint(x: semiWidth + 50, y: -semiHeight - 40)
-            ZOOM_BTN.alpha = 0.65
-        }
-        
         self.camera?.zPosition = UILayer
-        self.camera?.addChild(UP_BTN)
-        self.camera?.addChild(DOWN_BTN)
-        self.camera?.addChild(LEFT_BTN)
-        self.camera?.addChild(RIGHT_BTN)
-        self.camera?.addChild(ACTION_BTN)
-        self.camera?.addChild(IDLE_BTN)
-        self.camera?.addChild(CALL_BTN)
-        self.camera?.addChild(ZOOM_BTN)
         
         var nutrientsAdded = 0
-        while nutrientsAdded < 0 { //Default 75
+        while nutrientsAdded < 12 { //Default 12
             nutrientsAdded += 1
             var color = "Red"
             let rand = Int(arc4random_uniform(3) + 1)
@@ -250,7 +165,7 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
         }
         
         var devicesAdded = 0
-        while devicesAdded < 0 { //Default 10
+        while devicesAdded < 14 { //Default 14
             devicesAdded += 1
             
             let device = Machine(texture: machineAtlas.textureNamed("Electrode_Inactive"))
@@ -298,8 +213,7 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
         
         TheEnemy.isHidden = true
         
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.mpcHandler.setupPeerWithDisplayName(UIDevice.current.name)
+        runAppDelegateSetUpCode()
         appDelegate.mpcHandler.setupSession()
         appDelegate.mpcHandler.advertiseSelf(true)
         
@@ -308,15 +222,16 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(GameScene.handleReceivedDataWithNotification), name:  NSNotification.Name(rawValue: "MPC_DidReceiveDataNotification"), object: nil)
     }
     
-    override func runAppDelegateSetUpCode() {
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.mpcHandler.setupPeerWithDisplayName(UIDevice.current.name)
+    func runAppDelegateSetUpCode() {
+        fatalError("Must implement 'runAppDelegateSetUpCode'")
     }
     
-    override func presentMPCBrowser() {
-        self.view?.window?.rootViewController!.present(appDelegate.mpcHandler.browser, animated: true,completion:{
-            self.connected = true
-        })
+    func presentMPCBrowser() {
+        fatalError("Must implement 'presentMPCBrowser'")
+    }
+    
+    func dismissMPCBrowser() {
+        fatalError("Must implement 'dismissMPCBrowser'")
     }
     
     func connectWithPlayer() {
@@ -324,9 +239,7 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
             appDelegate.mpcHandler.setupBrowser()
             appDelegate.mpcHandler.browser.delegate = self
             appDelegate.mpcHandler.browser.maximumNumberOfPeers = 2
-            self.view?.window?.rootViewController!.present(appDelegate.mpcHandler.browser, animated: true,completion:{
-                self.connected = true
-            })
+            presentMPCBrowser()
         }
     }
     
@@ -335,7 +248,6 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
         let state = userInfo.object(forKey: "state") as! Int
         
         if state == MCSessionState.connected.rawValue {
-            self.view?.window?.rootViewController!.navigationItem.title = "Connected"
             print(connected)
             sendPlayerNum()
             if TheEnemy.isHidden {
@@ -655,226 +567,169 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
     }
     
     func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
-        appDelegate.mpcHandler.browser.dismiss(animated: true, completion: nil)
+        dismissMPCBrowser()
     }
     
     func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
-        appDelegate.mpcHandler.browser.dismiss(animated: true, completion: nil)
+        dismissMPCBrowser()
+        //appDelegate.mpcHandler.browser.dismiss(animated: true, completion: nil)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let objectTouched = self.atPoint(location)
-            let objectsPlayerOn = self.nodes(at: ThePlayer.position)
-            var attempts = 1
-            var objectPlayerOn = objectsPlayerOn[objectsPlayerOn.count - attempts]
-            //print(objectTouched)
-            
-            func checkPlayerOn() {
-                if objectsPlayerOn.count - attempts > 0 && !(objectPlayerOn is Onion) && !(objectPlayerOn is Ship) && !(objectPlayerOn is Seed) {
-                    attempts += 1
-                    objectPlayerOn = objectsPlayerOn[objectsPlayerOn.count - attempts]
-                    if !(objectPlayerOn is Onion) && !(objectPlayerOn is Ship) && !(objectPlayerOn is Seed) && objectsPlayerOn.count - attempts > 0 {
+    func receiveDownPressData(inputReceived:String,objectsPlayerOn:[SKNode],pikColor:String) {
+        var attempts = 1
+        var objectPlayerOn = objectsPlayerOn[objectsPlayerOn.count - attempts]
+        
+        func checkPlayerOn() {
+            if objectsPlayerOn.count - attempts > 0 && !(objectPlayerOn is Onion) && !(objectPlayerOn is Ship) && !(objectPlayerOn is Seed) {
+                attempts += 1
+                objectPlayerOn = objectsPlayerOn[objectsPlayerOn.count - attempts]
+                if !(objectPlayerOn is Onion) && !(objectPlayerOn is Ship) && !(objectPlayerOn is Seed) && objectsPlayerOn.count - attempts > 0 {
+                    checkPlayerOn()
+                } else if (objectPlayerOn is Onion) {
+                    if (objectPlayerOn as! Onion).awakened {
                         checkPlayerOn()
-                    } else if (objectPlayerOn is Onion) {
-                        if (objectPlayerOn as! Onion).awakened {
-                            checkPlayerOn()
-                        }
                     }
-                }
-            }
-            
-            if objectTouched == sundial {
-                connectWithPlayer()
-            } else if objectTouched == UP_BTN {
-                if TheShip.followShip {
-                    TheShip.toMultiplayer()
-                } else {
-                    ThePlayer.moveTo = "Up"
-                }
-            } else if objectTouched == RIGHT_BTN {
-                if TheShip.followShip {
-                    backgroundMusic.removeFromParent()
-                    backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
-                    backgroundMusic.autoplayLooped = true
-                    self.addChild(backgroundMusic)
-                } else {
-                    ThePlayer.moveTo = "Right"
-                }
-            } else if objectTouched == LEFT_BTN {
-                if TheShip.followShip {
-                    backgroundMusic.removeFromParent()
-                    backgroundMusic = SKAudioNode(fileNamed: "forestNaval")
-                    backgroundMusic.autoplayLooped = true
-                    self.addChild(backgroundMusic)
-                } else {
-                    ThePlayer.moveTo = "Left"
-                }
-            } else if objectTouched == DOWN_BTN {
-                if TheShip.followShip {
-                    TheShip.backToEarth()
-                } else {
-                    ThePlayer.moveTo = "Down"
-                }
-            }
-            
-            checkPlayerOn()
-            
-            if objectTouched == ACTION_BTN {
-                ThePlayer.playerChars = " "
-                if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
-                    let onion = objectPlayerOn as! Onion
-                    onion.wake()
-                } else if (objectPlayerOn is Onion) && ((objectPlayerOn as? Onion)?.awakened)! {
-                    let onion = objectPlayerOn as! Onion
-                    onion.toggleMenuOverlay()
-                } else if objectPlayerOn is Seed {
-                    let seed = objectPlayerOn as! Seed
-                    seed.unrootPikmin(ThePlayer)
-                } else if objectPlayerOn is Ship {
-                    let ship = objectPlayerOn as! Ship
-                    ship.toggleMenuOverlay()
-                } else {
-                    ThePlayer.grabPikmin()
-                }
-            } else if objectTouched == IDLE_BTN {
-                ThePlayer.makePikminIdle()
-                ThePlayer.playerChars = "q"
-            } else if objectTouched == CALL_BTN {
-                ThePlayer.recallPikmin()
-                ThePlayer.playerChars = "b"
-            } else if objectTouched == ZOOM_BTN {
-                if self.camera!.xScale == 1 {
-                    self.camera!.run(SKAction.scale(to: 0.75, duration: 0.25))
-                } else if self.camera!.xScale == 0.75 {
-                    self.camera!.run(SKAction.scale(to: 0.5, duration: 0.25))
-                } else if self.camera!.xScale == 0.5 {
-                    self.camera!.run(SKAction.scale(to: 5, duration: 0.25))
-                } else if self.camera!.xScale == 5 {
-                    self.camera!.run(SKAction.scale(to: 1, duration: 0.25))
-                }
-            } else if (objectTouched.parent! is MenuOverlay) {
-                let objectParent = objectTouched.parent as! MenuOverlay
-                let pikminColor:String = objectParent.menuColor
-                let pikminColor2:String = objectParent.menuColor2
-                pikminOut = pikminCount3()
-                print(pikminColor + " Pikmin following Player: " + String(self.pikminCount(pikminColor)))
-                
-                if pikminColor2 != "" {
-                    print(pikminColor2 + " Pikmin following Player: " + String(self.pikminCount(pikminColor2)))
-                }
-                
-                if objectTouched == objectParent.morePikmin {
-                    print("Depositing Pikmin. Color: " + pikminColor)
-                    
-                    if self.pikminCount(pikminColor) > 0 {
-                        var index = -1
-                        var found = false
-                        while index < ThePlayer.pikminFollowing.count - 1 && !found {
-                            index += 1
-                            
-                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome && ThePlayer.pikminFollowing[index].pikminColor == pikminColor {
-                                
-                                ThePlayer.pikminFollowing[index].movingToHome = true
-                                ThePlayer.pikminFollowing[index].idle = true
-                                ThePlayer.pikminFollowing[index].returning = false
-                                ThePlayer.pikminFollowing[index].run(SKAction.sequence([SKAction.wait(forDuration: Double(index)/100),ThePlayer.pikminFollowing[index].pikminLeft]))
-                                ThePlayer.pikminFollowing.remove(at: index)
-                                found = true
-                            }
-                        }
-                    }
-                } else if objectTouched == objectParent.lessPikmin {
-                    print("Withdrawing Pikmin. Color: " + pikminColor)
-                    
-                    if self.pikminCount2(pikminColor) > 0 {
-                        var index = -1
-                        var found = false
-                        while index < existingPikmin.count - 1 && !found {
-                            index += 1
-                            
-                            if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikminColor {
-                                existingPikmin[index].inHome = false
-                                existingPikmin[index].isHidden = false
-                                existingPikmin[index].becomeAwareToFollow()
-                                found = true
-                            }
-                        }
-                    }
-                }
-                
-                if objectTouched == objectParent.morePikmin2 {
-                    print("Depositing Pikmin. Color: " + pikminColor2)
-                    
-                    if self.pikminCount(pikminColor) > 0 {
-                        var index = -1
-                        var found = false
-                        while index < ThePlayer.pikminFollowing.count - 1 && !found {
-                            index += 1
-                            
-                            if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome && ThePlayer.pikminFollowing[index].pikminColor == pikminColor2 {
-                                
-                                ThePlayer.pikminFollowing[index].movingToHome = true
-                                ThePlayer.pikminFollowing[index].idle = true
-                                ThePlayer.pikminFollowing[index].returning = false
-                                ThePlayer.pikminFollowing[index].run(SKAction.sequence([SKAction.wait(forDuration: Double(index)/100),ThePlayer.pikminFollowing[index].pikminLeft]))
-                                ThePlayer.pikminFollowing.remove(at: index)
-                                found = true
-                            }
-                        }
-                    }
-                } else if objectTouched == objectParent.lessPikmin2 {
-                    print("Withdrawing Pikmin. Color: " + pikminColor2)
-                    
-                    if self.pikminCount2(pikminColor2) > 0 {
-                        var index = -1
-                        var found = false
-                        while index < existingPikmin.count - 1 && !found {
-                            index += 1
-                            
-                            if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikminColor2 {
-                                existingPikmin[index].inHome = false
-                                existingPikmin[index].isHidden = false
-                                existingPikmin[index].becomeAwareToFollow()
-                                found = true
-                            }
-                        }
-                    }
-                }
-                
-                if objectTouched == objectParent.takeFlightButton {
-                    TheShip.getIn(ThePlayer)
-                    TheShip.toggleMenuOverlay()
                 }
             }
         }
+        
+        if inputReceived == "MP" {
+            connectWithPlayer()
+        } else if inputReceived == "Up" {
+            if TheShip.followShip {
+                TheShip.toMultiplayer()
+            } else {
+                ThePlayer.moveTo = "Up"
+            }
+        } else if inputReceived == "Right" {
+            if TheShip.followShip {
+                backgroundMusic.removeFromParent()
+                backgroundMusic = SKAudioNode(fileNamed: "forestOfHope")
+                backgroundMusic.autoplayLooped = true
+                self.addChild(backgroundMusic)
+            } else {
+                ThePlayer.moveTo = "Right"
+            }
+        } else if inputReceived == "Left" {
+            if TheShip.followShip {
+                backgroundMusic.removeFromParent()
+                backgroundMusic = SKAudioNode(fileNamed: "forestNaval")
+                backgroundMusic.autoplayLooped = true
+                self.addChild(backgroundMusic)
+            } else {
+                ThePlayer.moveTo = "Left"
+            }
+        } else if inputReceived == "Down" {
+            if TheShip.followShip {
+                TheShip.backToEarth()
+            } else {
+                ThePlayer.moveTo = "Down"
+            }
+        }
+        
+        checkPlayerOn()
+        
+        if inputReceived == "Action" {
+            ThePlayer.playerChars = " "
+            if (objectPlayerOn is Onion) && !((objectPlayerOn as? Onion)?.awakened)! {
+                let onion = objectPlayerOn as! Onion
+                onion.wake()
+            } else if (objectPlayerOn is Onion) && ((objectPlayerOn as? Onion)?.awakened)! {
+                let onion = objectPlayerOn as! Onion
+                onion.toggleMenuOverlay()
+            } else if objectPlayerOn is Seed {
+                let seed = objectPlayerOn as! Seed
+                seed.unrootPikmin(ThePlayer)
+            } else if objectPlayerOn is Ship {
+                let ship = objectPlayerOn as! Ship
+                ship.toggleMenuOverlay()
+            } else {
+                ThePlayer.grabPikmin()
+            }
+        } else if inputReceived == "Idle" {
+            ThePlayer.makePikminIdle()
+            ThePlayer.playerChars = "q"
+        } else if inputReceived == "Recall" {
+            ThePlayer.recallPikmin()
+            ThePlayer.playerChars = "b"
+        } else if inputReceived == "Zoom" {
+            if self.camera!.xScale == 1 {
+                self.camera!.run(SKAction.scale(to: 0.75, duration: 0.25))
+            } else if self.camera!.xScale == 0.75 {
+                self.camera!.run(SKAction.scale(to: 0.5, duration: 0.25))
+            } else if self.camera!.xScale == 0.5 {
+                self.camera!.run(SKAction.scale(to: 5, duration: 0.25))
+            } else if self.camera!.xScale == 5 {
+                self.camera!.run(SKAction.scale(to: 1, duration: 0.25))
+            }
+        } else if inputReceived.contains("Deposit") || inputReceived.contains("Withdraw") {
+            pikminOut = pikminCount3()
+            print(pikColor + " Pikmin following Player: " + String(self.pikminCount(pikColor)))
+            
+            if inputReceived == "Deposit" {
+                print("Depositing Pikmin. Color: " + pikColor)
+                
+                if self.pikminCount(pikColor) > 0 {
+                    var index = -1
+                    var found = false
+                    while index < ThePlayer.pikminFollowing.count - 1 && !found {
+                        index += 1
+                        
+                        if !ThePlayer.pikminFollowing[index].busy && !ThePlayer.pikminFollowing[index].attacking && !ThePlayer.pikminFollowing[index].movingToHome && ThePlayer.pikminFollowing[index].pikminColor == pikColor {
+                            
+                            ThePlayer.pikminFollowing[index].movingToHome = true
+                            ThePlayer.pikminFollowing[index].idle = true
+                            ThePlayer.pikminFollowing[index].returning = false
+                            ThePlayer.pikminFollowing[index].run(SKAction.sequence([SKAction.wait(forDuration: Double(index)/100),ThePlayer.pikminFollowing[index].pikminLeft]))
+                            ThePlayer.pikminFollowing.remove(at: index)
+                            found = true
+                        }
+                    }
+                }
+            } else if inputReceived == "Withdraw" {
+                print("Withdrawing Pikmin. Color: " + pikColor)
+                
+                if self.pikminCount2(pikColor) > 0 {
+                    var index = -1
+                    var found = false
+                    while index < existingPikmin.count - 1 && !found {
+                        index += 1
+                        
+                        if existingPikmin[index].inHome && existingPikmin[index].pikminColor == pikColor {
+                            existingPikmin[index].inHome = false
+                            existingPikmin[index].isHidden = false
+                            existingPikmin[index].becomeAwareToFollow()
+                            found = true
+                        }
+                    }
+                }
+            }
+        } else if inputReceived == "EndDay" {
+            TheShip.getIn(ThePlayer)
+            TheShip.toggleMenuOverlay()
+        }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let objectTouched = self.atPoint(location)
-            if objectTouched == UP_BTN || objectTouched == DOWN_BTN || objectTouched == LEFT_BTN || objectTouched == RIGHT_BTN {
-                ThePlayer.moveTo = ""
-            }
-            
-            if objectTouched == ACTION_BTN {
-                pikminOut = pikminCount3()
-                if ThePlayer.pikminToThrow != nil {
-                    ThePlayer.throwPikmin()
-                    ThePlayer.playerChars = ""
-                }
-            } else if objectTouched == CALL_BTN {
-                pikminOut = pikminCount3()
-                ThePlayer.recallCircle.removeAllActions()
-                ThePlayer.playerChars = ""
-                ThePlayer.recallCircle.run(SKAction.scale(to: 1, duration: 0.15),completion:{
-                    self.ThePlayer.callingPikmin = false
-                })
-            } else {
+    func receiveDePressData(inputReceived:String) {
+        if inputReceived == "Up" || inputReceived == "Down" || inputReceived == "Left" || inputReceived == "Right" {
+            ThePlayer.moveTo = ""
+        }
+        
+        if inputReceived == "Action" {
+            pikminOut = pikminCount3()
+            if ThePlayer.pikminToThrow != nil {
+                ThePlayer.throwPikmin()
                 ThePlayer.playerChars = ""
             }
+        } else if inputReceived == "Recall" {
+            pikminOut = pikminCount3()
+            ThePlayer.recallCircle.removeAllActions()
+            ThePlayer.playerChars = ""
+            ThePlayer.recallCircle.run(SKAction.scale(to: 1, duration: 0.15),completion:{
+                self.ThePlayer.callingPikmin = false
+            })
+        } else {
+            ThePlayer.playerChars = ""
         }
     }
     
@@ -1004,6 +859,7 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
             gameTime = 0
         } else {
             gameTime += 1
+            /*
             if RedOnion.awake && !ThePlayer.timeForSpace {
                 var seeds = 0
                 while seeds < 5 {
@@ -1011,6 +867,7 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
                     RedOnion.dispelSeed()
                 }
             }
+            */
         }
         
         print("Current Time: " + String(gameTime))
@@ -1101,15 +958,16 @@ class GameScene:SKScene, MCBrowserViewControllerDelegate {
             day = false
         }
         
-        if gameTime > 19 || gameTime < 7 {
-            /*
-            let aMonster = Monster(texture: monsterAtlas.textureNamed("Monster_Red_Bulborb_Down_Stand"))
-            aMonster.zPosition = BackLayer
-            aMonster.monsterSpecies = "Red_Bulborb"
-            aMonster.setUp()
-            self.addChild(aMonster)
-            aMonster.randomizePosition()
-             */
+        if gameTime > 19 ||	 gameTime < 7 {
+            let random = arc4random_uniform(10) + 1
+            if random <= 3 {
+                let aMonster = Monster(texture: monsterAtlas.textureNamed("Monster_Red_Bulborb_Down_Stand"))
+                aMonster.zPosition = BackLayer
+                aMonster.monsterSpecies = "Red_Bulborb"
+                aMonster.setUp()
+                self.addChild(aMonster)
+                aMonster.randomizePosition()
+            }
         }
         
         if day {

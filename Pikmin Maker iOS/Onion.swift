@@ -47,8 +47,8 @@ class Onion:SKSpriteNode {
             var allowed = true
             var randX:CGFloat = CGFloat(Int(arc4random_uniform(180)) - 90)
             
-            if self.parent is MultiGameScene {
-                let parent = self.parent as! MultiGameScene
+            if (self.parent as! GameScene).connected {
+                let parent = self.parent as! GameScene
                 if parent.currentPlayer == "2" {
                     randX = randXMultiplayer
                     if !receivedMsg {
@@ -78,7 +78,7 @@ class Onion:SKSpriteNode {
                 seed.zPosition = FrontLayer
                 seed.seedColor = onionColor
                 let original = CGFloat(seed.zRotation)
-                seed.zRotation = CGFloat(M_PI * 3)
+                seed.zRotation = CGFloat(Double.pi * 3)
                 seed.position.x = self.position.x
                 seed.position.y = self.position.y + 50
                 seed.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Seed_" + onionColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + onionColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
@@ -86,7 +86,7 @@ class Onion:SKSpriteNode {
                 if randX > 0 {
                     seed.run(SKAction.rotate(toAngle: original, duration: 0.8,shortestUnitArc:true))
                 } else {
-                    seed.run((SKAction.rotate(byAngle: CGFloat(M_PI), duration: 0.8)))
+                    seed.run((SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 0.8)))
                 }
                 
                 seed.pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))

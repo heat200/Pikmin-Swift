@@ -6,14 +6,18 @@
 	<string>15E65</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Project Pikmin</string>
 	<key>CFBundleExecutable</key>
 	<string>Pikmin Maker</string>
+	<key>CFBundleGetInfoString</key>
+	<string>About Project Pikmin</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.Mazariegos.Pikmin-Maker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Pikmin Maker</string>
+	<string>Project Pikmin</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

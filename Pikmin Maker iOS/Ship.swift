@@ -33,7 +33,7 @@ class Ship:SKSpriteNode {
     }
     
     func toggleMenuOverlay() {
-        //menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
+        menuOverlay.position = CGPoint(x: self.position.x, y: self.position.y + 175)
         if menuOverlay.isHidden && !returning && !followShip && allowedToLeave {
             menuOverlay.pikminOut.text = String((self.parent as! GameScene).whitePopulation)
             menuOverlay.pikminOut2.text = String((self.parent as! GameScene).purplePopulation)
@@ -117,8 +117,8 @@ class Ship:SKSpriteNode {
             self.allowedToLeave = false
             self.returning = true
             
-            self.run(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 2),completion:{
-                self.run(SKAction.sequence([SKAction.wait(forDuration: 6),SKAction.rotate(byAngle: CGFloat(-M_PI), duration: 3)]))
+            self.run(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 2),completion:{
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 6),SKAction.rotate(byAngle: CGFloat(-Double.pi), duration: 3)]))
                 self.run(SKAction.moveBy(x: 0, y: -2800, duration: 10),completion:{
                     parent.ThePlayer.isHidden = false
                     if !parent.RedOnion.awakened && !parent.BlueOnion.awakened && !parent.YellowOnion.awakened {
@@ -146,8 +146,8 @@ class Ship:SKSpriteNode {
                 if parent.RedOnion.awakened {
                     parent.RedOnion.removeAllActions()
                     
-                    parent.RedOnion.run(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 2),completion:{
-                        parent.RedOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-M_PI), duration: 3)]))
+                    parent.RedOnion.run(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 2),completion:{
+                        parent.RedOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-Double.pi), duration: 3)]))
                     })
                     
                     parent.RedOnion.run(SKAction.move(to: CGPoint(x: self.position.x - 200,y: self.position.y - 2700), duration: 15),completion:{
@@ -163,8 +163,8 @@ class Ship:SKSpriteNode {
                     parent.BlueOnion.removeAllActions()
                     parent.BlueOnion.zPosition = self.zPosition + 1
                     
-                    parent.BlueOnion.run(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 2),completion:{
-                        parent.BlueOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-M_PI), duration: 3)]))
+                    parent.BlueOnion.run(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 2),completion:{
+                        parent.BlueOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-Double.pi), duration: 3)]))
                     })
                     parent.BlueOnion.run(SKAction.move(to: CGPoint(x: self.position.x,y: self.position.y - 2625), duration: 15),completion:{
                         parent.ThePlayer.timeForSpace = false
@@ -177,8 +177,8 @@ class Ship:SKSpriteNode {
                 
                 if parent.YellowOnion.awakened {
                     parent.YellowOnion.removeAllActions()
-                    parent.YellowOnion.run(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 2),completion:{
-                        parent.YellowOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-M_PI), duration: 3)]))
+                    parent.YellowOnion.run(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 2),completion:{
+                        parent.YellowOnion.run(SKAction.sequence([SKAction.wait(forDuration: 9),SKAction.rotate(byAngle: CGFloat(-Double.pi), duration: 3)]))
                     })
                     parent.YellowOnion.run(SKAction.move(to: CGPoint(x: self.position.x + 200,y: self.position.y - 2700), duration: 15),completion:{
                         parent.ThePlayer.timeForSpace = false

@@ -55,7 +55,7 @@ class Monster:SKSpriteNode {
             yScale = 1.2
             baseMoveSpeed = 50
             healthBar.position.x = self.position.x - self.size.width/2
-            self.zPosition = (self.position.y - self.size.height/2) * -1
+            self.zPosition = FrontLayer
         } else if monsterSpecies == "Red_Bulborb_Dwarf" {
             maxHealth = 320
             health = 320
@@ -64,7 +64,7 @@ class Monster:SKSpriteNode {
             baseMoveSpeed = 65
             healthBar.position.x = self.position.x - self.size.width/2
             healthBar.position.y = 35
-            self.zPosition = (self.position.y - self.size.height/2) * -1
+            self.zPosition = FrontLayer
         }
         
         target.isHidden = true
@@ -74,7 +74,6 @@ class Monster:SKSpriteNode {
     
     func move() {
         if !checkIfTooFar(target) && !target.isHidden && !target.dead {
-            self.zPosition = (self.position.y - halfHeight) * -1
             if abs(target.position.x - position.x) > abs(target.position.y - position.y) && !busy {
                 if target.position.x > position.x {
                     direction = "Right"
@@ -260,7 +259,7 @@ class Monster:SKSpriteNode {
                 let nutrient = Nutrient(imageNamed:"Nutrient_" + color)
                 nutrient.nutrientColor = color
                 nutrient.position = CGPoint(x: self.frame.midX + randX, y: self.frame.midY + randY)
-                nutrient.zPosition = (nutrient.position.y - nutrient.size.height/2) * -1
+                nutrient.zPosition = BackLayer
                 self.parent!.addChild(nutrient)
             }
             

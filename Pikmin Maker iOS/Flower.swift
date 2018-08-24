@@ -22,14 +22,14 @@ class Flower:SKSpriteNode {
             busy = true
             run(SKAction.scale(to: 1.5, duration: 1),completion:{
                 self.run(SKAction.scale(to: 1, duration: 0.01),completion:{
-                    self.run(SKAction.setTexture(SKTexture(imageNamed: "Flower_" + self.flowerColor + "_Closed"), resize: true))
+                    self.run(SKAction.setTexture(worldAtlas.textureNamed("Flower_" + self.flowerColor + "_Closed"), resize: true))
                 })
                 self.open = false
                 self.dispelSeed()
             })
         } else if !open && !busy {
             open = true
-            run(SKAction.setTexture(SKTexture(imageNamed: "Flower_" + flowerColor + "_Open"), resize: true))
+            run(SKAction.setTexture(worldAtlas.textureNamed("Flower_" + flowerColor + "_Open"), resize: true))
         }
     }
     
@@ -39,22 +39,22 @@ class Flower:SKSpriteNode {
                 pikminTaken -= 1
                 let randX:CGFloat = CGFloat(Int(arc4random_uniform(180)) - 90)
                 
-                let seed = Seed(imageNamed:"Seed_" + flowerColor + "_Falling2")
+                let seed = Seed(texture: pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"))
                 seed.zPosition = FrontLayer
                 seed.seedColor = flowerColor
                 let original = CGFloat(seed.zRotation)
-                seed.zRotation = CGFloat(M_PI * 3)
+                seed.zRotation = CGFloat(Double.pi * 3)
                 seed.position.x = self.position.x
                 seed.position.y = self.position.y + 50
-                seed.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
+                seed.run(SKAction.repeatForever(SKAction.animate(with: [pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling1"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling3"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
                 
                 if randX > 0 {
                     seed.run(SKAction.rotate(toAngle: original, duration: 0.8,shortestUnitArc:true))
                 } else {
-                    seed.run((SKAction.rotate(byAngle: CGFloat(M_PI), duration: 0.8)))
+                    seed.run((SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 0.8)))
                 }
                 
-                seed.pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
+                seed.pikminIdleLook.run(SKAction.setTexture(pikminAtlas.textureNamed(seed.seedColor + "Glow"), resize: true))
                 seed.pikminIdleLook.setScale(1)
                 seed.pikminIdleLook.zPosition = -1
                 seed.pikminIdleLook.isHidden = true
@@ -67,7 +67,7 @@ class Flower:SKSpriteNode {
                         seed.rooted = true
                         seed.pikminIdleLook.isHidden = false
                         seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
-                        seed.run(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.flowerColor + "_Falling2"), resize: true))
+                        seed.run(SKAction.setTexture(pikminAtlas.textureNamed("Seed_" + self.flowerColor + "_Falling2"), resize: true))
                         seed.pikminCycle()
                     })
                 })
@@ -77,8 +77,8 @@ class Flower:SKSpriteNode {
             run(SKAction.wait(forDuration: 1.5),completion:{
                 self.toggleOpen()
             })
-        } else if self.parent is MultiGameScene {
-            let parent = self.parent as! MultiGameScene
+        } else if (self.parent as! GameScene).connected {
+            let parent = self.parent as! GameScene
             if parent.currentPlayer == "1" {
                 while pikminTaken > 0 {
                     pikminTaken -= 1
@@ -86,22 +86,22 @@ class Flower:SKSpriteNode {
                     
                     parent.sendFlowerNum(self, randX: randX)
                     
-                    let seed = Seed(imageNamed:"Seed_" + flowerColor + "_Falling2")
+                    let seed = Seed(texture: pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"))
                     seed.zPosition = FrontLayer
                     seed.seedColor = flowerColor
                     let original = CGFloat(seed.zRotation)
-                    seed.zRotation = CGFloat(M_PI * 3)
+                    seed.zRotation = CGFloat(Double.pi * 3)
                     seed.position.x = self.position.x
                     seed.position.y = self.position.y + 50
-                    seed.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
+                    seed.run(SKAction.repeatForever(SKAction.animate(with: [pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling1"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling3"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
                     
                     if randX > 0 {
                         seed.run(SKAction.rotate(toAngle: original, duration: 0.8,shortestUnitArc:true))
                     } else {
-                        seed.run((SKAction.rotate(byAngle: CGFloat(M_PI), duration: 0.8)))
+                        seed.run((SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 0.8)))
                     }
                     
-                    seed.pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
+                    seed.pikminIdleLook.run(SKAction.setTexture(pikminAtlas.textureNamed(seed.seedColor + "Glow"), resize: true))
                     seed.pikminIdleLook.setScale(1)
                     seed.pikminIdleLook.zPosition = -1
                     seed.pikminIdleLook.isHidden = true
@@ -114,7 +114,7 @@ class Flower:SKSpriteNode {
                             seed.rooted = true
                             seed.pikminIdleLook.isHidden = false
                             seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
-                            seed.run(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.flowerColor + "_Falling2"), resize: true))
+                            seed.run(SKAction.setTexture(pikminAtlas.textureNamed("Seed_" + self.flowerColor + "_Falling2"), resize: true))
                         })
                     })
                     self.parent!.addChild(seed)
@@ -128,22 +128,22 @@ class Flower:SKSpriteNode {
                 let randX = randXMultiplayer
                 if receivedMsg {
                     print("Still attempting")
-                    let seed = Seed(imageNamed:"Seed_" + flowerColor + "_Falling2")
+                    let seed = Seed(texture: pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"))
                     seed.zPosition = FrontLayer
                     seed.seedColor = flowerColor
                     let original = CGFloat(seed.zRotation)
-                    seed.zRotation = CGFloat(M_PI * 3)
+                    seed.zRotation = CGFloat(Double.pi * 3)
                     seed.position.x = self.position.x
                     seed.position.y = self.position.y + 50
-                    seed.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling1"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling2"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling3"),SKTexture(imageNamed:"Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
+                    seed.run(SKAction.repeatForever(SKAction.animate(with: [pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling1"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling2"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling3"),pikminAtlas.textureNamed("Seed_" + flowerColor + "_Falling4")], timePerFrame: 0.15, resize: true, restore: true)))
                     
                     if randX > 0 {
                         seed.run(SKAction.rotate(toAngle: original, duration: 0.8,shortestUnitArc:true))
                     } else {
-                        seed.run((SKAction.rotate(byAngle: CGFloat(M_PI), duration: 0.8)))
+                        seed.run((SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 0.8)))
                     }
                     
-                    seed.pikminIdleLook.run(SKAction.setTexture(SKTexture(imageNamed:seed.seedColor + "Glow"), resize: true))
+                    seed.pikminIdleLook.run(SKAction.setTexture(pikminAtlas.textureNamed(seed.seedColor + "Glow"), resize: true))
                     seed.pikminIdleLook.setScale(1)
                     seed.pikminIdleLook.zPosition = -1
                     seed.pikminIdleLook.isHidden = true
@@ -156,7 +156,7 @@ class Flower:SKSpriteNode {
                             seed.rooted = true
                             seed.pikminIdleLook.isHidden = false
                             seed.pikminIdleLook.position = CGPoint(x: 0, y: 10)
-                            seed.run(SKAction.setTexture(SKTexture(imageNamed:"Seed_" + self.flowerColor + "_Falling2"), resize: true))
+                            seed.run(SKAction.setTexture(pikminAtlas.textureNamed("Seed_" + self.flowerColor + "_Falling2"), resize: true))
                         })
                     })
                     self.parent!.addChild(seed)

@@ -55,7 +55,7 @@ class Player:SKSpriteNode {
             addChild(makeIdleSound)
             addChild(cursorCircle)
             addChild(recallCircle)
-            antenna = SKSpriteNode(imageNamed:"RedGlow")
+            antenna = SKSpriteNode(texture: pikminAtlas.textureNamed("RedGlow"))
             antenna.setScale(1)
             antenna.position = CGPoint(x: 0, y: 20)
             let glowEffect = SKAction.sequence([SKAction.scale(to: 0.7, duration: 1.3),SKAction.scale(to: 0.9, duration: 0.7)])
@@ -76,10 +76,10 @@ class Player:SKSpriteNode {
         if moveTo != "" && playerLastDirection != playerDirection {
             playerLastDirection = playerDirection
             self.removeAllActions()
-            self.run(SKAction.repeatForever(SKAction.animate(with: [SKTexture(imageNamed:graphic + "Run1"),SKTexture(imageNamed:graphic + "Run2"),SKTexture(imageNamed:graphic + "Run3"),SKTexture(imageNamed:graphic + "Run4")], timePerFrame: 0.12)))
+            self.run(SKAction.repeatForever(SKAction.animate(with: [playerAtlas.textureNamed(graphic + "Run1"),playerAtlas.textureNamed(graphic + "Run2"),playerAtlas.textureNamed(graphic + "Run3"),playerAtlas.textureNamed(graphic + "Run4")], timePerFrame: 0.12)))
         } else if moveTo == "" {
-            if self.parent is MultiGameScene && playerLastDirection != "" {
-                let parent = self.parent as! MultiGameScene
+            if (self.parent as! GameScene).connected && playerLastDirection != "" {
+                let parent = self.parent as! GameScene
                 if parent.ThePlayer == self {
                     parent.sendCorrectedPos(self)
                 }
@@ -87,7 +87,7 @@ class Player:SKSpriteNode {
             
             playerLastDirection = ""
             self.removeAllActions()
-            self.run(SKAction.setTexture(SKTexture(imageNamed:graphic + "Stand")))
+            self.run(SKAction.setTexture(playerAtlas.textureNamed(graphic + "Stand")))
         }
         
         if moveTo == "Down" {
@@ -112,8 +112,8 @@ class Player:SKSpriteNode {
             cursorCircle.run(SKAction.move(to: CGPoint(x: 100, y: -20), duration: 0.5))
         }
         
-        if self.parent is MultiGameScene {
-            let parent = self.parent as! MultiGameScene
+        if (self.parent as! GameScene).connected {
+            let parent = self.parent as! GameScene
             parent.sendPlayerInfo()
         }
     }
@@ -213,8 +213,8 @@ class Player:SKSpriteNode {
             }
             
             if self.playerDirection == "Left" {
-                pikminChosen?.run(SKAction.rotate(byAngle: CGFloat(M_PI * 10), duration: 1),completion:{
-                    pikminChosen?.run(SKAction.rotate(toAngle: CGFloat(M_PI * 2), duration: 0.05),completion:{
+                pikminChosen?.run(SKAction.rotate(byAngle: CGFloat(Double.pi * 10), duration: 1),completion:{
+                    pikminChosen?.run(SKAction.rotate(toAngle: CGFloat(Double.pi * 2), duration: 0.05),completion:{
                         checkIfPikminIsFine()
                     })
                 })
@@ -222,8 +222,8 @@ class Player:SKSpriteNode {
                     pikminChosen?.run(SKAction.move(to: CGPoint(x: localPosition.x + throwPosition.x, y: localPosition.y), duration: 0.5))
                 })
             } else if self.playerDirection == "Right" {
-                pikminChosen?.run(SKAction.rotate(byAngle: CGFloat(-M_PI * 10), duration: 1),completion:{
-                    pikminChosen?.run(SKAction.rotate(toAngle: CGFloat(-M_PI * 2), duration: 0.05),completion:{
+                pikminChosen?.run(SKAction.rotate(byAngle: CGFloat(-Double.pi * 10), duration: 1),completion:{
+                    pikminChosen?.run(SKAction.rotate(toAngle: CGFloat(-Double.pi * 2), duration: 0.05),completion:{
                         checkIfPikminIsFine()
                     })
                 })
@@ -231,7 +231,7 @@ class Player:SKSpriteNode {
                     pikminChosen?.run(SKAction.move(to: CGPoint(x: localPosition.x + throwPosition.x, y: localPosition.y), duration: 0.5))
                 })
             } else if self.playerDirection == "Up" {
-                pikminChosen?.zRotation = CGFloat(M_PI)
+                pikminChosen?.zRotation = CGFloat(Double.pi)
                 pikminChosen?.zPosition = self.zPosition - 1
                 pikminChosen?.yScale = -1
                 pikminChosen?.run(SKAction.repeat(SKAction.sequence([SKAction.scaleY(to: 1, duration: 1/10),SKAction.scaleY(to: -1, duration: 1/10)]),count: 5),completion:{
@@ -242,7 +242,7 @@ class Player:SKSpriteNode {
                 })
                 pikminChosen?.run(SKAction.move(to: CGPoint(x: localPosition.x + throwPosition.x, y: localPosition.y + throwPosition.y), duration: 1))
             } else if self.playerDirection == "Down" {
-                pikminChosen?.zRotation = CGFloat(M_PI)
+                pikminChosen?.zRotation = CGFloat(Double.pi)
                 pikminChosen?.zPosition = self.zPosition + 1
                 pikminChosen?.yScale = -1
                 pikminChosen?.run(SKAction.repeat(SKAction.sequence([SKAction.scaleY(to: 1, duration: 1/10),SKAction.scaleY(to: -1, duration: 1/10)]),count: 5),completion:{

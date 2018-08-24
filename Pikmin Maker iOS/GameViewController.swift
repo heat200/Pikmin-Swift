@@ -13,7 +13,25 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        ghostAtlas.preload(completionHandler: {
+            print("Ghost Atlas Loaded!")
+        })
+        machineAtlas.preload(completionHandler: {
+            print("Machine Atlas Loaded!")
+        })
+        monsterAtlas.preload(completionHandler: {
+            print("Monster Atlas Loaded!")
+        })
+        pikminAtlas.preload(completionHandler: {
+            print("Pikmin Atlas Loaded!")
+        })
+        playerAtlas.preload(completionHandler: {
+            print("Player Atlas Loaded!")
+        })
+        worldAtlas.preload(completionHandler: {
+            print("World Atlas Loaded!")
+        })
+        
         if let scene = GameScene(fileNamed:"GameScene") {
             // Configure the view.
             let skView = self.view as! SKView

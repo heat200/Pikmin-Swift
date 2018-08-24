@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D063FDB1CD5AE510063539B /* pikminLand.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D063FD91CD5AE2B0063539B /* pikminLand.wav */; };
 		7D063FDD1CD5B49F0063539B /* pikminLand.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D063FDC1CD5B49F0063539B /* pikminLand.mp3 */; };
 		7D40F96B1CF30A9700BA588A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D40F96A1CF30A9700BA588A /* AppDelegate.swift */; };
 		7D40F96D1CF30A9700BA588A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D40F96C1CF30A9700BA588A /* GameScene.sks */; };
@@ -45,11 +44,6 @@
 		7D488C401CC67EAF00A412D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C3F1CC67EAF00A412D9 /* AppDelegate.swift */; };
 		7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C411CC67EAF00A412D9 /* GameScene.swift */; };
 		7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C431CC67EAF00A412D9 /* GameScene.sks */; };
-		7D488C511CC6850600A412D9 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C501CC6850600A412D9 /* Player.swift */; };
-		7D488C551CC6B4FC00A412D9 /* Onion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C541CC6B4FC00A412D9 /* Onion.swift */; };
-		7D488C571CC6E33900A412D9 /* map1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D488C561CC6E33900A412D9 /* map1.png */; };
-		7D488C591CC6E6DF00A412D9 /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C581CC6E6DF00A412D9 /* Seed.swift */; };
-		7D488C5B1CC6ED0400A412D9 /* Pikmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D488C5A1CC6ED0400A412D9 /* Pikmin.swift */; };
 		7D51C6911CD568D6002FB2F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */; };
 		7D51C6931CD568D6002FB2F8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6921CD568D6002FB2F8 /* GameScene.sks */; };
 		7D51C6951CD568D6002FB2F8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6941CD568D6002FB2F8 /* GameScene.swift */; };
@@ -71,35 +65,45 @@
 		7D51C6CD1CD56995002FB2F8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B71CD56995002FB2F8 /* Player.swift */; };
 		7D51C6CE1CD56995002FB2F8 /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B81CD56995002FB2F8 /* Seed.swift */; };
 		7D51C6CF1CD56995002FB2F8 /* throw.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B91CD56995002FB2F8 /* throw.mp3 */; };
+		7D698EC9212F7D5B00D929DC /* Flower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6A81CD56995002FB2F8 /* Flower.swift */; };
+		7D698ECA212F7D5B00D929DC /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6AD1CD56995002FB2F8 /* Ghost.swift */; };
+		7D698ECB212F7D5B00D929DC /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B01CD56995002FB2F8 /* Monster.swift */; };
+		7D698ECC212F7D5B00D929DC /* Nutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B11CD56995002FB2F8 /* Nutrient.swift */; };
+		7D698ECD212F7D5B00D929DC /* Onion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B21CD56995002FB2F8 /* Onion.swift */; };
+		7D698ECE212F7D5B00D929DC /* MenuOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D83117B1CDAF3220061D5E4 /* MenuOverlay.swift */; };
+		7D698ECF212F7D5B00D929DC /* Pikmin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B31CD56995002FB2F8 /* Pikmin.swift */; };
+		7D698ED0212F7D5B00D929DC /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B71CD56995002FB2F8 /* Player.swift */; };
+		7D698ED1212F7D5B00D929DC /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D51C6B81CD56995002FB2F8 /* Seed.swift */; };
+		7D698ED2212F7D5B00D929DC /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B7D1CD60E3000A5B704 /* Ship.swift */; };
+		7D698ED3212F7D5B00D929DC /* MPCHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B7B1CD6087E00A5B704 /* MPCHandler.swift */; };
+		7D698ED5212F804400D929DC /* map1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6AF1CD56995002FB2F8 /* map1.png */; };
+		7D698ED6212F804400D929DC /* space.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B8D1CD6D55100A5B704 /* space.png */; };
+		7D698ED7212F804400D929DC /* menuTheme.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7D9F109E1CDDB67100A98FD0 /* menuTheme.m4a */; };
+		7D698ED8212F804400D929DC /* pikminLand.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D063FDC1CD5B49F0063539B /* pikminLand.mp3 */; };
+		7D698ED9212F804400D929DC /* call.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6A71CD56995002FB2F8 /* call.mp3 */; };
+		7D698EDA212F804400D929DC /* forestOfHope.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6A91CD56995002FB2F8 /* forestOfHope.mp3 */; };
+		7D698EDB212F804400D929DC /* forestNaval.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B7F1CD616E800A5B704 /* forestNaval.mp3 */; };
+		7D698EDC212F804400D929DC /* pikminGhost.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B41CD56995002FB2F8 /* pikminGhost.mp3 */; };
+		7D698EDD212F804400D929DC /* pikminSqueel.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B61CD56995002FB2F8 /* pikminSqueel.mp3 */; };
+		7D698EDE212F804400D929DC /* throw.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D51C6B91CD56995002FB2F8 /* throw.mp3 */; };
+		7D698EDF212F804400D929DC /* pikminPluck.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B751CD5FCA300A5B704 /* pikminPluck.mp3 */; };
+		7D698EE1212F85A600D929DC /* MainGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D698EE0212F85A600D929DC /* MainGameLogic.swift */; };
+		7D698EE2212F85A600D929DC /* MainGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D698EE0212F85A600D929DC /* MainGameLogic.swift */; };
 		7D6F9C971E8F48F6008C5E93 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F9C961E8F48F6008C5E93 /* Machine.swift */; };
 		7D6F9C981E8F5D63008C5E93 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F9C961E8F48F6008C5E93 /* Machine.swift */; };
 		7D83117C1CDAF3220061D5E4 /* MenuOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D83117B1CDAF3220061D5E4 /* MenuOverlay.swift */; };
 		7D9F109C1CDDB66900A98FD0 /* Map_AwakeningWood.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9F109A1CDDB66900A98FD0 /* Map_AwakeningWood.png */; };
 		7D9F109D1CDDB66900A98FD0 /* space_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9F109B1CDDB66900A98FD0 /* space_new.png */; };
-		7DA7353F1CD11C7000B5CE3F /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA7353E1CD11C7000B5CE3F /* Monster.swift */; };
 		7DAF450F1CD35F1900178852 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DAF450C1CD35E3A00178852 /* MainMenu.xib */; };
-		7DAF45151CD46EA100178852 /* forestOfHope.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DAF45141CD46EA100178852 /* forestOfHope.mp3 */; };
-		7DBFEF601CD47CFE00841727 /* call.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DBFEF5E1CD47CFE00841727 /* call.wav */; };
-		7DBFEF611CD47CFE00841727 /* throw.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DBFEF5F1CD47CFE00841727 /* throw.wav */; };
-		7DBFEF631CD47F7600841727 /* pikminGhost.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DBFEF621CD47F7600841727 /* pikminGhost.wav */; };
-		7DBFEF651CD47F8C00841727 /* pikminPluck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DBFEF641CD47F8C00841727 /* pikminPluck.wav */; };
-		7DBFEF671CD47F9C00841727 /* pikminSquel.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DBFEF661CD47F9C00841727 /* pikminSquel.wav */; };
-		7DC598941CD0766A004ED675 /* Nutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC598931CD0766A004ED675 /* Nutrient.swift */; };
-		7DC86A001CD143970086E146 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DC869FF1CD143970086E146 /* Assets.xcassets */; };
-		7DCC0A3B1CCEDD250009197E /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC0A3A1CCEDD250009197E /* Ghost.swift */; };
-		7DD29B131CCD7CDC0084D707 /* Flower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD29B121CCD7CDC0084D707 /* Flower.swift */; };
 		7DD42B761CD5FCA300A5B704 /* pikminPluck.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B751CD5FCA300A5B704 /* pikminPluck.mp3 */; };
 		7DD42B781CD607E300A5B704 /* MultiGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B771CD607E300A5B704 /* MultiGameScene.swift */; };
 		7DD42B7A1CD6081400A5B704 /* MultiGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B791CD6081400A5B704 /* MultiGameScene.sks */; };
 		7DD42B7C1CD6087E00A5B704 /* MPCHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B7B1CD6087E00A5B704 /* MPCHandler.swift */; };
 		7DD42B7E1CD60E3000A5B704 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B7D1CD60E3000A5B704 /* Ship.swift */; };
 		7DD42B801CD616E800A5B704 /* forestNaval.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B7F1CD616E800A5B704 /* forestNaval.mp3 */; };
-		7DD42B871CD6329400A5B704 /* MPCHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B851CD6329400A5B704 /* MPCHandler.swift */; };
-		7DD42B881CD6329400A5B704 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B861CD6329400A5B704 /* Ship.swift */; };
 		7DD42B8B1CD632FD00A5B704 /* MultiGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B891CD632FD00A5B704 /* MultiGameScene.sks */; };
 		7DD42B8C1CD632FD00A5B704 /* MultiGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD42B8A1CD632FD00A5B704 /* MultiGameScene.swift */; };
 		7DD42B8E1CD6D55100A5B704 /* space.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B8D1CD6D55100A5B704 /* space.png */; };
-		7DD42B901CD6D55A00A5B704 /* space.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD42B8F1CD6D55A00A5B704 /* space.png */; };
 		7DF40C0C1E9310040066C7C5 /* pikminBurning.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */; };
 		7DF40C0D1E9310040066C7C5 /* pikminZapped.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */; };
 		7DF40C0E1E93101B0066C7C5 /* pikminBurning.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */; };
@@ -107,7 +111,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7D063FD91CD5AE2B0063539B /* pikminLand.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminLand.wav; sourceTree = "<group>"; };
 		7D063FDC1CD5B49F0063539B /* pikminLand.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminLand.mp3; sourceTree = "<group>"; };
 		7D40F9681CF30A9700BA588A /* Pikmin Maker tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pikmin Maker tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D40F96A1CF30A9700BA588A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -149,11 +152,6 @@
 		7D488C411CC67EAF00A412D9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		7D488C431CC67EAF00A412D9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = GameScene.sks; path = ../GameScene.sks; sourceTree = "<group>"; };
 		7D488C4A1CC67EAF00A412D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
-		7D488C501CC6850600A412D9 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		7D488C541CC6B4FC00A412D9 /* Onion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Onion.swift; sourceTree = "<group>"; };
-		7D488C561CC6E33900A412D9 /* map1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map1.png; path = ../map1.png; sourceTree = "<group>"; };
-		7D488C581CC6E6DF00A412D9 /* Seed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
-		7D488C5A1CC6ED0400A412D9 /* Pikmin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pikmin.swift; sourceTree = "<group>"; };
 		7D51C68E1CD568D6002FB2F8 /* Pikmin Maker iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pikmin Maker iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D51C6921CD568D6002FB2F8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -177,35 +175,22 @@
 		7D51C6B71CD56995002FB2F8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		7D51C6B81CD56995002FB2F8 /* Seed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
 		7D51C6B91CD56995002FB2F8 /* throw.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = throw.mp3; sourceTree = "<group>"; };
+		7D698EE0212F85A600D929DC /* MainGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGameLogic.swift; sourceTree = "<group>"; };
 		7D6F9C961E8F48F6008C5E93 /* Machine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Machine.swift; sourceTree = "<group>"; };
 		7D83117B1CDAF3220061D5E4 /* MenuOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuOverlay.swift; sourceTree = "<group>"; };
 		7D9F109A1CDDB66900A98FD0 /* Map_AwakeningWood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Map_AwakeningWood.png; sourceTree = "<group>"; };
 		7D9F109B1CDDB66900A98FD0 /* space_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space_new.png; sourceTree = "<group>"; };
 		7D9F109E1CDDB67100A98FD0 /* menuTheme.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = menuTheme.m4a; sourceTree = "<group>"; };
-		7DA7353E1CD11C7000B5CE3F /* Monster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 		7DAF450D1CD35E3A00178852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
-		7DAF45141CD46EA100178852 /* forestOfHope.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = forestOfHope.mp3; sourceTree = "<group>"; };
-		7DBFEF5E1CD47CFE00841727 /* call.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = call.wav; sourceTree = "<group>"; };
-		7DBFEF5F1CD47CFE00841727 /* throw.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = throw.wav; sourceTree = "<group>"; };
-		7DBFEF621CD47F7600841727 /* pikminGhost.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminGhost.wav; sourceTree = "<group>"; };
-		7DBFEF641CD47F8C00841727 /* pikminPluck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminPluck.wav; sourceTree = "<group>"; };
-		7DBFEF661CD47F9C00841727 /* pikminSquel.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikminSquel.wav; sourceTree = "<group>"; };
-		7DC598931CD0766A004ED675 /* Nutrient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrient.swift; sourceTree = "<group>"; };
-		7DC869FF1CD143970086E146 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		7DCC0A3A1CCEDD250009197E /* Ghost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ghost.swift; sourceTree = "<group>"; };
-		7DD29B121CCD7CDC0084D707 /* Flower.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flower.swift; sourceTree = "<group>"; };
 		7DD42B751CD5FCA300A5B704 /* pikminPluck.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminPluck.mp3; sourceTree = "<group>"; };
 		7DD42B771CD607E300A5B704 /* MultiGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiGameScene.swift; sourceTree = "<group>"; };
 		7DD42B791CD6081400A5B704 /* MultiGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MultiGameScene.sks; sourceTree = "<group>"; };
 		7DD42B7B1CD6087E00A5B704 /* MPCHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPCHandler.swift; sourceTree = "<group>"; };
 		7DD42B7D1CD60E3000A5B704 /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Ship.swift; path = "Pikmin Maker iOS/Ship.swift"; sourceTree = SOURCE_ROOT; };
 		7DD42B7F1CD616E800A5B704 /* forestNaval.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = forestNaval.mp3; sourceTree = "<group>"; };
-		7DD42B851CD6329400A5B704 /* MPCHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPCHandler.swift; sourceTree = "<group>"; };
-		7DD42B861CD6329400A5B704 /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		7DD42B891CD632FD00A5B704 /* MultiGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MultiGameScene.sks; sourceTree = "<group>"; };
 		7DD42B8A1CD632FD00A5B704 /* MultiGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiGameScene.swift; sourceTree = "<group>"; };
 		7DD42B8D1CD6D55100A5B704 /* space.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space.png; sourceTree = "<group>"; };
-		7DD42B8F1CD6D55A00A5B704 /* space.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = space.png; sourceTree = "<group>"; };
 		7DF40C0A1E9310040066C7C5 /* pikminBurning.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminBurning.mp3; sourceTree = "<group>"; };
 		7DF40C0B1E9310040066C7C5 /* pikminZapped.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikminZapped.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -312,20 +297,6 @@
 				7D488C431CC67EAF00A412D9 /* GameScene.sks */,
 				7DD42B8A1CD632FD00A5B704 /* MultiGameScene.swift */,
 				7DD42B891CD632FD00A5B704 /* MultiGameScene.sks */,
-				7D488C501CC6850600A412D9 /* Player.swift */,
-				7D488C541CC6B4FC00A412D9 /* Onion.swift */,
-				7D488C581CC6E6DF00A412D9 /* Seed.swift */,
-				7D488C5A1CC6ED0400A412D9 /* Pikmin.swift */,
-				7DD29B121CCD7CDC0084D707 /* Flower.swift */,
-				7DC598931CD0766A004ED675 /* Nutrient.swift */,
-				7DCC0A3A1CCEDD250009197E /* Ghost.swift */,
-				7DA7353E1CD11C7000B5CE3F /* Monster.swift */,
-				7DD42B851CD6329400A5B704 /* MPCHandler.swift */,
-				7DD42B861CD6329400A5B704 /* Ship.swift */,
-				7DC869FF1CD143970086E146 /* Assets.xcassets */,
-				7D488C561CC6E33900A412D9 /* map1.png */,
-				7DD42B8F1CD6D55A00A5B704 /* space.png */,
-				7D51C6D01CD569E3002FB2F8 /* Sounds */,
 				7DAF450C1CD35E3A00178852 /* MainMenu.xib */,
 				7D488C4A1CC67EAF00A412D9 /* Info.plist */,
 			);
@@ -338,6 +309,7 @@
 			children = (
 				7D51C6901CD568D6002FB2F8 /* AppDelegate.swift */,
 				7D51C6961CD568D6002FB2F8 /* GameViewController.swift */,
+				7D698EE0212F85A600D929DC /* MainGameLogic.swift */,
 				7D51C6941CD568D6002FB2F8 /* GameScene.swift */,
 				7D51C6921CD568D6002FB2F8 /* GameScene.sks */,
 				7DD42B771CD607E300A5B704 /* MultiGameScene.swift */,
@@ -366,20 +338,6 @@
 			);
 			name = "Pikmin iOS";
 			path = "Pikmin Maker iOS";
-			sourceTree = "<group>";
-		};
-		7D51C6D01CD569E3002FB2F8 /* Sounds */ = {
-			isa = PBXGroup;
-			children = (
-				7DAF45141CD46EA100178852 /* forestOfHope.mp3 */,
-				7DBFEF641CD47F8C00841727 /* pikminPluck.wav */,
-				7DBFEF661CD47F9C00841727 /* pikminSquel.wav */,
-				7DBFEF621CD47F7600841727 /* pikminGhost.wav */,
-				7DBFEF5E1CD47CFE00841727 /* call.wav */,
-				7DBFEF5F1CD47CFE00841727 /* throw.wav */,
-				7D063FD91CD5AE2B0063539B /* pikminLand.wav */,
-			);
-			name = Sounds;
 			sourceTree = "<group>";
 		};
 		7D51C6D11CD569EF002FB2F8 /* Sounds */ = {
@@ -530,22 +488,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DBFEF631CD47F7600841727 /* pikminGhost.wav in Resources */,
+				7D698ED5212F804400D929DC /* map1.png in Resources */,
+				7D698ED6212F804400D929DC /* space.png in Resources */,
+				7D698ED7212F804400D929DC /* menuTheme.m4a in Resources */,
+				7D698ED8212F804400D929DC /* pikminLand.mp3 in Resources */,
+				7D698ED9212F804400D929DC /* call.mp3 in Resources */,
+				7D698EDA212F804400D929DC /* forestOfHope.mp3 in Resources */,
+				7D698EDB212F804400D929DC /* forestNaval.mp3 in Resources */,
+				7D698EDC212F804400D929DC /* pikminGhost.mp3 in Resources */,
+				7D698EDD212F804400D929DC /* pikminSqueel.mp3 in Resources */,
+				7D698EDE212F804400D929DC /* throw.mp3 in Resources */,
+				7D698EDF212F804400D929DC /* pikminPluck.mp3 in Resources */,
 				7D9F109C1CDDB66900A98FD0 /* Map_AwakeningWood.png in Resources */,
-				7DBFEF671CD47F9C00841727 /* pikminSquel.wav in Resources */,
-				7DBFEF601CD47CFE00841727 /* call.wav in Resources */,
 				7DAF450F1CD35F1900178852 /* MainMenu.xib in Resources */,
 				7DD42B8B1CD632FD00A5B704 /* MultiGameScene.sks in Resources */,
 				7D488C441CC67EAF00A412D9 /* GameScene.sks in Resources */,
-				7DD42B901CD6D55A00A5B704 /* space.png in Resources */,
-				7D063FDB1CD5AE510063539B /* pikminLand.wav in Resources */,
-				7DAF45151CD46EA100178852 /* forestOfHope.mp3 in Resources */,
-				7D488C571CC6E33900A412D9 /* map1.png in Resources */,
-				7DBFEF611CD47CFE00841727 /* throw.wav in Resources */,
-				7DBFEF651CD47F8C00841727 /* pikminPluck.wav in Resources */,
 				7DF40C0D1E9310040066C7C5 /* pikminZapped.mp3 in Resources */,
 				7D9F109D1CDDB66900A98FD0 /* space_new.png in Resources */,
-				7DC86A001CD143970086E146 /* Assets.xcassets in Resources */,
 				7DF40C0C1E9310040066C7C5 /* pikminBurning.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -603,20 +562,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DA7353F1CD11C7000B5CE3F /* Monster.swift in Sources */,
-				7DD42B881CD6329400A5B704 /* Ship.swift in Sources */,
-				7DD42B871CD6329400A5B704 /* MPCHandler.swift in Sources */,
-				7DD29B131CCD7CDC0084D707 /* Flower.swift in Sources */,
+				7D698EC9212F7D5B00D929DC /* Flower.swift in Sources */,
+				7D698ECA212F7D5B00D929DC /* Ghost.swift in Sources */,
+				7D698ECB212F7D5B00D929DC /* Monster.swift in Sources */,
+				7D698ECC212F7D5B00D929DC /* Nutrient.swift in Sources */,
+				7D698ECD212F7D5B00D929DC /* Onion.swift in Sources */,
+				7D698ECE212F7D5B00D929DC /* MenuOverlay.swift in Sources */,
+				7D698ECF212F7D5B00D929DC /* Pikmin.swift in Sources */,
+				7D698ED0212F7D5B00D929DC /* Player.swift in Sources */,
+				7D698ED1212F7D5B00D929DC /* Seed.swift in Sources */,
+				7D698ED2212F7D5B00D929DC /* Ship.swift in Sources */,
+				7D698ED3212F7D5B00D929DC /* MPCHandler.swift in Sources */,
+				7D698EE1212F85A600D929DC /* MainGameLogic.swift in Sources */,
 				7D488C421CC67EAF00A412D9 /* GameScene.swift in Sources */,
 				7D6F9C971E8F48F6008C5E93 /* Machine.swift in Sources */,
-				7D488C551CC6B4FC00A412D9 /* Onion.swift in Sources */,
-				7DCC0A3B1CCEDD250009197E /* Ghost.swift in Sources */,
-				7D488C511CC6850600A412D9 /* Player.swift in Sources */,
-				7D488C591CC6E6DF00A412D9 /* Seed.swift in Sources */,
 				7D488C401CC67EAF00A412D9 /* AppDelegate.swift in Sources */,
 				7DD42B8C1CD632FD00A5B704 /* MultiGameScene.swift in Sources */,
-				7D488C5B1CC6ED0400A412D9 /* Pikmin.swift in Sources */,
-				7DC598941CD0766A004ED675 /* Nutrient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,6 +598,7 @@
 				7D51C6C71CD56995002FB2F8 /* Nutrient.swift in Sources */,
 				7DD42B7C1CD6087E00A5B704 /* MPCHandler.swift in Sources */,
 				7D51C6BE1CD56995002FB2F8 /* Flower.swift in Sources */,
+				7D698EE2212F85A600D929DC /* MainGameLogic.swift in Sources */,
 				7D51C6971CD568D6002FB2F8 /* GameViewController.swift in Sources */,
 				7D51C6911CD568D6002FB2F8 /* AppDelegate.swift in Sources */,
 				7D51C6C91CD56995002FB2F8 /* Pikmin.swift in Sources */,
